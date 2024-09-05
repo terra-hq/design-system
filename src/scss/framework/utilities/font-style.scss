@@ -24,39 +24,6 @@ $font-styles: (
 
 @include font-style($font-styles, $breakpoints-grid);
 
-$font-weight: (
-  thin: 100,
-  extralight: 200,
-  light: 300,
-  regular: 400,
-  medium: 500,
-  semibold: 600,
-  bold: 700,
-  extrabold: 800,
-  black: 900,
-);
-
-@mixin font-weight($f-weight, $breakpoints) {
-  @each $breakpoint-name, $breakpoint-value in $breakpoints {
-    @if ($breakpoint-value == 0) {
-      @each $name, $property in $f-weight {
-        .u--font-weight-#{$name} {
-          font-weight: $property;
-        }
-      }
-    } @else {
-      @media screen and ($viewport-type: $breakpoint-value) {
-        @each $name, $property in $f-weight {
-          .u--font-weight-#{$breakpoint-name}-#{$name} {
-            font-weight: $property;
-          }
-        }
-      }
-    }
-  }
-}
-
-@include font-weight($font-weight, $breakpoints-grid);
 
 $font-transform: (
   uppercase: uppercase,
