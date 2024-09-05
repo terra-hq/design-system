@@ -1,0 +1,28 @@
+$overflow-values:(
+  hidden: hidden,
+  clip: clip,
+  auto: auto,
+);
+
+
+@mixin overflow-utility($overflow-prop,$breakpoints){
+  @each $breakpoint-name, $breakpoint-value in $breakpoints {
+    @if($breakpoint-value == 0) {
+      @each $name, $property in $overflow-prop {
+        .u--overflow-#{$name}{
+          overflow:$property;
+        }
+      }
+    }@else{
+      @media screen and ($viewport-type: $breakpoint-value) {
+        @each $name, $property in $overflow-prop {
+          .u--overflow-#{$breakpoint-name}-#{$name}{
+            overflow:$property;
+          }
+        }
+      }
+    }
+  }
+}
+
+  @include overflow-utility($overflow-values,$breakpoints-grid)
