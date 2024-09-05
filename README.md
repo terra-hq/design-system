@@ -5,7 +5,7 @@ This package is a small helper for building demos or small projects outside of o
 You can include the following stylesheet in your project:
 
 ```
-<link rel="stylesheet" href="https://unpkg.com/@terrahq/design-system@0.0.2/dist/style.css">
+<link rel="stylesheet" href="hhttps://unpkg.com/@terrahq/design-system@latest/dist/style.css">
 
 ```
 
