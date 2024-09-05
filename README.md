@@ -46,8 +46,8 @@ $color-i: #f58dd7;
     - .f--col-#{$i} 1 to 12 (columns) or f--col-#{$size}-#{$i}
     - .f--offset-#{$i} 0 to 12 (columns) or f--offset-#{$size}-#{$i}
 
-- Color: Terra Branded colors 
-- Background: Terra Brand Colors
+- Color: Terra Branded colors .f--color-a/i
+- Background: Terra Brand Colors .f--color-a/e
 - Aspect Ratio (1.7 - 1 - 1.3 - 0.75)
 - Spacing .f--#{$attr-short}-#{$value} or .f--#{$attr-short}-#{$breakpoint-name}-#{$value}
 - Section .f--section-#{letter}
