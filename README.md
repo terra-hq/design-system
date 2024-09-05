@@ -41,7 +41,7 @@ $color-i: #f58dd7;
 
 #### Foundation
 - Grid: 
-    - .f--container
+    - .f--container || .f--container--fluid
     - .f--row || .f--row--remove-gutter
     - .f--col-#{$i} 1 to 12 (columns) or f--col-#{$size}-#{$i}
     - .f--offset-#{$i} 0 to 12 (columns) or f--offset-#{$size}-#{$i}
