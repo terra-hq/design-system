@@ -1,0 +1,33 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+@mixin make-container () {
+  margin: 0 auto;
+  padding-right: $half-gutter-width;
+  padding-left: $half-gutter-width;
+  width: $g-container-width;
+  max-width: $g-container-max-width;
+  @media all and ($viewport-type: $mobile){
+    max-width: $g-container-width-mobile;
+  }
+}
+
+@mixin make-container-fluid () {
+  padding: 0;
+  width: 100%;
+  @if variable-exists(g-container-fluid-max-width) {
+    max-width: $g-container-fluid-max-width;
+  } @else {
+    max-width: 100%;
+  }
+
+  & > [class*="f--row"] {
+      margin-right: 0;
+      margin-left: 0;
+
+      & > [class^="f--col"],
+      & > [class*="f--col-"] {
+        padding-right: 0;
+        padding-left: 0;
+      }
+    }
+}

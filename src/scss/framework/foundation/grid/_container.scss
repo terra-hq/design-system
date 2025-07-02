@@ -1,0 +1,17 @@
+@use "@scss/framework/foundation/grid/make-container" as *;
+@use "@scss/framework/_var/_vars.scss" as *;
+
+.f--container {
+  @include make-container();
+  // * container fluid
+  // &--fluid {
+  //   @include make-container-fluid();
+  // }
+
+  // * container fluid responsive
+  // &--tabletm-fluid {
+  //   @media all and ($viewport-type: $tabletm) {
+  //     @include make-container-fluid();
+  //   }
+  // }
+}

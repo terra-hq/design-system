@@ -1,0 +1,27 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+$wrap-properties:(
+  wrap: wrap,
+  nowrap:nowrap,
+);
+@mixin wrap-alignment($wrap-prop,$breakpoints){
+  @each $breakpoint-name, $breakpoint-value in $breakpoints {
+    @if($breakpoint-value == 0) {
+      @each $name, $property in $wrap-prop {
+        .u--flex-wrap-#{$name}{
+          flex-wrap:$property;
+        }
+      }
+    }@else{
+      @media screen and ($viewport-type: $breakpoint-value) {
+        @each $name, $property in $wrap-prop {
+          .u--flex-wrap-#{$breakpoint-name}-#{$name}{
+            flex-wrap:$property;
+          }
+        }
+      }
+    }
+  }
+}
+
+@include wrap-alignment($wrap-properties,$breakpoints-grid)
