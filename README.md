@@ -49,7 +49,6 @@ $color-i: #f58dd7;
 - Color: Terra Branded colors .f--color-a/i
 - Background: Terra Brand Colors .f--color-a/e
 - Aspect Ratio (1.7 - 1 - 1.3 - 0.75)
-- Spacing .f--#{$attr-short}-#{$value} or .f--#{$attr-short}-#{$breakpoint-name}-#{$value}
 - Section .f--section-#{letter}
 - Gap .f--gap-#{letter}
 
@@ -63,8 +62,8 @@ $color-i: #f58dd7;
 - Justify Content .u--justify-content-#{$name} or .u--justify-content-#{$breakpoint-name}-#{$name}
 - Overflow .u--overflow-#{$name} or .u--overflow-#{$breakpoint-name}-#{$name}
 - Position .u--position-#{$name} or .u--position-#{$breakpoint-name}-#{$name}
+- Spacing .u--#{$attr-short}-#{$value} or .u--#{$attr-short}-#{$breakpoint-name}-#{$value}
 - Text-align .u--text-align-#{$name} or .u--position-#{$breakpoint-name}-#{$name}
 
 <br>
 Note: This is not intended for use in ongoing projects.
-
