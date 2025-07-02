@@ -54,16 +54,35 @@ $color-i: #f58dd7;
 
 #### Utilities
 
-- Align Items .u--align-items-#{$name} or u--align-items-#{$breakpoint-name}-#{$name}
-- Display .u--display-#{$name} or .u--display-#{$breakpoint-name}-#{$name}
-- Flex-wrap .u--flex-wrap-#{$name} or .u--flex-wrap-#{$breakpoint-name}-#{$name}
-- Font Style .u--font-style-#{$name} or .u--font-style-#{$breakpoint-name}-#{$name}
-- Font Weight .u--font-weight-#{$name} or .u--font-weight-#{$breakpoint-name}-#{$name}
-- Justify Content .u--justify-content-#{$name} or .u--justify-content-#{$breakpoint-name}-#{$name}
-- Overflow .u--overflow-#{$name} or .u--overflow-#{$breakpoint-name}-#{$name}
-- Position .u--position-#{$name} or .u--position-#{$breakpoint-name}-#{$name}
-- Spacing .u--#{$attr-short}-#{$value} or .u--#{$attr-short}-#{$breakpoint-name}-#{$value}
-- Text-align .u--text-align-#{$name} or .u--position-#{$breakpoint-name}-#{$name}
+- **Align Items** `.u--align-items-#{$name}` or `.u--align-items-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--align-items-center`, `.u--align-items-flex-start`, `.u--align-items-mobile-center`
+
+- **Display** `.u--display-#{$name}` or `.u--display-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--display-flex`, `.u--display-none`, `.u--display-desktop-block`
+
+- **Flex-wrap** `.u--flex-wrap-#{$name}` or `.u--flex-wrap-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--flex-wrap-wrap`, `.u--flex-wrap-nowrap`, `.u--flex-wrap-tablets-wrap`
+
+- **Font Style** `.u--font-style-#{$name}` or `.u--font-style-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--font-style-italic`, `.u--font-style-normal`, `.u--font-style-mobile-italic`
+
+- **Font Weight** `.u--font-#{$name}` or `.u--font-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--font-bold`, `.u--font-light`, `.u--font-desktop-medium`
+
+- **Justify Content** `.u--justify-content-#{$name}` or `.u--justify-content-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--justify-content-center`, `.u--justify-content-space-between`, `.u--justify-content-mobile-flex-start`
+
+- **Overflow** `.u--overflow-#{$name}` or `.u--overflow-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--overflow-hidden`, `.u--overflow-auto`, `.u--overflow-tablets-scroll`
+
+- **Position** `.u--position-#{$name}` or `.u--position-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--position-relative`, `.u--position-absolute`, `.u--position-desktop-fixed`
+
+- **Spacing** `.u--#{$attr-short}-#{$value}` or `.u--#{$attr-short}-#{$breakpoint-name}-#{$value}`
+  - Examples: `.u--mb-2`, `.u--p-4`, `.u--mt-mobile-1`, `.u--pl-desktop-3`
+
+- **Text-align** `.u--text-align-#{$name}` or `.u--text-align-#{$breakpoint-name}-#{$name}`
+  - Examples: `.u--text-align-center`, `.u--text-align-right`, `.u--text-align-mobile-left`
 
 <br>
 Note: This is not intended for use in ongoing projects.
