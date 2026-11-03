@@ -14,7 +14,7 @@ Terra CSS classes for building demos and prototypes outside our regular ecosyste
 <link rel="stylesheet" href="https://unpkg.com/@terrahq/design-system@latest/dist/style.css">
 ```
 
-Pin a version instead of `latest` if the page must never change: `@terrahq/design-system@0.1.0`.
+Pin a version instead of `latest` if the page must never change: `@terrahq/design-system@0.2.0`.
 
 **From npm:**
 
@@ -28,10 +28,12 @@ import '@terrahq/design-system' // resolves to dist/style.css
 
 ## Use it
 
+A white card with a 1px border, an outlined pill and a title at weight 500:
+
 ```html
-<article class="f--background-b f--radius-c f--shadow-a u--p-4 u--display-flex u--flex-direction-column u--gap-2">
-  <span class="f--background-d f--color-a f--font-f u--px-2 f--radius-full">new</span>
-  <h3 class="f--font-c u--font-bold">Project Atlas</h3>
+<article class="f--background-b f--radius-c u--border-a u--p-4 u--display-flex u--flex-direction-column u--gap-2">
+  <span class="f--font-f u--font-medium u--px-2 f--radius-full u--border-f" style="align-self:flex-start">new</span>
+  <h3 class="f--font-c u--font-medium">project atlas</h3>
   <p class="f--font-e">Built only with classes.</p>
 </article>
 ```
@@ -40,16 +42,50 @@ import '@terrahq/design-system' // resolves to dist/style.css
 
 | Layer | What it is | Examples |
 |---|---|---|
-| `f--` **foundation** | Terra's design decisions. Several properties per class, responsive included. They don't change between versions. | `f--font-c`, `f--color-a`, `f--background-d`, `f--radius-c`, `f--shadow-a`, `f--row`, `f--col-6` |
+| `f--` **foundation** | Terra's design decisions. Several properties per class, responsive included. They don't change between versions. | `f--font-c`, `f--color-a`, `f--background-b`, `f--radius-c`, `f--shadow-a`, `f--row`, `f--col-6` |
 | `u--` **utilities** | One property per class, with a variant per breakpoint. | `u--p-4`, `u--p-mobile-2`, `u--display-flex`, `u--border-a` |
 
-If a foundation class already covers something, there is no utility for it. To tweak one detail of a foundation class, add a utility: `f--font-c u--font-bold`. Utilities load after foundation, so they win.
+If a foundation class already covers something, there is no utility for it. To tweak one detail of a foundation class, add a utility: `f--font-c u--font-medium`. Utilities load after foundation, so they win.
 
 **Breakpoints** (`max-width`): `desktop` 1700 · `laptop` 1570 · `tabletl` 1300 · `tabletm` 1024 · `tablets` 810 · `mobile` 580. Utilities take the name in the middle: `u--p-mobile-2`.
 
-**Typography.** `f--font-a` to `f--font-f` use Uncut Sans, then `system-ui`. The package does **not** ship the font files; load Uncut Sans yourself or the browser falls back to `system-ui`.
+**Typography.** `f--font-a` to `f--font-f` use Uncut Sans, then `system-ui`. The package does **not** ship the font files; load Uncut Sans yourself or the browser falls back to `system-ui`. Titles use weight 500: add `u--font-medium`.
 
-All classes are listed in the [class reference](docs/CLASSES.md).
+## Brand use
+
+When you build something that carries the Terra brand:
+
+- **Backgrounds** are only `a` (Noche), `b` (white) or `c` (Morning Haze): `f--background-a`, `-b`, `-c`.
+- **Text** is only `a` or `b`: `f--color-a`, `f--color-b`. Never color text.
+- **Accents** (`d` to `i`) are outlines and dots, not fills: `u--border-d` … `u--border-i`.
+- **Shape.** Everything you click or tag is a capsule (`f--radius-full`); cards use `f--radius-c` with a 1px border and no shadow.
+
+The package still ships a few default values that differ slightly from the brand (`b`, `e`, `f`, `g`, `h`, `i`). Until they are updated, set the brand palette in a `terra.config.js` (next section):
+
+```js
+colors: {
+  a: '#0f0f0f', b: '#ffffff', c: '#f7f8f4',
+  d: '#7ce55e', e: '#189b5c', f: '#3d9dd8', g: '#ffb41d', h: '#f96e43', i: '#f78bd8',
+},
+```
+
+## States and motion
+
+State lives in the class name, with no colons. Hover only applies on devices that can hover, and states have no breakpoint variants.
+
+```html
+<button class="u--transition-colors u--duration-a u--hover-background-a u--hover-color-b u--focus-ring u--active-scale-95 u--disabled-opacity-50 f--radius-full u--border-a u--px-3 u--py-1">
+  save
+</button>
+```
+
+| What | Classes |
+|---|---|
+| Hover | `u--hover-background-*`, `u--hover-color-*`, `u--hover-border-*` |
+| Group | `u--group` on the parent, `u--group-hover-*` on its children |
+| Focus, press, disabled | `u--focus-ring`, `u--active-scale-90\|95\|98`, `u--disabled-opacity-25\|50\|75` |
+| Transitions | `u--transition-all\|colors\|opacity\|transform`, `u--duration-a\|b\|c` (0.1s, 0.3s, 0.6s), `u--ease-standard\|entrance\|exit-a\|b` |
+| Animations | `u--animation-fade-in`, `fade-up`, `spin`, `pulse` (all respect `prefers-reduced-motion`) |
 
 ## Configure your own build
 
@@ -64,7 +100,7 @@ npx terra-ds build
 ```js
 // terra.config.js
 export default {
-  colors: { a: '#0f0f0f', b: '#fefefe', j: '#ff00aa' }, // replaces the palette; "a" and "b" are required
+  colors: { a: '#0f0f0f', b: '#ffffff', j: '#ff00aa' }, // replaces the palette; "a" and "b" are required
   backgrounds: ['a', 'b', 'j'],                          // which colors get f--background-*
   spacing: [0, 1, 2, 4, 8],                              // replaces the u--p-*, u--m-*, u--gap-* steps (x 8px)
   font: "'Uncut Sans', system-ui, sans-serif",           // font-family of f--font-*
@@ -73,22 +109,15 @@ export default {
 }
 ```
 
-Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 77 kB with five spacing steps, against 108 kB by default). Breakpoints, grid and shadows are not configurable yet.
+Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 80 kB with this config, against 113 kB by default). Breakpoints, grid and shadows are not configurable yet.
 
-## What's new in 0.2.0
+## What's new
 
-- **States:** `u--hover-background-*`, `u--hover-color-*`, `u--hover-border-*`, `u--focus-ring`, `u--active-scale-90|95|98`, `u--disabled-opacity-25|50|75`, and `u--group` with `u--group-hover-*` for children of a hovered parent. Hover only applies on devices that can hover. States have no breakpoint variants.
-- **Motion:** `u--transition-all|colors|opacity|transform`, `u--duration-a|b|c` (0.1s, 0.3s, 0.6s), `u--ease-standard|entrance|exit-a|b`, and the animations `u--animation-fade-in`, `fade-up`, `spin` and `pulse`, which respect `prefers-reduced-motion`.
-- Everything is additive: every 0.1.0 rule is unchanged.
+**0.2.0** adds states (`u--hover-*`, `u--focus-ring`, `u--active-scale-*`, `u--disabled-opacity-*`, `u--group-hover-*`) and motion (`u--transition-*`, `u--duration-*`, `u--ease-*`, `u--animation-*`). Everything is additive: every 0.1.0 rule is unchanged.
 
-## What's new in 0.1.0
-
-- **`terra-ds build`** and `terra.config.js` to configure palette, spacing, radius and font.
-- **New foundation classes:** `f--radius-*`, `f--shadow-*`.
-- **New utilities:** `u--border-*`, `u--px/py/mx/my`, `u--gap`, `u--row-gap`, `u--col-gap`, `u--mx-auto`, and spacing steps 6, 9 and 12.
-- **Changed default:** `f--font-*` now uses Uncut Sans (with `system-ui` as fallback) instead of Arial. Every other existing class is unchanged.
+**0.1.0** added `terra-ds build` and `terra.config.js`, the `f--radius-*` and `f--shadow-*` foundations, `u--border-*`, `u--px/py/mx/my`, `u--gap`, `u--row-gap`, `u--col-gap`, `u--mx-auto`, and spacing steps 6, 9 and 12. The default `f--font-*` typeface changed from Arial to Uncut Sans.
 
 ## More
 
-- [Class reference](docs/CLASSES.md)
-- [Contributing](CONTRIBUTING.md)
+- [Class reference](https://github.com/terra-hq/design-system/blob/HEAD/docs/CLASSES.md)
+- [Contributing](https://github.com/terra-hq/design-system/blob/HEAD/CONTRIBUTING.md)
