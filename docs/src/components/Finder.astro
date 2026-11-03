@@ -1,0 +1,146 @@
+---
+// Search over every real class (generated from the compiled CSS by scripts/sync.mjs), the proposed interaction classes and hand-written "how do I…" recipes.
+// The build fails if a recipe uses a class that doesn't exist, so recipes can't go stale.
+import search from '../data/search.json'
+import classes from '../data/classes.json'
+
+const proposed = [
+['u--hover-background-{letter}','background-color on :hover','Background change on hover','proposed'],
+['u--hover-shadow-{a|b|c}','box-shadow on :hover','Lift on hover','proposed'],
+['u--focus-ring','outline on :focus-visible','Keyboard focus ring','proposed'],
+['u--active-scale-95','scale: .95 on :active','Press effect','proposed'],
+['u--disabled-opacity-50','opacity: .5 when disabled','Dim a disabled control','proposed'],
+['u--group / u--group-hover-{…}','parent :hover','Style a child when the parent is hovered','proposed'],
+['u--transition-{colors|shadow|transform|all}','transition','Animate the property that changes','proposed'],
+['u--duration-{a|b|c}','transition-duration','0.1s, 0.3s, 0.6s (Terra time-a/b/c)','proposed'],
+['u--ease-{standard-a|b|entrance|exit}','transition-timing-function','Terra easing curves','proposed'],
+['u--scale-{n} u--translate-y-{n} u--rotate-{n}','scale / translate / rotate','Transform via separate CSS properties','proposed'],
+['u--animation-fade-in','animation','Appear with a fade; respects reduced motion','proposed'],
+['u--animation-fade-up','animation','Appear sliding up','proposed'],
+['u--animation-spin','animation','Spinner for loading buttons','proposed'],
+['u--animation-pulse','animation','Skeleton pulse','proposed'],
+['u--opacity-{n}','opacity','Opacity steps','proposed'],
+['u--cursor-pointer','cursor: pointer','Pointer cursor','proposed'],
+['u--pointer-events-none','pointer-events: none','Ignore clicks','proposed']
+]
+const recipes = [
+['Center a div','center centre middle align horizontally vertically','Flex on the parent, then center on both axes.','<div class="u--display-flex u--align-items-center u--justify-content-center">\n  <div>centered</div>\n</div>','existing'],
+['Center a block horizontally','mx auto margin container width','Give it a width and auto side margins.','<div class="f--container u--mx-auto">…</div>','existing'],
+['A card','card panel box border radius padding','Border, rounded corners and padding. No shadow: Terra separates with 1px rules.','<div class="f--background-b f--radius-c u--border-a u--p-3">\n  <h3 class="f--font-c">title</h3>\n</div>','new'],
+['A capsule button','button pill capsule rounded cta','Full radius, Noche background, white text.','<a class="f--background-a f--radius-full u--px-3 u--py-1">start a chat</a>','new'],
+['A floating menu or toast','shadow float elevation popover menu toast','Shadows are only for things that float above the page.','<div class="f--background-b f--radius-c f--shadow-b u--p-1">…</div>','new'],
+['Hide on mobile','hide mobile phone responsive display none breakpoint','Use the display utility with a breakpoint suffix.','<div class="u--display-mobile-none">desktop only</div>','existing'],
+['Two columns that stack','columns grid layout responsive row col half','12-column grid; each column spans 6 from tablet up.','<div class="f--row">\n  <div class="f--col-12 f--col-tabletm-6">left</div>\n  <div class="f--col-12 f--col-tabletm-6">right</div>\n</div>','existing'],
+['Push a column to the right (offset)','offset push indent column shift space left grid gap margin','Skip N columns before a column. Add a breakpoint name to apply it only from there.','<div class="f--row">\n  <div class="f--col-6 f--offset-3">centered 6 of 12</div>\n</div>','existing'],
+['Space between sections','section spacing vertical rhythm padding space','Use the section foundation, not manual padding.','<section class="f--section-a">…</section>','existing'],
+['Space between elements','gap stack space between margin spacing','Gap on a flex column keeps spacing out of the children.','<div class="u--display-flex u--flex-direction-column u--gap-2">…</div>','new'],
+['Change color on hover','hover background color change','State is part of the class name; hover only applies on devices that can hover.','<a class="f--background-b u--hover-background-d u--transition-colors u--duration-a">link</a>','proposed'],
+['Lift a card on hover','hover shadow lift raise card','Shadow on hover with a short transition.','<div class="u--hover-shadow-b u--transition-shadow u--duration-a">…</div>','proposed'],
+['Press effect on a button','active press click scale button','Shrink slightly while pressed.','<button class="u--active-scale-95 u--transition-transform u--duration-a">save</button>','proposed'],
+['Loading spinner in a button','spinner loading spin animation button','Keeps the button width and swaps the label for a spinner.','<span class="u--animation-spin"></span>','proposed'],
+['Fade in on load','fade in appear entrance animation reveal','One orchestrated reveal beats effects on every section.','<h1 class="u--animation-fade-up">hello</h1>','proposed'],
+['Skeleton while loading','skeleton loading pulse placeholder','Sunk block with the final shape and a gentle pulse.','<div class="f--radius-c u--animation-pulse" style="height:96px"></div>','proposed'],
+['Style a child when the parent is hovered','group hover parent child','Mark the parent with the group class.','<a class="u--group">\n  <span class="u--group-hover-opacity-100 u--opacity-0">↗</span>\n</a>','proposed']
+];
+
+const known = new Set(classes as string[])
+for (const r of recipes) {
+  if (r[4] === 'proposed') continue
+  for (const c of r[3].match(/\b[fu]--[\w-]+/g) ?? []) if (!known.has(c)) throw new Error(`Finder recipe "${r[0]}" uses "${c}", which is not in the compiled CSS`)
+}
+const real = (search as [string, string][]).map(([n, d]) => [n, d, n.startsWith('u--') ? 'also with -mobile, -tablets, -tabletm, -tabletl, -laptop, -desktop' : '', 'existing'])
+---
+<div class="fd">
+  <label class="box" for="q">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" autocomplete="off" placeholder="padding-left, u--hover, center a div…">
+    <kbd>⌘K</kbd>
+  </label>
+  <div class="scopes" role="group" aria-label="scope">
+    <button class="scope on" data-scope="all" type="button">everything</button>
+    <button class="scope" data-scope="class" type="button">classes</button>
+    <button class="scope" data-scope="recipe" type="button">how do i…</button>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div id="out"></div>
+</div>
+<style is:global>
+.fd .box{display:flex;align-items:center;gap:12px;height:52px;padding:0 20px;border:1px solid var(--strong);border-radius:999px;background:var(--raised)}
+.fd .box:focus-within{outline:2px solid var(--ink);outline-offset:2px}
+.fd .box input{flex:1;min-width:0;border:0;background:none;outline:0;font-size:16px}
+.fd .box input::placeholder{color:var(--faint)}
+.fd kbd{font:500 12px var(--sans);border:1px solid var(--edge);border-radius:8px;padding:2px 8px;color:var(--mute)}
+.fd{--cielo:#3d9dd8;--blush:#f78bd8;--sol:#ffb41d}
+.fd .chips{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 8px}
+.fd .chip{height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--cielo);background:none;cursor:pointer;font-size:12px;font-weight:500}
+.fd .chip:nth-child(3n+2){border-color:var(--blush)}.fd .chip:nth-child(3n){border-color:var(--neon)}
+.fd .chip:hover{background:var(--sunk)}
+.fd .count{margin:24px 0 0;font-size:12px;color:var(--mute);font-weight:500}
+.fd .group{margin:16px 0 0;border:1px solid var(--edge);border-radius:16px;background:var(--raised);overflow:hidden}
+.fd .group>h2{margin:0;padding:12px 20px;font-size:12px;font-weight:500;color:var(--soft);background:var(--sunk);text-transform:lowercase}
+.fd .row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:16px;align-items:center;padding:12px 20px;border-top:1px solid var(--edge);min-height:44px}
+.fd .row:first-of-type{border-top:0}
+.fd .cls{font:400 13px var(--mono);word-break:break-all}
+.fd .cls mark,.fd .rtitle mark{background:var(--sunk);color:inherit;border-radius:4px;padding:0 2px}
+.fd .prop{color:var(--mute);font:400 12px/16px var(--mono);word-break:break-word}
+.fd .pill{display:inline-flex;align-items:center;height:22px;padding:0 10px;margin-left:8px;border-radius:999px;border:1px solid var(--edge);font:500 12px var(--sans);vertical-align:middle}
+.fd .pill.new{border-color:var(--neon)}.pill.proposed{border-color:var(--sol)}
+.fd .copy{height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--strong);background:var(--raised);font-weight:500;font-size:12px;cursor:pointer}
+.fd .copy:hover{background:var(--sunk)}
+.fd .recipe{padding:20px;border-top:1px solid var(--edge)}
+.fd .recipe:first-of-type{border-top:0}
+.fd .rtitle{margin:0 0 4px;font-size:18px;line-height:28px;font-weight:500;letter-spacing:-.01em}
+.fd .rdesc{margin:0 0 12px;color:var(--mute);max-width:64ch}
+.fd pre{margin:0;background:var(--sunk);border-radius:12px;padding:16px;overflow:auto;font:400 12.5px/1.7 var(--mono)}
+.fd .rtop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.fd .empty{margin:24px 0 0;border:1px solid var(--edge);border-radius:16px;padding:32px;background:var(--raised)}
+.fd .empty h2{margin:0 0 4px;font-size:18px;font-weight:500}.empty p{margin:0;color:var(--mute)}
+
+.fd .group>h2{margin:0;font-size:12px;line-height:20px}
+.fd .rtitle{font-size:18px}
+.fd pre{font-size:12.5px;margin:0}
+.fd .recipe:first-of-type,.fd .row:first-of-type{border-top:0}
+@media (max-width:860px){.fd .row{grid-template-columns:1fr auto}.fd .prop{grid-column:1/-1;grid-row:2}}
+
+.fd .scopes{display:flex;gap:8px;margin:16px 0 0}
+.fd .scope{height:28px;padding:0 12px;border-radius:999px;border:0;background:none;color:var(--mute);cursor:pointer;font:500 12px var(--sans)}
+.fd .scope:hover{background:var(--sunk);color:var(--ink)}
+.fd .scope.on{background:var(--ink);color:var(--on-ink)}
+</style>
+<script is:inline define:vars={{ real, proposed, recipes }}>
+var C=real.concat(proposed),R=recipes;
+var SYN={margin:'margen',hide:'ocultar',center:'centrar centre',padding:'relleno',color:'colour',shadow:'sombra',round:'rounded',rounded:'radius',bg:'background',mobile:'phone',hover:'over'};
+var $=function(i){return document.getElementById(i)};
+var scope='all';
+function norm(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim()}
+function score(hay,terms){var h=' '+norm(hay)+' ',t=0;for(var i=0;i<terms.length;i++){var w=terms[i];if(h.indexOf(' '+w)>-1)t+=3;else if(h.indexOf(w)>-1)t+=1;else{var ok=false;for(var k in SYN){if((k===w||SYN[k].split(' ').indexOf(w)>-1)&&(h.indexOf(k)>-1||h.indexOf(SYN[k].split(' ')[0])>-1)){ok=true}}if(ok)t+=1;else return 0}}return t}
+function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function hl(s,terms){var e=esc(s);terms.forEach(function(w){if(w.length>1)e=e.replace(new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>')});return e}
+function pill(st){return st==='existing'?'':'<span class="pill '+st+'">'+st+'</span>'}
+function run(){
+  var q=$('q').value,terms=norm(q).split(' ').filter(Boolean),out='';
+  var cs=C.map(function(c){return{c:c,s:terms.length?score(c.join(' '),terms):1}}).filter(function(x){return x.s}).sort(function(a,b){return b.s-a.s});
+  var rs=R.map(function(r){return{r:r,s:terms.length?score(r.join(' '),terms):1}}).filter(function(x){return x.s}).sort(function(a,b){return b.s-a.s});
+  if(scope==='class')rs=[];if(scope==='recipe')cs=[];
+  var more=Math.max(0,cs.length-40);cs=cs.slice(0,40);
+  if(!terms.length){cs=cs.slice(0,8);rs=rs.slice(0,4)}
+  if(rs.length){out+='<section class="group"><h2>how do i…</h2>'+rs.map(function(x,i){var r=x.r;return '<div class="recipe"><div class="rtop"><div><h3 class="rtitle">'+hl(r[0],terms)+pill(r[4])+'</h3><p class="rdesc">'+esc(r[2])+'</p></div><button class="copy" data-copy="r'+i+'">copy</button></div><pre><code id="r'+i+'">'+esc(r[3])+'</code></pre></div>'}).join('')+'</section>'}
+  if(cs.length){out+='<section class="group"><h2>classes</h2>'+cs.map(function(x){var c=x.c;return '<div class="row"><div><span class="cls">'+hl(c[0],terms)+'</span>'+pill(c[3])+'</div><div class="prop">'+hl(c[1],terms)+'<br><span style="font-family:var(--sans)">'+esc(c[2])+'</span></div><button class="copy" data-text="'+esc(c[0].split(' ')[0])+'">copy</button></div>'}).join('')+(more?'<div class="row"><span class="prop">'+more+' more. Add a word to narrow it down.</span></div>':'')+'</section>'}
+  var n=cs.length+rs.length+more;
+  $('out').innerHTML=(terms.length?'<p class="count">'+n+' result'+(n===1?'':'s')+'</p>':'<p class="count">popular</p>')+(n?out:'<div class="empty"><h2>nothing for “'+esc(q)+'”</h2><p>Try the CSS property (“border-radius”), a shorter word, or what you want to do (“hide on mobile”).</p></div>');
+  window._r=rs.map(function(x){return x.r[3]});
+}
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.scope){scope=b.dataset.scope;document.querySelectorAll('.fd .scope').forEach(function(n){n.classList.toggle('on',n===b)});run();return}
+  var t=b.dataset.text||(b.dataset.copy?window._r[+b.dataset.copy.slice(1)]:null);
+  if(t!=null){var done=function(){b.textContent='copied';setTimeout(function(){b.textContent='copy'},1200)};try{navigator.clipboard.writeText(t).then(done,function(){})}catch(x){}}
+  if(b.classList.contains('chip')){$('q').value=b.textContent;run()}
+  if(b.id==='theme'){var el=document.documentElement,d=el.dataset.theme?el.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;el.dataset.theme=d?'light':'dark'}
+});
+$('q').addEventListener('input',run);
+document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('q').focus();$('q').select()}});
+$('chips').innerHTML=['padding left','center','hide on mobile','border radius','hover','animation','shadow','grid columns'].map(function(s){return '<button class="chip" type="button">'+s+'</button>'}).join('');
+run();
+
+</script>

@@ -1,0 +1,23 @@
+---
+// Live example rendered with the REAL compiled CSS (/terra.css) inside an iframe, so the docs' own styles never leak in.
+const { code, height = 260 } = Astro.props
+---
+<div class="pg">
+  <iframe class="pg-view" title="result" style={`height:${height}px`}></iframe>
+  <textarea class="pg-code" spellcheck="false" aria-label="example html" style={`height:${height}px`}>{code.trim()}</textarea>
+</div>
+<style>
+  .pg{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);border:1px solid var(--edge);border-radius:16px;overflow:hidden;background:var(--raised);margin:24px 0}
+  .pg-view{border:0;width:100%;background:#f7f8f4;min-width:0}
+  .pg-code{border:0;border-left:1px solid var(--edge);background:var(--sunk);color:var(--ink);font:12.5px/1.7 var(--mono);padding:16px;resize:none;width:100%;min-width:0;tab-size:2}
+  @media (max-width:810px){.pg{grid-template-columns:1fr}.pg-code{border-left:0;border-top:1px solid var(--edge)}}
+</style>
+<script>
+  const frame = (code: string) => `<!doctype html><link rel="stylesheet" href="${location.origin}/fonts.css"><link rel="stylesheet" href="${location.origin}/terra.css"><body style="padding:24px;margin:0;font:400 14px/1.4 'Uncut Sans',system-ui,sans-serif">${code}`
+  document.querySelectorAll<HTMLElement>('.pg').forEach(pg => {
+    const view = pg.querySelector('iframe')!, code = pg.querySelector('textarea')!
+    const draw = () => (view.srcdoc = frame(code.value))
+    code.addEventListener('input', draw)
+    draw()
+  })
+</script>

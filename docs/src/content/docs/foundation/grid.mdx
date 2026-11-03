@@ -1,0 +1,23 @@
+---
+title: grid and offset
+description: A 12-column grid with a 32px gutter. Columns, offsets and the container.
+group: foundation
+order: 30
+---
+import ClassTable from '../../../components/ClassTable.astro'
+import Playground from '../../../components/Playground.astro'
+
+Columns are mobile-first: `f--col-6` applies everywhere, `f--col-tabletm-6` from that breakpoint up. `f--offset-N` pushes a column right by N columns (0 to 11).
+
+<ClassTable match="^f--container" title="container" />
+<ClassTable match="^f--row" title="row" />
+<ClassTable match="^f--col-(\d+)$" title="columns (all sizes)" />
+<ClassTable match="^f--offset-(\d+)$" title="offset (all sizes)" />
+<ClassTable match="^f--(col|offset)-(tabletm)-" title="the same, from tabletm up" />
+
+<Playground height={220} code={`
+<div class="f--container"><div class="f--row">
+  <div class="f--col-12 f--col-tabletm-6"><div class="f--background-c f--radius-c u--p-2">left</div></div>
+  <div class="f--col-6 f--offset-3 f--col-tabletm-3"><div class="f--background-c f--radius-c u--p-2">offset 3</div></div>
+</div></div>
+`} />

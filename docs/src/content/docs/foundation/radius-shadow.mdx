@@ -1,0 +1,33 @@
+---
+title: radius and shadow
+description: Corners and elevation, named with letters.
+group: foundation
+order: 30
+status: new
+---
+import ClassTable from '../../../components/ClassTable.astro'
+import Playground from '../../../components/Playground.astro'
+
+| Class | Value | Use |
+|---|---|---|
+| `f--radius-a` | 8px | Menu items |
+| `f--radius-b` | 12px | Inputs, code blocks |
+| `f--radius-c` | 16px | Cards, menus |
+| `f--radius-d` | 20px | Modals |
+| `f--radius-full` | 999px | Buttons, pills |
+| `f--radius-round` | 50% | Avatars |
+| `f--shadow-a` | float-sm | Toasts, tooltips |
+| `f--shadow-b` | float-md | Menus |
+| `f--shadow-c` | float-lg | Modals |
+
+Cards don't get a shadow: they are separated with a border. Shadows are only for things that float.
+
+<ClassTable match="^f--(radius|shadow)-" title="radius and shadow classes" />
+
+<Playground height={200} code={`
+<div class="u--display-flex u--gap-3">
+  <div class="f--background-b f--radius-c f--shadow-a u--p-4">shadow-a</div>
+  <div class="f--background-b f--radius-c f--shadow-b u--p-4">shadow-b</div>
+  <div class="f--background-b f--radius-c f--shadow-c u--p-4">shadow-c</div>
+</div>
+`} />

@@ -1,0 +1,39 @@
+---
+title: terra design system
+description: Terra CSS classes for prototyping demos outside the ecosystem, with the same names and decisions as the rest of Terra.
+group: start
+order: 1
+---
+import Playground from '../../components/Playground.astro'
+import Finder from '../../components/Finder.astro'
+
+> **Experimental.** This project is a work in progress. New classes, options and pages are still being added and may change.
+
+## find a class
+
+<Finder />
+
+## use the css
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@terrahq/design-system@latest/dist/style.css">
+```
+
+## two layers
+
+| Layer | What it is | Example |
+|---|---|---|
+| `f--` foundation | Terra's design decisions: several properties per class, responsive included. They don't change. | `f--font-c`, `f--color-a`, `f--radius-c` |
+| `u--` utilities | One property per class, with a variant per breakpoint. | `u--p-4`, `u--p-mobile-2`, `u--display-flex` |
+
+## try it
+
+Edit the HTML on the right. The result uses the package's real CSS.
+
+<Playground height={300} code={`
+<article class="f--background-b f--radius-c f--shadow-a u--p-4 u--display-flex u--flex-direction-column u--gap-2" style="max-width:320px">
+  <span class="f--background-d f--color-a f--font-f u--font-medium u--px-2 f--radius-full" style="align-self:flex-start">new</span>
+  <h3 class="f--font-c u--font-medium" style="margin:0">project atlas</h3>
+  <p class="f--font-e" style="margin:0">Built only with Terra classes.</p>
+</article>
+`} />

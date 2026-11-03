@@ -1,178 +1,95 @@
 # @terrahq/design-system
 
-This package is a small helper for building demos or small projects outside of our regular ecosystem.
+[![npm](https://img.shields.io/npm/v/@terrahq/design-system)](https://www.npmjs.com/package/@terrahq/design-system)
 
-You can include the following stylesheet in your project:
+Terra CSS classes for building demos and prototypes outside our regular ecosystem: the same colors, type scale, radius and spacing as Terra's sites, as plain classes you can write straight in your HTML.
 
-```
+> **Experimental.** This project is a work in progress: class names, options and docs may still change. Not intended for production projects. For those, use Terra's own setup.
+
+## Install
+
+**From a CDN (nothing to install):**
+
+```html
 <link rel="stylesheet" href="https://unpkg.com/@terrahq/design-system@latest/dist/style.css">
-
 ```
 
-### Features
+Pin a version instead of `latest` if the page must never change: `@terrahq/design-system@0.1.0`.
 
-### breakpoints names
-```
-desktop: 1700px;
-laptop: 1570px;
-tabletl: 1300px;
-tabletm: 1024px;
-tablets: 810px;
-mobile: 580px;
+**From npm:**
+
+```bash
+npm i @terrahq/design-system
 ```
 
-### colors
-
+```js
+import '@terrahq/design-system' // resolves to dist/style.css
 ```
-/* Core Colors */
-$color-a: #0f0f0f;
-$color-b: #fefefe;
-$color-c: #f7f8f4;
 
-/* Accent Color */
-$color-d: #7ce55e;
-$color-e: #2d9f66;
-$color-f: #429ed6;
-$color-g: #fdb335;
-$color-h: #f76e4a;
-$color-i: #f58dd7;
+## Use it
+
+```html
+<article class="f--background-b f--radius-c f--shadow-a u--p-4 u--display-flex u--flex-direction-column u--gap-2">
+  <span class="f--background-d f--color-a f--font-f u--px-2 f--radius-full">new</span>
+  <h3 class="f--font-c u--font-bold">Project Atlas</h3>
+  <p class="f--font-e">Built only with classes.</p>
+</article>
 ```
-<br><br>
 
-#### Foundation
+## Two layers
 
-- **Grid System:**
-  - **Container:** `.f--container`, `.f--container--fluid`, `.f--container--tabletm-fluid`
-    - Examples: `.f--container` (max-width), `.f--container--fluid` (full-width)
-  
-  - **Row:** `.f--row`, `.f--row--remove-gutter`
-    - Examples: `.f--row` (with gutter), `.f--row--remove-gutter` (no spacing)
-  
-  - **Columns:** `.f--col-#{$i}` (1 to 12) or `.f--col-#{$size}-#{$i}`
-    - Examples: `.f--col-6`, `.f--col-12`, `.f--col-desktop-8`, `.f--col-mobile-4`
-  
-  - **Offset:** `.f--offset-#{$i}` (0 to 11) or `.f--offset-#{$size}-#{$i}`
-    - Examples: `.f--offset-2`, `.f--offset-desktop-3`, `.f--offset-mobile-1`
+| Layer | What it is | Examples |
+|---|---|---|
+| `f--` **foundation** | Terra's design decisions. Several properties per class, responsive included. They don't change between versions. | `f--font-c`, `f--color-a`, `f--background-d`, `f--radius-c`, `f--shadow-a`, `f--row`, `f--col-6` |
+| `u--` **utilities** | One property per class, with a variant per breakpoint. | `u--p-4`, `u--p-mobile-2`, `u--display-flex`, `u--border-a` |
 
-- **Color:** Terra Branded colors `.f--color-#{letter}`
-  - Examples: `.f--color-a`, `.f--color-d`, `.f--color-i`
+If a foundation class already covers something, there is no utility for it. To tweak one detail of a foundation class, add a utility: `f--font-c u--font-bold`. Utilities load after foundation, so they win.
 
-- **Background:** Terra Brand Colors `.f--bg-#{letter}`
-  - Examples: `.f--bg-a`, `.f--bg-b`, `.f--bg-e`
+**Breakpoints** (`max-width`): `desktop` 1700 · `laptop` 1570 · `tabletl` 1300 · `tabletm` 1024 · `tablets` 810 · `mobile` 580. Utilities take the name in the middle: `u--p-mobile-2`.
 
-- **Section:** `.f--section-#{letter}`
-  - Examples: `.f--section-a`, `.f--section-c`, `.f--section-f`
+**Typography.** `f--font-a` to `f--font-f` use Uncut Sans, then `system-ui`. The package does **not** ship the font files; load Uncut Sans yourself or the browser falls back to `system-ui`.
 
-- **Gap:** `.f--gap-#{letter}`
-  - Examples: `.f--gap-a`, `.f--gap-b`, `.f--gap-d`
+All classes are listed in the [class reference](docs/CLASSES.md).
 
-#### Utilities
+## Configure your own build
 
-- **Align Items** `.u--align-items-#{$name}` or `.u--align-items-#{$breakpoint-name}-#{$name}`
+The CDN file is the same for everyone. To change the palette, spacing, radius or font, describe it in a `terra.config.js` and generate your own CSS (needs Node 18+):
 
-| Value | Class | CSS Property |
-|-------|-------|--------------|
-| baseline | `.u--align-items-baseline` | `align-items: baseline` |
-| flex-start | `.u--align-items-flex-start` | `align-items: flex-start` |
-| flex-end | `.u--align-items-flex-end` | `align-items: flex-end` |
-| center | `.u--align-items-center` | `align-items: center` |
+```bash
+npm i @terrahq/design-system
+cp node_modules/@terrahq/design-system/terra.config.example.js terra.config.js
+npx terra-ds build
+```
 
-**With breakpoints:** `.u--align-items-desktop-center`, `.u--align-items-mobile-flex-start`, etc.
+```js
+// terra.config.js
+export default {
+  colors: { a: '#0f0f0f', b: '#fefefe', j: '#ff00aa' }, // replaces the palette; "a" and "b" are required
+  backgrounds: ['a', 'b', 'j'],                          // which colors get f--background-*
+  spacing: [0, 1, 2, 4, 8],                              // replaces the u--p-*, u--m-*, u--gap-* steps (x 8px)
+  font: "'Uncut Sans', system-ui, sans-serif",           // font-family of f--font-*
+  radius: { a: '4px', full: '999px' },                   // replaces f--radius-*
+  output: 'public/terra.css',
+}
+```
 
-- **Display** `.u--display-#{$name}` or `.u--display-#{$breakpoint-name}-#{$name}`
+Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 77 kB with five spacing steps, against 108 kB by default). Breakpoints, grid and shadows are not configurable yet.
 
-| Value | Class | CSS Property |
-|-------|-------|--------------|
-| block | `.u--display-block` | `display: block` |
-| none | `.u--display-none` | `display: none` |
-| inline-block | `.u--display-inline-block` | `display: inline-block` |
-| inline | `.u--display-inline` | `display: inline` |
-| flex | `.u--display-flex` | `display: flex` |
-| inline-flex | `.u--display-inline-flex` | `display: inline-flex` |
+## What's new in 0.2.0
 
-**With breakpoints:** `.u--display-desktop-flex`, `.u--display-mobile-block`, etc.
+- **States:** `u--hover-background-*`, `u--hover-color-*`, `u--hover-border-*`, `u--focus-ring`, `u--active-scale-90|95|98`, `u--disabled-opacity-25|50|75`, and `u--group` with `u--group-hover-*` for children of a hovered parent. Hover only applies on devices that can hover. States have no breakpoint variants.
+- **Motion:** `u--transition-all|colors|opacity|transform`, `u--duration-a|b|c` (0.1s, 0.3s, 0.6s), `u--ease-standard|entrance|exit-a|b`, and the animations `u--animation-fade-in`, `fade-up`, `spin` and `pulse`, which respect `prefers-reduced-motion`.
+- Everything is additive: every 0.1.0 rule is unchanged.
 
-- **Flex-wrap** `.u--flex-wrap-#{$name}` or `.u--flex-wrap-#{$breakpoint-name}-#{$name}`
-  - Examples: `.u--flex-wrap-wrap`, `.u--flex-wrap-nowrap`, `.u--flex-wrap-tablets-wrap`
+## What's new in 0.1.0
 
-- **Font Style** `.u--font-style-#{$name}` or `.u--font-style-#{$breakpoint-name}-#{$name}`
-  - Examples: `.u--font-style-italic`, `.u--font-style-normal`, `.u--font-style-mobile-italic`
+- **`terra-ds build`** and `terra.config.js` to configure palette, spacing, radius and font.
+- **New foundation classes:** `f--radius-*`, `f--shadow-*`.
+- **New utilities:** `u--border-*`, `u--px/py/mx/my`, `u--gap`, `u--row-gap`, `u--col-gap`, `u--mx-auto`, and spacing steps 6, 9 and 12.
+- **Changed default:** `f--font-*` now uses Uncut Sans (with `system-ui` as fallback) instead of Arial. Every other existing class is unchanged.
 
-- **Font Weight** `.u--font-#{$name}` or `.u--font-#{$breakpoint-name}-#{$name}`
+## More
 
-| Value | Class | CSS Property |
-|-------|-------|--------------|
-| thin | `.u--font-thin` | `font-weight: 100` |
-| extralight | `.u--font-extralight` | `font-weight: 200` |
-| light | `.u--font-light` | `font-weight: 300` |
-| regular | `.u--font-regular` | `font-weight: 400` |
-| medium | `.u--font-medium` | `font-weight: 500` |
-| semibold | `.u--font-semibold` | `font-weight: 600` |
-| bold | `.u--font-bold` | `font-weight: 700` |
-| extrabold | `.u--font-extrabold` | `font-weight: 800` |
-| black | `.u--font-black` | `font-weight: 900` |
-
-**With breakpoints:** `.u--font-desktop-bold`, `.u--font-mobile-light`, etc.
-
-- **Justify Content** `.u--justify-content-#{$name}` or `.u--justify-content-#{$breakpoint-name}-#{$name}`
-
-| Value | Class | CSS Property |
-|-------|-------|--------------|
-| space-between | `.u--justify-content-space-between` | `justify-content: space-between` |
-| space-around | `.u--justify-content-space-around` | `justify-content: space-around` |
-| space-evenly | `.u--justify-content-space-evenly` | `justify-content: space-evenly` |
-| flex-start | `.u--justify-content-flex-start` | `justify-content: flex-start` |
-| flex-end | `.u--justify-content-flex-end` | `justify-content: flex-end` |
-| center | `.u--justify-content-center` | `justify-content: center` |
-
-**With breakpoints:** `.u--justify-content-desktop-center`, `.u--justify-content-mobile-flex-start`, etc.
-
-- **Overflow** `.u--overflow-#{$name}` or `.u--overflow-#{$breakpoint-name}-#{$name}`
-  - Examples: `.u--overflow-hidden`, `.u--overflow-auto`, `.u--overflow-tablets-scroll`
-
-- **Position** `.u--position-#{$name}` or `.u--position-#{$breakpoint-name}-#{$name}`
-  - Examples: `.u--position-relative`, `.u--position-absolute`, `.u--position-desktop-fixed`
-
-- **Aspect Ratio** `.u--ar-#{$name}` or `.u--ar-#{$breakpoint-name}-#{$name}`
-
-| Value | Class | CSS Property | Ratio |
-|-------|-------|--------------|-------|
-| a | `.u--ar-a` | `aspect-ratio: 1.77777777` | 16:9 |
-| b | `.u--ar-b` | `aspect-ratio: 1.33333333` | 4:3 |
-| c | `.u--ar-c` | `aspect-ratio: 1.5` | 3:2 |
-| d | `.u--ar-d` | `aspect-ratio: 1` | 1:1 |
-| e | `.u--ar-e` | `aspect-ratio: 0.75` | 3:4 |
-| f | `.u--ar-f` | `aspect-ratio: 0.33333333` | 1:3 |
-
-**With breakpoints:** `.u--ar-desktop-a`, `.u--ar-mobile-d`, etc.
-
-- **Spacing** `.u--#{$attr-short}-#{$value}` or `.u--#{$attr-short}-#{$breakpoint-name}-#{$value}`
-
-| Property | Prefix | Values | Example Classes |
-|----------|--------|--------|-----------------|
-| padding | `p` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--p-2`, `.u--p-5` |
-| padding-top | `pt` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--pt-1`, `.u--pt-4` |
-| padding-right | `pr` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--pr-2`, `.u--pr-8` |
-| padding-bottom | `pb` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--pb-3`, `.u--pb-10` |
-| padding-left | `pl` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--pl-1`, `.u--pl-15` |
-| margin | `m` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--m-2`, `.u--m-7` |
-| margin-top | `mt` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--mt-1`, `.u--mt-5` |
-| margin-right | `mr` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--mr-3`, `.u--mr-8` |
-| margin-bottom | `mb` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--mb-2`, `.u--mb-10` |
-| margin-left | `ml` | 0, 1, 2, 3, 4, 5, 7, 8, 10, 15 | `.u--ml-4`, `.u--ml-15` |
-
-**With breakpoints:** `.u--mb-desktop-2`, `.u--p-mobile-4`, `.u--mt-tablets-1`, etc.
-
-- **Text-align** `.u--text-align-#{$name}` or `.u--text-align-#{$breakpoint-name}-#{$name}`
-
-| Value | Class | CSS Property |
-|-------|-------|--------------|
-| left | `.u--text-align-left` | `text-align: left` |
-| center | `.u--text-align-center` | `text-align: center` |
-| right | `.u--text-align-right` | `text-align: right` |
-| justify | `.u--text-align-justify` | `text-align: justify` |
-
-**With breakpoints:** `.u--text-align-desktop-center`, `.u--text-align-mobile-left`, etc.
-
-<br>
-Note: This is not intended for use in ongoing projects.
+- [Class reference](docs/CLASSES.md)
+- [How Terra works](TERRA.md): colors, type, shape, motion and voice
+- [Contributing](CONTRIBUTING.md)

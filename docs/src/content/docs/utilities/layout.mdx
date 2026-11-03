@@ -1,0 +1,16 @@
+---
+title: layout
+description: Display, flex, position, overflow, order, size and aspect ratio. Each class has a variant per breakpoint.
+group: utilities
+order: 30
+---
+import ClassTable from '../../../components/ClassTable.astro'
+import Playground from '../../../components/Playground.astro'
+
+Add a breakpoint name before the value to apply a class only from there, for example `u--display-mobile-none`.
+
+<ClassTable match="^u--display-" title="display" />
+<ClassTable match="^u--flex-" title="flex direction and wrap" />
+<ClassTable match="^u--(align-items|justify-content)-" title="alignment" />
+<ClassTable match="^u--(position|overflow|order)-" title="position, overflow, order" />
+<ClassTable match="^u--(width|height|ar)-" title="width, height, aspect ratio" />

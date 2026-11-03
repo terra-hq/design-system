@@ -1,0 +1,18 @@
+---
+title: border
+description: A 1px border in a palette color.
+group: utilities
+order: 20
+status: new
+---
+import ClassTable from '../../../components/ClassTable.astro'
+import Playground from '../../../components/Playground.astro'
+
+<ClassTable match="^u--border-" title="border classes" />
+
+<Playground height={160} code={`
+<div class="u--display-flex u--gap-2">
+  <span class="u--border-a u--px-3 u--py-1 f--radius-full">a</span>
+  <span class="u--border-e u--px-3 u--py-1 f--radius-full">e</span>
+</div>
+`} />

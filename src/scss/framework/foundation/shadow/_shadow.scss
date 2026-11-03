@@ -1,0 +1,7 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+@each $name, $value in $shadow-options {
+    .f--shadow-#{$name} {
+        box-shadow: $value;
+    }
+}

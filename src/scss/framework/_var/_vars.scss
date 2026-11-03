@@ -26,18 +26,17 @@ $color-options: (
     g: $color-g,
     h: $color-h,
     i: $color-i,
-);
+) !default;
 
-$colorbg-options: (
-    a: $color-a,
-    b: $color-b,
-    c: $color-c,
-    d: $color-d,
-    e: $color-e,
-);
+// Which of $color-options also get an f--background-* class (keys missing from $color-options are skipped).
+$colorbg-keys: (a, b, c, d, e) !default;
+
+// Spacing steps for u--p-*, u--m-* (x $measure)
+$space-values: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15) !default;
 
 // * TYPOGRAPHY
-$type-a:'Arial', sans-serif;
+// Terra's typeface. The package does not ship the font files: load Uncut Sans yourself, or the fallbacks are used.
+$type-a: 'Uncut Sans', system-ui, sans-serif !default;
 
 // * LAYOUT
 $viewport-type: max-width;
@@ -80,6 +79,14 @@ $measure: 0.5rem; /* 0.5rem = 8px */
 
 // * border
 $border-radius-a: $measure;
+// f--radius-*  a 8 · b 12 · c 16 · d 20 · full (pills) · round (circles)
+$radius-options: (a: $measure, b: $measure * 1.5, c: $measure * 2, d: $measure * 2.5, full: 999px, round: 50%) !default;
+// f--shadow-*  a float-sm · b float-md · c float-lg
+$shadow-options: (
+    a: (0 1px 2px rgb(15 15 15 / 0.06), 0 4px 16px rgb(15 15 15 / 0.08)),
+    b: (0 2px 4px rgb(15 15 15 / 0.06), 0 12px 32px rgb(15 15 15 / 0.12)),
+    c: (0 24px 64px rgb(15 15 15 / 0.2)),
+) !default;
 
 // * Time
 $time-a: 0.1s; // * Micro-interactions such as button and toggle

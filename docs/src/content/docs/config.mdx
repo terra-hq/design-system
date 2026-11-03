@@ -1,0 +1,161 @@
+---
+title: configure
+description: Build your own copy of the CSS with a different palette, spacing, radius or font. What each option covers, what it doesn't, and how to use it.
+group: start
+order: 5
+---
+
+The CDN link gives everyone the same CSS. When a project needs something different (fewer colors, another font, smaller radius), you describe it in a `terra.config.js` and generate your own CSS file from it. The classes keep the same names; only their values and which ones exist change.
+
+| | CDN `<link>` | `terra.config.js` |
+|---|---|---|
+| Needs Node | No | Yes |
+| Setup | None | One config file, one command |
+| Palette, spacing, radius, font | Defaults | Yours |
+| CSS size | Everything (about 108 kB) | Only what you keep |
+
+## quick start
+
+```bash
+npm i @terrahq/design-system
+cp node_modules/@terrahq/design-system/terra.config.example.js terra.config.js
+npx terra-ds build
+```
+
+1. **Install** the package.
+2. **Copy the example config** to the root of your project and edit it.
+3. **Build.** The command reads `terra.config.js` and writes the CSS to the path in `output`.
+4. **Link that file** from your HTML instead of the CDN: `<link rel="stylesheet" href="/terra.css">`.
+
+To run it with every build, add a script to your `package.json`: `"css": "terra-ds build"`. To use another file name, pass it: `npx terra-ds build my-config.js`.
+
+## every option
+
+```js
+// terra.config.js  (an ES module: it must use `export default`)
+export default {
+  colors: { a: '#0f0f0f', b: '#fefefe' },
+  backgrounds: ['a', 'b'],
+  spacing: [0, 1, 2, 4, 8],
+  font: "'Uncut Sans', system-ui, sans-serif",
+  radius: { a: '4px', full: '999px' },
+  output: 'public/terra.css',
+}
+```
+
+Every key is optional. Whatever you leave out keeps its default.
+
+| Key | Behavior | Default |
+|---|---|---|
+| `colors` | **Replaces** the palette | `a`–`i` (see [color](/foundation/color/)) |
+| `backgrounds` | **Replaces** the list of colors that get a background class | `['a', 'b', 'c', 'd', 'e']` |
+| `spacing` | **Replaces** the spacing steps (each step × 8px) | `0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15` |
+| `font` | **Replaces** the font family of the typography classes | `'Uncut Sans', system-ui, sans-serif` |
+| `radius` | **Replaces** the corner sizes | `a` 8px · `b` 12px · `c` 16px · `d` 20px · `full` 999px · `round` 50% |
+| `output` | Where the CSS is written, relative to where you run the command | `terra.css` |
+
+"Replaces" means that if you write `colors: { a, b }`, the other seven colors are gone, not merged. That is how you get a smaller file.
+
+### colors
+
+An object with a letter for each color and any CSS color as the value. Each letter you list generates:
+
+- `f--color-{letter}` (text color)
+- `u--border-{letter}` (1px solid border)
+- `f--background-{letter}`, if the letter is also in `backgrounds`
+
+`a` and `b` are **required**. The base styles use them (text color, focus outline, autofill). If either is missing the command stops with an error.
+
+You can add letters that don't exist by default. `colors: { a, b, j: '#ff00aa' }` creates `f--color-j` and `u--border-j`. Add `'j'` to `backgrounds` to get `f--background-j` too.
+
+### backgrounds
+
+A list of letters that get an `f--background-*` class. It exists apart from `colors` because by default backgrounds stop at `e`, while text colors go up to `i`. A letter that is in this list but not in `colors` is skipped without an error.
+
+### spacing
+
+A list of whole numbers. These numbers are **steps**, not pixels: each step is multiplied by 8px to get the real size. A step is also the number you write in the class name.
+
+| Step | Size | Example class |
+|---|---|---|
+| `0` | 0 | `u--p-0` |
+| `1` | 8px | `u--p-1` |
+| `2` | 16px | `u--p-2` |
+| `3` | 24px | `u--p-3` |
+| `4` | 32px | `u--p-4` |
+| `5` | 40px | `u--p-5` |
+| `6` | 48px | `u--p-6` |
+| `7` | 56px | `u--p-7` |
+| `8` | 64px | `u--p-8` |
+| `9` | 72px | `u--p-9` |
+| `10` | 80px | `u--p-10` |
+| `12` | 96px | `u--p-12` |
+| `15` | 120px | `u--p-15` |
+
+That table is the default list. The jump from 10 to 12 and from 12 to 15 is intentional: bigger spaces don't need every step. Sizes are written in `rem` (`0.5rem` per step), so they follow the visitor's font size; the pixel values above assume the usual 16px.
+
+**What you write is what you keep.** `spacing: [0, 1, 2, 4, 8]` means that only `u--p-0`, `u--p-1`, `u--p-2`, `u--p-4` and `u--p-8` exist. `u--p-3` and `u--p-6` no longer exist, and any HTML that still uses them silently loses that spacing. You can also add a step that isn't in the default list, such as `20` (160px) for `u--p-20`.
+
+**Every step is applied to all of these**, at every breakpoint:
+
+| Group | Classes |
+|---|---|
+| Padding | `u--p-N` `u--pt-N` `u--pr-N` `u--pb-N` `u--pl-N` `u--px-N` `u--py-N` |
+| Margin | `u--m-N` `u--mt-N` `u--mr-N` `u--mb-N` `u--ml-N` |
+| Gap | `u--gap-N` `u--row-gap-N` `u--col-gap-N` |
+
+That is 15 classes per step, and each one also exists once per breakpoint, for example `u--p-mobile-N`. With the 13 default steps that makes 1,365 classes. With `[0, 1, 2, 4, 8]` it makes 525. This is why `spacing` has the biggest effect on file size. The `u--mx-auto` class is always generated and doesn't depend on the list.
+
+**Rules**
+- Whole numbers, 0 or higher. A decimal such as `0.5` can't be used in a class name, and a negative number would create invalid CSS. The command stops with a message if you try.
+- The list **doesn't affect** `f--section-*`, `f--gap-*` or `f--sp-*`. Those are fixed Terra decisions with their own values.
+- Half steps (4px) aren't possible today. If a project needs the 4px scale that Terra uses in interfaces, that requires a change in the package, not a config value.
+
+See [spacing](/utilities/spacing/) for the classes in use.
+
+### font
+
+A CSS `font-family` value written as a string, with inner quotes for names that contain spaces: `"'Uncut Sans', system-ui, sans-serif"`.
+
+It sets the family for `f--font-a` to `f--font-f`. The default is already Uncut Sans, so you only need this key to use a different typeface.
+
+The package does **not** include the font files, with or without this key. You still have to load the font yourself (an `@font-face` rule or a font link). Until you do, the browser uses the next name in the list (`system-ui`). Sizes, line heights and the responsive step of those classes don't change.
+
+### radius
+
+An object with a name and a CSS length for each corner size. Each key becomes a class: `radius: { a: '4px', full: '999px' }` creates `f--radius-a` and `f--radius-full` and nothing else. Keys can be any name you like.
+
+### output
+
+The file path for the generated CSS. Missing folders are created. If you omit it, the file is `terra.css` in the folder where you ran the command.
+
+## example: a project with two colors
+
+```js
+export default {
+  colors: { a: '#111111', b: '#ffffff', j: '#ff00aa' },
+  backgrounds: ['a', 'b', 'j'],
+  spacing: [0, 1, 2, 4, 8],
+  output: 'public/terra.css',
+}
+```
+
+The resulting file has `f--color-a/b/j`, `f--background-a/b/j`, `u--border-a/b/j`, spacing utilities only for 0, 1, 2, 4 and 8, and the default font and radius. It is about 77 kB, against 108 kB for the default build.
+
+## what you can't configure yet
+
+These values exist in the SCSS but are not available in `terra.config.js`:
+
+- **Breakpoints** (names and widths). Seventeen utilities define their own copy, so changing them needs a refactor first.
+- **Grid and container** (12 columns, 32px gutter, container widths).
+- **Shadows** (`f--shadow-*`), **motion** (`$time-*`, `$ease-*`) and the base 8px measure.
+- **The spacing of `f--section-*`, `f--gap-*` and `f--sp-*`.** These are fixed Terra decisions. Their numbers are not affected by the `spacing` option.
+
+Existing classes are never renamed or removed by the package itself, so a project can keep using them while another one customizes its own copy.
+
+## good to know
+
+- **The CDN version doesn't change.** Configuring only affects the CSS you build yourself.
+- **Check the output.** After building, search the file for a class you expect to exist. If you removed a step or a color that your HTML still uses, that class silently stops working.
+- **This site builds its own copy** with `docs/terra.config.js`, so the live examples use the real classes from the current source.
+- **How it works.** The command turns your config into a Sass `@use ... with (...)` call and compiles the package's SCSS. All defaults live in `src/scss/framework/_var/_vars.scss`, which is also where a new configurable value gets added (see [contributing](/contributing/)).
