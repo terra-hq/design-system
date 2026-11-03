@@ -1,7 +1,0 @@
-# Netlify builds the docs site (docs/), not the npm package.
-[build]
-  command = "npm ci && npm --prefix docs ci && npm run docs:build"
-  publish = "docs/dist"
-
-[build.environment]
-  NODE_VERSION = "24"

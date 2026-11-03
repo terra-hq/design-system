@@ -91,5 +91,4 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 ## More
 
 - [Class reference](docs/CLASSES.md)
-- [How Terra works](TERRA.md): colors, type, shape, motion and voice
 - [Contributing](CONTRIBUTING.md)

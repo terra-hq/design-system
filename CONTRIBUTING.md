@@ -31,9 +31,7 @@ src/scss/
     └── utilities/_<topic>.scss u--
 bin/terra-ds.mjs                command that reads terra.config.js and compiles
 scripts/check-foundation.mjs    the check above
-docs/                           Astro site (npm run docs:dev)
 docs/CLASSES.md                 class reference
-TERRA.md                        how Terra works (design reference)
 ```
 
 ## Adding a class
@@ -42,11 +40,11 @@ TERRA.md                        how Terra works (design reference)
 2. Create `foundation/<topic>/_<topic>.scss` (or `utilities/_<topic>.scss`) and forward it from `_foundation.scss` / `_utilities.scss`.
 3. If it is configurable from `terra.config.js`, add the key in `bin/terra-ds.mjs`.
 4. `npm run build && npm run check`.
-5. Document it: add an `.mdx` page in `docs/src/content/docs/` (it needs `title`, `group`, `order` in the frontmatter). Class tables fill themselves from the compiled CSS.
+5. Document it: add the classes to `docs/CLASSES.md`. The full documentation site lives in Terra Docs, outside this repo.
 
-## Docs site
+## Documentation
 
-`docs/` is a separate Astro project (not published to npm). `npm run docs:dev` builds the library, then starts the site. Its examples run on the real compiled CSS, and `TERRA.md` and this file are copied in as pages by `docs/scripts/sync.mjs`.
+This repo only holds the code and `docs/CLASSES.md`. The documentation site (guides, examples, the design reference) lives in Terra Docs, so there is no docs app to build or deploy here.
 
 ## Versioning
 
@@ -56,5 +54,5 @@ One deliberate exception so far: in 0.1.0 the default `f--font-*` typeface chang
 
 ## Known gaps
 
-- Breakpoints aren't configurable: 17 utilities define their own map. Check the differences listed in `TERRA.md` before touching them.
+- Breakpoints aren't configurable: 17 utilities define their own map. Check the differences between the utilities' breakpoint maps before touching them.
 - States (`u--hover-*`) and transitions (`u--transition-*`).
