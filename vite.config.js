@@ -27,6 +27,12 @@ export default defineConfig({
       }
     }
   },
+  css: {
+    preprocessorOptions: {
+      // Vite 4 talks to Sass through its legacy JS API; nothing to fix on our side.
+      scss: { silenceDeprecations: ['legacy-js-api'] },
+    },
+  },
   resolve: {
     alias: {
       '@scss': path.resolve(__dirname, './src/scss'),

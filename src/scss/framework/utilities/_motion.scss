@@ -1,0 +1,88 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// Transitions reuse Terra's time tokens and easing curves ($time-*, $ease-* in _vars.scss).
+// Order matters: the transition-* classes set a default duration and curve, and the duration and ease classes
+// that follow them win over those defaults.
+
+.u--transition-all {
+    transition-property: all;
+    transition-duration: $time-a;
+    transition-timing-function: $ease-standard-a;
+}
+.u--transition-colors {
+    transition-property: color, background-color, border-color, fill, stroke;
+    transition-duration: $time-a;
+    transition-timing-function: $ease-standard-a;
+}
+.u--transition-opacity {
+    transition-property: opacity;
+    transition-duration: $time-a;
+    transition-timing-function: $ease-standard-a;
+}
+.u--transition-transform {
+    transition-property: transform;
+    transition-duration: $time-a;
+    transition-timing-function: $ease-standard-a;
+}
+
+// u--duration-a (0.1s) / b (0.3s) / c (0.6s)
+$durations: (a: $time-a, b: $time-b, c: $time-c);
+@each $name, $time in $durations {
+    .u--duration-#{$name} {
+        transition-duration: $time;
+    }
+}
+
+// u--ease-{standard|entrance|exit}-{a|b}: a = productive (interfaces), b = expressive (marketing)
+$eases: (
+    standard-a: $ease-standard-a,
+    standard-b: $ease-standard-b,
+    entrance-a: $ease-entrance-a,
+    entrance-b: $ease-entrance-b,
+    exit-a: $ease-exit-a,
+    exit-b: $ease-exit-b,
+);
+@each $name, $curve in $eases {
+    .u--ease-#{$name} {
+        transition-timing-function: $curve;
+    }
+}
+
+// Animations are utilities, not foundations.
+@keyframes u-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes u-fade-up {
+    from { opacity: 0; transform: translateY(1rem); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes u-spin {
+    to { transform: rotate(360deg); }
+}
+@keyframes u-pulse {
+    50% { opacity: 0.5; }
+}
+
+.u--animation-fade-in {
+    animation: u-fade-in $time-b $ease-entrance-a both;
+}
+.u--animation-fade-up {
+    animation: u-fade-up $time-b $ease-entrance-a both;
+}
+.u--animation-spin {
+    animation: u-spin 1s linear infinite;
+}
+.u--animation-pulse {
+    animation: u-pulse 2s $ease-standard-a infinite;
+}
+
+// All of them respect prefers-reduced-motion.
+@media (prefers-reduced-motion: reduce) {
+    .u--animation-fade-in,
+    .u--animation-fade-up,
+    .u--animation-spin,
+    .u--animation-pulse {
+        animation: none;
+    }
+}

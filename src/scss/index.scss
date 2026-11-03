@@ -1,3 +1,5 @@
-@use "./src/scss/framework/foundation/foundation.scss";
+// _vars is forwarded first so `@use "<pkg>" with (...)` configures it before anything else loads it.
+@forward "./framework/_var/vars";
 
-@use "./src/scss/framework/utilities/utilities.scss";
+@use "./framework/foundation/foundation";
+@use "./framework/utilities/utilities";

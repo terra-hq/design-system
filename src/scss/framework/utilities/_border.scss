@@ -1,0 +1,8 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// u--border-{color}: 1px solid in a palette color
+@each $name, $color in $color-options {
+    .u--border-#{$name} {
+        border: 1px solid $color;
+    }
+}

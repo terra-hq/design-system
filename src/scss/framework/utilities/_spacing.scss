@@ -1,17 +1,5 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 
-$space-values : (
-  0,
-  1,
-  2,
-  3,
-  4,
-  5,
-  7,
-  8,
-  10,
-  15,
-  ) !default;
 
   $space-prefixes : (
     p  : padding,
@@ -24,6 +12,13 @@ $space-values : (
     mr : margin-right,
     mb : margin-bottom,
     ml : margin-left,
+    px : (padding-left, padding-right),
+    py : (padding-top, padding-bottom),
+    mx : (margin-left, margin-right),
+    my : (margin-top, margin-bottom),
+    gap : gap,
+    row-gap : row-gap,
+    col-gap : column-gap,
   ) !default;
 
   $space-breakpoints: (
@@ -44,7 +39,7 @@ $space-values : (
         @each $attr-short, $attr-long in $prefixes {
           @each $value in $values {
             .u--#{$attr-short}-#{$value} {
-              #{$attr-long}: calc(#{$measure} * #{$value});
+              @each $prop in $attr-long { #{$prop}: calc(#{$measure} * #{$value}); }
             }
           }
         }
@@ -55,7 +50,7 @@ $space-values : (
           @each $attr-short, $attr-long in $prefixes {
             @each $value in $values {
               .u--#{$attr-short}-#{$breakpoint-name}-#{$value} {
-                #{$attr-long}: calc(#{$measure} * #{$value});
+                @each $prop in $attr-long { #{$prop}: calc(#{$measure} * #{$value}); }
               }
             }
           }
@@ -65,3 +60,5 @@ $space-values : (
   }
   
   @include make-spaces($space-values, $space-prefixes,$space-breakpoints);
+
+.u--mx-auto { margin-left: auto; margin-right: auto; }

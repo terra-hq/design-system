@@ -1,3 +1,4 @@
+@use "sass:meta";
 @use "@scss/framework/_var/_vars.scss" as *;
 
 $height-values: (
@@ -38,7 +39,7 @@ $height-breakpoints: (
     }
 }
 
-@if variable-exists(height-breakpoints) {
+@if meta.variable-exists(height-breakpoints) {
     @include height-utility($height-values, $height-breakpoints);
   }
 @else {

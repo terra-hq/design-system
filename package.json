@@ -1,7 +1,7 @@
 {
   "name": "@terrahq/design-system",
   "private": false,
-  "version": "0.0.9",
+  "version": "0.2.1",
   "type": "module",
   "exports": {
     ".": "./dist/style.css"
@@ -9,12 +9,43 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "check": "node scripts/check-foundation.mjs",
+    "prepublishOnly": "npm run build && npm run check"
   },
   "devDependencies": {
     "@types/node": "^20.8.5",
-    "sass": "^1.69.3",
     "typescript": "^5.0.2",
     "vite": "^4.4.5"
+  },
+  "bin": {
+    "terra-ds": "bin/terra-ds.mjs"
+  },
+  "files": [
+    "dist",
+    "src/scss",
+    "bin",
+    "terra.config.example.js"
+  ],
+  "dependencies": {
+    "sass": "^1.69.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terra-hq/design-system.git"
+  },
+  "homepage": "https://github.com/terra-hq/design-system#readme",
+  "bugs": {
+    "url": "https://github.com/terra-hq/design-system/issues"
+  },
+  "keywords": [
+    "terra",
+    "design-system",
+    "css",
+    "utility-classes",
+    "sass"
+  ],
+  "engines": {
+    "node": ">=18"
   }
 }

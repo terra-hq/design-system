@@ -1,0 +1,70 @@
+@use "sass:map";
+@use "sass:math";
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// States live in the class name, with no colons: u--hover-background-d, u--focus-ring, u--active-scale-95...
+// Hover only applies on devices that can hover. States have no breakpoint variants.
+
+@media (hover: hover) {
+    // u--hover-color-{letter}, u--hover-border-{letter} (border color only: pair with u--border-*)
+    @each $name, $color in $color-options {
+        .u--hover-color-#{$name}:hover {
+            color: $color;
+        }
+        .u--hover-border-#{$name}:hover {
+            border-color: $color;
+        }
+    }
+
+    // u--hover-background-{letter}: the letters that also have f--background-*
+    @each $name in $colorbg-keys {
+        @if map.has-key($color-options, $name) {
+            .u--hover-background-#{$name}:hover {
+                background-color: map.get($color-options, $name);
+            }
+        }
+    }
+
+    // u--group on a parent, u--group-hover-* on its children
+    @each $name, $color in $color-options {
+        .u--group:hover .u--group-hover-color-#{$name} {
+            color: $color;
+        }
+        .u--group:hover .u--group-hover-border-#{$name} {
+            border-color: $color;
+        }
+    }
+    @each $name in $colorbg-keys {
+        @if map.has-key($color-options, $name) {
+            .u--group:hover .u--group-hover-background-#{$name} {
+                background-color: map.get($color-options, $name);
+            }
+        }
+    }
+}
+
+// u--group is a marker: it sets only a custom property so the class exists in the CSS.
+.u--group {
+    --u-group: 1;
+}
+
+// u--focus-ring: a 2px ring in color a, only for keyboard focus
+.u--focus-ring:focus-visible {
+    outline: 2px solid map.get($color-options, a);
+    outline-offset: 2px;
+}
+
+// u--active-scale-{90|95|98}: pressed
+@each $step in (90, 95, 98) {
+    .u--active-scale-#{$step}:active {
+        transform: scale(math.div($step, 100));
+    }
+}
+
+// u--disabled-opacity-{25|50|75}: on :disabled and [aria-disabled="true"]
+@each $step in (25, 50, 75) {
+    .u--disabled-opacity-#{$step}:disabled,
+    .u--disabled-opacity-#{$step}[aria-disabled="true"] {
+        opacity: math.div($step, 100);
+    }
+}
