@@ -15,6 +15,7 @@ export default defineConfig({
     lib: {
       entry: 'src/scss/index.scss', // Punto de entrada de tu biblioteca
       name: 'terra-design-system', // Nombre global si se incluye mediante una etiqueta <script>
+      cssFileName: 'style', // Vite 5+ names the CSS after the package: keep dist/style.css (package.json exports)
       // Especifica los formatos de salida deseados
       // formats: ['es', 'umd', 'cjs'],
     },
@@ -26,12 +27,6 @@ export default defineConfig({
         // entryFileNames: `[name].[format].js`,
       }
     }
-  },
-  css: {
-    preprocessorOptions: {
-      // Vite 4 talks to Sass through its legacy JS API; nothing to fix on our side.
-      scss: { silenceDeprecations: ['legacy-js-api'] },
-    },
   },
   resolve: {
     alias: {

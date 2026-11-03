@@ -4,7 +4,13 @@
 import { readFileSync } from 'node:fs'
 
 // Intentional change in 0.1.0: the default typeface. Everything else in those rules must still match.
-const norm = r => r.replace(/font-family:[^;}]*/g, 'font-family:*')
+// Vite 5+ minifies `@media (max-width:N)` as `@media all and (max-width: N)` and `@media(...)`: the same rules, so the spellings compare equal.
+const norm = r =>
+  r
+    .replace(/font-family:[^;}]*/g, 'font-family:*')
+    .replace(/@media all and /g, '@media ')
+    .replace(/@media\s*\(/g, '@media (')
+    .replace(/\(([^()]*)\)/g, (m, inner) => '(' + inner.replace(/:\s+/g, ':') + ')')
 
 function rules(css) {
   const out = new Set()
