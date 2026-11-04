@@ -1,0 +1,31 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// c--terraform-a is a Terraform painted with the text color. The shape is a modifier (c--terraform-a--forma,
+// defined in dist/terraforms.css) and so is the size. Terraforms are used alone or in a trio:
+// three different shapes in three different colors, inside c--terraform-trio-a.
+.c--terraform-a {
+    display: inline-block;
+    flex: none;
+    width: 64px;
+    height: 64px;
+    background-color: currentColor;
+    -webkit-mask: var(--c-terraform, linear-gradient(transparent, transparent)) center / contain no-repeat;
+    mask: var(--c-terraform, linear-gradient(transparent, transparent)) center / contain no-repeat;
+}
+.c--terraform-a--small {
+    width: 32px;
+    height: 32px;
+}
+.c--terraform-a--medium {
+    width: 64px;
+    height: 64px;
+}
+.c--terraform-a--large {
+    width: 128px;
+    height: 128px;
+}
+.c--terraform-trio-a {
+    display: inline-flex;
+    align-items: center;
+    gap: $measure * 2;
+}

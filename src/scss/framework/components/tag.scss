@@ -1,0 +1,26 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// An outlined pill with a dot: the one splash of color the brand allows on a label.
+.c--tag-a {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: $measure * 0.75;
+    box-sizing: border-box;
+    height: 22px;
+    padding: 0 $measure * 1.125;
+    border: 1px solid pick(f);
+    border-radius: radius(full, 999px);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+
+    &::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: pick(f);
+    }
+}

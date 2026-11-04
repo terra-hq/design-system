@@ -209,3 +209,20 @@ Hover only applies on devices that can hover. States have no breakpoint variants
 - **Duration:** `.u--duration-a` (0.1s), `.u--duration-b` (0.3s), `.u--duration-c` (0.6s)
 - **Easing:** `.u--ease-standard-a`, `.u--ease-standard-b`, `.u--ease-entrance-a`, `.u--ease-entrance-b`, `.u--ease-exit-a`, `.u--ease-exit-b` (`a` productive, `b` expressive)
 - **Animation:** `.u--animation-fade-in`, `.u--animation-fade-up`, `.u--animation-spin`, `.u--animation-pulse`. All of them respect `prefers-reduced-motion`.
+
+## Components (0.3.0)
+
+Named `c--name-variant--modifier`. Sizes, icon types and Terraform shapes are modifiers.
+
+| Component | Classes |
+|---|---|
+| Button | `c--btn-a` `c--btn-b` `c--btn-c`, each with `--small` `--medium` `--large` |
+| Card | `c--card-wrapper-a` `c--card-wrapper-b` |
+| Tag | `c--tag-a` |
+| Icon | `c--icon-a` + `--small` `--medium` `--large` + a type from `dist/icons.css` |
+| Terraform | `c--terraform-a` + `--small` `--medium` `--large` + a shape from `dist/terraforms.css` |
+| Terraform trio | `c--terraform-trio-a` |
+
+## Also new in 0.3.0
+
+`u--order-last`, `u--order-none`, `u--order-2` to `u--order-12` (each with breakpoint variants), `u--text-decoration-underline`, `u--text-decoration-line-through`, `u--text-decoration-none`, `u--animation-scale-in`, `u--animation-slide-left`, `u--animation-shake`, `u--animation-shimmer`.

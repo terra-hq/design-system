@@ -1,0 +1,39 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--card-wrapper-a is the box of a card: put anything inside. Flat, as the brand asks: on hover the border turns
+// Noche, with no shadow and no movement.
+// c--card-wrapper-b has no padding, so an image can reach the edge; add the inner space with utilities (u--p-3).
+.c--card-wrapper-a,
+.c--card-wrapper-b {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    min-width: 0;
+    border: 1px solid rgba(pick(a), 0.14);
+    border-radius: radius(c, $measure * 2);
+    background: pick(b, a);
+    transition: border-color $time-b $ease-standard-a;
+}
+.c--card-wrapper-a {
+    padding: $measure * 3;
+    gap: $measure * 1.5;
+}
+.c--card-wrapper-b {
+    padding: 0;
+    overflow: hidden;
+}
+
+@media (hover: hover) {
+    .c--card-wrapper-a:hover,
+    .c--card-wrapper-b:hover {
+        border-color: pick(a);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .c--card-wrapper-a,
+    .c--card-wrapper-b {
+        transition: none;
+    }
+}

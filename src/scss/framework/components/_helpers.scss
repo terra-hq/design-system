@@ -1,0 +1,17 @@
+@use "sass:map";
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// A palette color, or the fallback when a custom palette does not have that letter.
+@function pick($key, $fallback: a) {
+    @if map.has-key($color-options, $key) {
+        @return map.get($color-options, $key);
+    }
+    @return map.get($color-options, $fallback);
+}
+// A radius from the config, or the Terra default when a custom radius map does not have that letter.
+@function radius($key, $fallback) {
+    @if map.has-key($radius-options, $key) {
+        @return map.get($radius-options, $key);
+    }
+    @return $fallback;
+}

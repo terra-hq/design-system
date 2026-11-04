@@ -57,6 +57,25 @@ $eases: (
     from { opacity: 0; transform: translateY(1rem); }
     to { opacity: 1; transform: none; }
 }
+@keyframes u-scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes u-slide-left {
+    from { opacity: 0; transform: translateX(-1.5rem); }
+    to { opacity: 1; transform: none; }
+}
+@keyframes u-shake {
+    0%, 100% { transform: none; }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+@keyframes u-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
 @keyframes u-spin {
     to { transform: rotate(360deg); }
 }
@@ -77,12 +96,32 @@ $eases: (
     animation: u-pulse 2s $ease-standard-a infinite;
 }
 
+.u--animation-scale-in {
+    animation: u-scale-in $time-b $ease-entrance-a both;
+}
+.u--animation-slide-left {
+    animation: u-slide-left $time-b $ease-entrance-a both;
+}
+.u--animation-shake {
+    animation: u-shake 0.4s $ease-standard-a both;
+}
+// Loading placeholder: give it a height and it sweeps a light band across.
+.u--animation-shimmer {
+    background: linear-gradient(90deg, rgb(15 15 15 / 0.06) 25%, rgb(15 15 15 / 0.14) 50%, rgb(15 15 15 / 0.06) 75%);
+    background-size: 200% 100%;
+    animation: u-shimmer 1.6s linear infinite;
+}
+
 // All of them respect prefers-reduced-motion.
 @media (prefers-reduced-motion: reduce) {
     .u--animation-fade-in,
     .u--animation-fade-up,
     .u--animation-spin,
-    .u--animation-pulse {
+    .u--animation-pulse,
+    .u--animation-scale-in,
+    .u--animation-slide-left,
+    .u--animation-shake,
+    .u--animation-shimmer {
         animation: none;
     }
 }
