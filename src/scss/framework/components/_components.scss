@@ -1,0 +1,10 @@
+// Components: c--name-variant--modifier. Ready-made pieces built from the same tokens as foundation and utilities,
+// so they follow terra.config.js (palette, radius, time and easing).
+// Icon types (c--icon-a--check) and Terraform shapes (c--terraform-a--forma) ship as separate files:
+// dist/icons.css and dist/terraforms.css.
+// Order: icon before button, because the button restyles the icon placed inside it.
+@forward './tag.scss';
+@forward './icon.scss';
+@forward './terraform.scss';
+@forward './card.scss';
+@forward './btn.scss';

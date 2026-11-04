@@ -1,0 +1,106 @@
+@use "sass:map";
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary.
+// Sizes are modifiers of the variant: --small, --medium (the default) and --large.
+$btn-ink: pick(a);
+$btn-paper: pick(b, a);
+
+.c--btn-a,
+.c--btn-b,
+.c--btn-c {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $measure;
+    box-sizing: border-box;
+    height: $measure * 5;
+    padding: 0 $measure * 2.5;
+    border: 1px solid $btn-ink;
+    border-radius: radius(full, 999px);
+    font-family: $type-a;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background-color $time-a $ease-standard-a,
+        color $time-a $ease-standard-a,
+        border-color $time-a $ease-standard-a,
+        transform $time-a $ease-standard-a;
+
+    &:focus-visible {
+        outline: 2px solid pick(f);
+        outline-offset: 2px;
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    .c--icon-a {
+        width: 1.25em;
+        height: 1.25em;
+    }
+}
+
+.c--btn-a {
+    background: $btn-ink;
+    color: $btn-paper;
+}
+.c--btn-b {
+    background: transparent;
+    color: $btn-ink;
+}
+.c--btn-c {
+    padding: 0 $measure * 1.5;
+    border-color: transparent;
+    background: transparent;
+    color: $btn-ink;
+}
+.c--btn-a:active,
+.c--btn-b:active {
+    transform: scale(0.98);
+}
+
+@media (hover: hover) {
+    .c--btn-a:hover {
+        background: transparent;
+        color: $btn-ink;
+    }
+    .c--btn-b:hover {
+        background: $btn-ink;
+        color: $btn-paper;
+    }
+    .c--btn-c:hover {
+        background: rgba($btn-ink, 0.06);
+    }
+}
+
+// --small 32px · --medium 40px (the default, written out so it can be forced) · --large 48px
+@mixin btn-size($v, $name, $height, $font, $px, $px-c) {
+    .c--btn-#{$v}--#{$name} {
+        height: $height;
+        padding-inline: $px;
+        font-size: $font;
+        @if $v == c {
+            padding-inline: $px-c;
+        }
+    }
+}
+@each $v in (a, b, c) {
+    @include btn-size($v, small, $measure * 4, 13px, $measure * 1.75, $measure * 1.5);
+    @include btn-size($v, medium, $measure * 5, 14px, $measure * 2.5, $measure * 1.5);
+    @include btn-size($v, large, $measure * 6, 16px, $measure * 3.5, $measure * 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .c--btn-a,
+    .c--btn-b,
+    .c--btn-c {
+        transition: none;
+    }
+}

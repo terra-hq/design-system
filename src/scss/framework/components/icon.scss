@@ -1,0 +1,25 @@
+// c--icon-a is an icon painted with the text color (a CSS mask), so f--color-* and any color class tint it.
+// The type is a modifier (c--icon-a--check, defined in dist/icons.css) and so is the size.
+// Without icons.css the icon is simply hidden.
+.c--icon-a {
+    display: inline-block;
+    flex: none;
+    width: 24px;
+    height: 24px;
+    background-color: currentColor;
+    -webkit-mask: var(--c-icon, linear-gradient(transparent, transparent)) center / contain no-repeat;
+    mask: var(--c-icon, linear-gradient(transparent, transparent)) center / contain no-repeat;
+    vertical-align: -0.25em;
+}
+.c--icon-a--small {
+    width: 16px;
+    height: 16px;
+}
+.c--icon-a--medium {
+    width: 24px;
+    height: 24px;
+}
+.c--icon-a--large {
+    width: 32px;
+    height: 32px;
+}
