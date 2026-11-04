@@ -4,6 +4,8 @@
 
 Terra CSS classes for building demos and prototypes outside our regular ecosystem: the same colors, type scale, radius and spacing as Terra's sites, as plain classes you can write straight in your HTML.
 
+**Documentation:** guides, live examples and the design reference are in [Terra Docs](https://dev.terrahq.com/design-system). It is internal, so you need a Terra account to open it; without one, this README and the [class reference](https://github.com/terra-hq/design-system/blob/HEAD/docs/CLASSES.md) cover everything the package does.
+
 > **Experimental.** This project is a work in progress: class names, options and docs may still change. Not intended for production projects. For those, use Terra's own setup.
 
 ## Install
@@ -164,6 +166,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 ## What's new
 
+**0.3.1** adds the link to the documentation in Terra Docs. The CSS is the same as 0.3.0.
+
 **0.3.0** adds components (`c--btn-*`, `c--card-wrapper-*`, `c--tag-a`, `c--icon-a`, `c--terraform-a`, `c--terraform-trio-a`), the extra files `icons.css` and `terraforms.css`, `u--order-last`, `u--order-none` and `u--order-2` to `-12`, `u--text-decoration-*`, and the animations `scale-in`, `slide-left`, `shake` and `shimmer`. Everything is additive: every 0.2.1 rule is unchanged. The default CSS grows from 113 kB to 123 kB (15 kB gzipped).
 
 **0.2.0** adds states (`u--hover-*`, `u--focus-ring`, `u--active-scale-*`, `u--disabled-opacity-*`, `u--group-hover-*`) and motion (`u--transition-*`, `u--duration-*`, `u--ease-*`, `u--animation-*`). Everything is additive: every 0.1.0 rule is unchanged.
@@ -172,5 +176,6 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 ## More
 
+- [Documentation in Terra Docs](https://dev.terrahq.com/design-system) (Terra account needed)
 - [Class reference](https://github.com/terra-hq/design-system/blob/HEAD/docs/CLASSES.md)
 - [Contributing](https://github.com/terra-hq/design-system/blob/HEAD/CONTRIBUTING.md)
