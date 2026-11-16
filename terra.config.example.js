@@ -11,7 +11,7 @@ export default {
   shadows: { a: '0 1px 2px rgb(15 15 15 / .06), 0 4px 16px rgb(15 15 15 / .08)' }, // f--shadow-* (default a, b, c)
 
   // Scales of the utilities (each step is a class)
-  spacing: [0, 1, 2, 4, 8],                        // u--p-*, u--m-*, u--gap-* (x 8px; default 0 to 10, 12 and 15)
+  spacing: [0, 1, 2, 4, 8],                        // u--padding-*, u--margin-*, u--gap-* (x 8px; default 0 to 10, 12 and 15)
   sizes: [2, 4, 5, 6, 8],                          // u--height-*, u--width-* (x 8px; default 2, 3, 4, 5, 6, 8, 10, 12)
   minWidth: [10, 20, 30, 40],                      // u--min-width-* (x 8px; this is the default)
   opacity: { 100: 1, 85: 0.85, 70: 0.7, 50: 0.5 }, // u--opacity-* (this is the default)
