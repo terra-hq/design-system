@@ -29,6 +29,11 @@ if (cfg.spacing) {
   if (bad.length) { console.error(`spacing steps must be whole numbers, 0 or higher (got ${bad.join(', ')}). Each step is that number x 8px.`); process.exit(1) }
 }
 if (cfg.spacing) vars.push(`$space-values: ${list(cfg.spacing)}`)
+if (cfg.minWidth) {
+  const bad = cfg.minWidth.filter(n => !Number.isInteger(n) || n < 1)
+  if (bad.length) { console.error(`minWidth steps must be whole numbers, 1 or higher (got ${bad.join(', ')}). Each step is that number x 8px.`); process.exit(1) }
+  vars.push(`$min-width-steps: ${list(cfg.minWidth)}`)
+}
 
 const { css } = sass.compileString(
   `@use "@scss/index"${vars.length ? ` with (${vars.join(', ')})` : ''};`,
