@@ -1,4 +1,4 @@
-// The naming contract of the utilities: u--{css-property}[-{value}], and a variant is a prefix: {variant}:u--...
+// The naming contract of the utilities: u--{css-property}[-{breakpoint}]-{value}, like f--offset-tabletm-4 in Terra.
 // Fails (or, with --list, prints) every u-- class whose name is not a CSS property followed by a value.
 // Run: node scripts/check-naming.mjs [--list]
 import { readFileSync } from 'node:fs'
@@ -25,12 +25,11 @@ const classes = [...new Set([...css.matchAll(/\.(u--[a-z0-9-]+)/g)].map(m => m[1
 
 const bad = []
 for (const c of classes) {
-  const name = c.slice(3).replace(BREAKPOINT, '') // a breakpoint in the middle is a violation of its own, reported below
+  const name = c.slice(3).replace(BREAKPOINT, '') // the breakpoint sits after the property, as Terra does
   const prop = PROPERTIES.find(p => name === p || name.startsWith(p + '-'))
   const reasons = []
   if (!prop) reasons.push('the name does not start with a CSS property')
-  if (BREAKPOINT.test(c.slice(3))) reasons.push('the breakpoint is inside the name (it should be a prefix: mobile:)')
-  if (/^(hover|focus|active|disabled|group)/.test(c.slice(3))) reasons.push('the state is inside the name (it should be a prefix: hover:)')
+  if (/^(hover|focus|active|disabled|group)/.test(c.slice(3))) reasons.push('the state is inside the name (not decided yet: how a state is written)')
   if (reasons.length) bad.push([c, reasons])
 }
 
