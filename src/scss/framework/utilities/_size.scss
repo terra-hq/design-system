@@ -1,0 +1,13 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// u--h-{n} and u--w-{n}: a fixed height or width of n x $measure (n = 4 is 2rem, 5 is 2.5rem, 6 is 3rem). They are what
+// a button, an avatar or an icon box needs: the percentage classes (u--height-50) need a parent with a size.
+// The steps live in _vars.scss and come from `sizes` in terra.config.js.
+@each $n in $size-steps {
+    .u--h-#{$n} {
+        height: $n * $measure;
+    }
+    .u--w-#{$n} {
+        width: $n * $measure;
+    }
+}

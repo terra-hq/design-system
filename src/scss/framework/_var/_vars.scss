@@ -37,6 +37,9 @@ $space-values: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15) !default;
 // Steps for u--min-width-* (x $measure). Set it from terra.config.js with `minWidth`.
 $min-width-steps: (10, 20, 30, 40) !default;
 
+// Steps for u--h-* and u--w-* (x $measure): a fixed height or width, 4 = 2rem. Set it from terra.config.js with `sizes`.
+$size-steps: (2, 3, 4, 5, 6, 8, 10, 12) !default;
+
 // * TYPOGRAPHY
 // Terra's typeface. The package does not ship the font files: load Uncut Sans yourself, or the fallbacks are used.
 $type-a: 'Uncut Sans', system-ui, sans-serif !default;
