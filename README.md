@@ -98,7 +98,7 @@ import '@terrahq/design-system/terraforms.css'
 <i class="c--terraform-a c--terraform-a--forma f--color-d"></i>
 ```
 
-Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
+Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash`, `pencil` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
 
 A Terraform is used **alone or in a trio**: three different shapes in three different colors. Never two, and never the same shape or color twice in a trio.
 
@@ -190,7 +190,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
-**0.9.0** adds `u--tint-{letter}`, a faint wash of the color as the background (10%), to pair with `f--color-{letter}` for a quiet button or tag with an outline. `u--hover-tint-{letter}` is now 20%, so it is visible on top of `u--tint-*`. New config key `tintHover`. Behavior change: the hover wash went from 10% to 20%.
+**0.9.0** adds the icon `c--icon-a--pencil` and `u--tint-{letter}`, a faint wash of the color as the background (10%), to pair with `f--color-{letter}` for a quiet button or tag with an outline. `u--hover-tint-{letter}` is now 20%, so it is visible on top of `u--tint-*`. New config key `tintHover`. Behavior change: the hover wash went from 10% to 20%.
 
 **0.8.0** renames the spacing classes so they read like the CSS property, and the short names are gone (this is the one release that is not additive, while the package is still in development): `u--p-4` is now `u--padding-4`, `u--pt-4` is `u--padding-top-4`, `u--px-4` is `u--padding-x-4`, `u--py-4` is `u--padding-y-4`, and the same for `u--margin-*`. `u--mx-auto`, `u--my-auto` and `u--m-auto` are `u--margin-x-auto`, `u--margin-y-auto` and `u--margin-auto`, and `u--col-gap-*` is `u--column-gap-*`. Breakpoint versions follow: `u--p-mobile-4` is `u--padding-mobile-4`. To migrate, replace the names in your HTML; the frozen 0.0.9 rules were renamed with them, nothing else changed.
 
