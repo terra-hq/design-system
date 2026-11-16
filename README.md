@@ -173,7 +173,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
-**0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`). Additive.
+**0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`) and the button `c--btn-a--sixth` for dangerous actions such as delete (rojizo text, a faint tint on hover). Additive.
 
 **0.6.0** adds `c--diff-a` (on a `<pre>`, with `c--diff-a__same`, `__add`, `__del`, `__skip` and `__mark`) for review screens, and `u--cursor-pointer`. Additive.
 
