@@ -183,7 +183,7 @@ Also available: `px` / `py` (padding on an axis), `mx` / `my` (margin on an axis
 - **Divide** `.u--divide-edge`: a 1px rule (Noche at 14%) between the children of the element, not before the first one. Put it on a `ul` and the rows get their separators.
 
 - **Flex** `.u--flex-1` (grow and shrink from zero, takes the free space), `.u--flex-none` (keeps its size) and `.u--min-width-0` (lets a flex child shrink below its content).
-- **Min height** `.u--min-height-screen` (at least as tall as the viewport). **Min width** `.u--min-width-{10|20|30|40}` (n x 0.5rem).
+- **Min height** `.u--min-height-screen` (at least as tall as the viewport). **Min width** `.u--min-width-{10|20|30|40}` (n x 0.5rem; steps set with `minWidth` in `terra.config.js`).
 - **Offsets** `.u--top-0|100`, `right`, `bottom`, `left`. **Stacking** `.u--z-index-0|10|20|40`. **Grow** `.u--flex-grow-1`.
 
 - **Opacity** `.u--opacity-100`, `.u--opacity-85`, `.u--opacity-70`, `.u--opacity-50`: for secondary text.

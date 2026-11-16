@@ -156,6 +156,7 @@ export default {
   colors: { a: '#0f0f0f', b: '#ffffff', j: '#ff00aa' }, // replaces the palette; "a" and "b" are required
   backgrounds: ['a', 'b', 'j'],                          // which colors get f--background-*
   spacing: [0, 1, 2, 4, 8],                              // replaces the u--p-*, u--m-*, u--gap-* steps (x 8px)
+  minWidth: [10, 20, 30, 40],                            // replaces the u--min-width-* steps (x 8px)
   font: "'Uncut Sans', system-ui, sans-serif",           // font-family of f--font-*
   radius: { a: '4px', full: '999px' },                   // replaces f--radius-*
   output: 'public/terra.css',
@@ -170,7 +171,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.1** adds `u--min-height-screen` (at least the height of the viewport, for full-screen pages such as a login). Additive.
 
-**0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x `$measure`, a `!default` map), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
+**0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
 **0.3.2** aligns six palette colors with the Terra Brand Guide.
 
