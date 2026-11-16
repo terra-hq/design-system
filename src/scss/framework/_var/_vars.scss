@@ -100,9 +100,6 @@ $opacity-values: (100: 1, 85: 0.85, 70: 0.7, 50: 0.5) !default;
 $z-index-values: (0, 10, 20, 40) !default;
 // Offsets for u--top-*, u--right-*, u--bottom-* and u--left-*
 $offset-values: (0: 0, 100: 100%) !default;
-// Strength of the wash in u--tint-* and, stronger, in u--hover-tint-* (0 to 1)
-$tint-alpha: 0.1 !default;
-$tint-hover-alpha: 0.2 !default;
 
 // * Time
 $time-a: 0.1s !default; // * Micro-interactions such as button and toggle
