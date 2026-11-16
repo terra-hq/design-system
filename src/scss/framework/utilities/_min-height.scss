@@ -1,0 +1,5 @@
+// u--min-height-screen: the element is at least as tall as the viewport (full-screen pages such as the login).
+.u--min-height-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+}

@@ -168,6 +168,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.0** makes `f--font-a`, `f--font-b` and `f--font-c` (32px and up) weight 700 by default; add `u--font-regular` to get the old 400. It also adds `u--opacity-*`, `u--flex-1`, `u--flex-none`, `u--min-width-0`, `u--divide-edge` the tag colors `c--tag-a--d|e|g|h|i` and the button `c--btn-d` for dark sections. Everything is additive: the frozen 0.0.9 rules are unchanged.
 
+**0.4.1** adds `u--min-height-screen` (at least the height of the viewport, for full-screen pages such as a login). Additive.
+
 **0.3.2** aligns six palette colors with the Terra Brand Guide.
 
 **0.3.1** adds the link to the documentation in Terra Docs. The CSS is the same as 0.3.0.
