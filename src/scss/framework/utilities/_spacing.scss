@@ -62,3 +62,5 @@
   @include make-spaces($space-values, $space-prefixes,$space-breakpoints);
 
 .u--mx-auto { margin-left: auto; margin-right: auto; }
+.u--my-auto { margin-top: auto; margin-bottom: auto; }
+.u--m-auto { margin: auto; }
