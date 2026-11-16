@@ -28,7 +28,7 @@
     // u--hover-tint-{letter}: a faint wash of the color (10%) on hover, for quiet buttons: pair it with the same f--color-{letter}
     @each $name, $color in $color-options {
         .u--hover-tint-#{$name}:hover {
-            background-color: rgba($color, 0.1);
+            background-color: rgba($color, $tint-alpha);
         }
     }
 

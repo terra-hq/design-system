@@ -94,15 +94,24 @@ $shadow-options: (
     c: (0 24px 64px rgb(15 15 15 / 0.2)),
 ) !default;
 
+// Opacity steps for u--opacity-* (the number is the class, the value is the opacity)
+$opacity-values: (100: 1, 85: 0.85, 70: 0.7, 50: 0.5) !default;
+// Stacking levels for u--z-index-*
+$z-index-values: (0, 10, 20, 40) !default;
+// Offsets for u--top-*, u--right-*, u--bottom-* and u--left-*
+$offset-values: (0: 0, 100: 100%) !default;
+// Strength of the wash in u--hover-tint-* (0 to 1)
+$tint-alpha: 0.1 !default;
+
 // * Time
-$time-a: 0.1s; // * Micro-interactions such as button and toggle
-$time-b: 0.3s; // * Expansion, system communication, toast
-$time-c: 0.6s; // * Background dimming
+$time-a: 0.1s !default; // * Micro-interactions such as button and toggle
+$time-b: 0.3s !default; // * Expansion, system communication, toast
+$time-c: 0.6s !default; // * Background dimming
 
 // * Ease
-$ease-standard-a: cubic-bezier(0.2, 0, 0.38, 0.9); // * productive
-$ease-standard-b: cubic-bezier(0, 0, 0.3, 1); // * expresive
-$ease-entrance-a: cubic-bezier(0, 0, 0.38, 0.9); // * productive
-$ease-entrance-b: cubic-bezier(0.4, 0.14, 0.3, 1); // * expresive
-$ease-exit-a: cubic-bezier(0.2, 0, 1, 0.9); // * productive
-$ease-exit-b: cubic-bezier(0.4, 0.14, 1, 1); // * expresive
+$ease-standard-a: cubic-bezier(0.2, 0, 0.38, 0.9) !default; // * productive
+$ease-standard-b: cubic-bezier(0, 0, 0.3, 1) !default; // * expresive
+$ease-entrance-a: cubic-bezier(0, 0, 0.38, 0.9) !default; // * productive
+$ease-entrance-b: cubic-bezier(0.4, 0.14, 0.3, 1) !default; // * expresive
+$ease-exit-a: cubic-bezier(0.2, 0, 1, 0.9) !default; // * productive
+$ease-exit-b: cubic-bezier(0.4, 0.14, 1, 1) !default; // * expresive

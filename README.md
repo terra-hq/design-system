@@ -152,19 +152,35 @@ npx terra-ds build
 
 ```js
 // terra.config.js
+// Every key is optional: what you leave out keeps the value Terra ships with, shown here as a comment.
 export default {
-  colors: { a: '#0f0f0f', b: '#ffffff', j: '#ff00aa' }, // replaces the palette; "a" and "b" are required
-  backgrounds: ['a', 'b', 'j'],                          // which colors get f--background-*
-  spacing: [0, 1, 2, 4, 8],                              // replaces the u--p-*, u--m-*, u--gap-* steps (x 8px)
-  minWidth: [10, 20, 30, 40],                            // replaces the u--min-width-* steps (x 8px)
-  sizes: [2, 4, 5, 6, 8],                                // replaces the u--height-* and u--width-* steps (x 8px)
-  font: "'Uncut Sans', system-ui, sans-serif",           // font-family of f--font-*
-  radius: { a: '4px', full: '999px' },                   // replaces f--radius-*
-  output: 'public/terra.css',
+  // Palette and type
+  colors: { a: '#0f0f0f', b: '#ffffff' },        // replaces the palette; "a" and "b" are required
+  backgrounds: ['a', 'b'],                         // which colors also get f--background-* (default a to e)
+  font: "'Uncut Sans', system-ui, sans-serif",    // font-family of f--font-* (this is the default)
+
+  // Shape and depth
+  radius: { a: '4px', full: '999px' },             // replaces f--radius-* (default a 8px, b 12px, c 16px, d 20px, full, round)
+  shadows: { a: '0 1px 2px rgb(15 15 15 / .06), 0 4px 16px rgb(15 15 15 / .08)' }, // f--shadow-* (default a, b, c)
+
+  // Scales of the utilities (each step is a class)
+  spacing: [0, 1, 2, 4, 8],                        // u--p-*, u--m-*, u--gap-* (x 8px; default 0 to 10, 12 and 15)
+  sizes: [2, 4, 5, 6, 8],                          // u--height-*, u--width-* (x 8px; default 2, 3, 4, 5, 6, 8, 10, 12)
+  minWidth: [10, 20, 30, 40],                      // u--min-width-* (x 8px; this is the default)
+  opacity: { 100: 1, 85: 0.85, 70: 0.7, 50: 0.5 }, // u--opacity-* (this is the default)
+  zIndex: [0, 10, 20, 40],                         // u--z-index-* (this is the default)
+  offsets: { 0: '0', 100: '100%' },                // u--top-*, u--right-*, u--bottom-*, u--left-* (this is the default)
+  tint: 0.1,                                       // strength of u--hover-tint-* (this is the default)
+
+  // Motion
+  time: { a: '0.1s', b: '0.3s', c: '0.6s' },       // micro-interactions, expansion, background dimming (this is the default)
+  ease: { 'standard-a': 'cubic-bezier(0.2, 0, 0.38, 0.9)' }, // also standard-b, entrance-a/b, exit-a/b
+
+  output: 'public/terra.css',                      // where the CSS is written
 }
 ```
 
-Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 80 kB with this config, against 113 kB by default). Breakpoints, grid and shadows are not configurable yet.
+Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 80 kB with this config, against 113 kB by default). Breakpoints and the grid are not configurable yet.
 
 ## What's new
 
@@ -174,7 +190,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
-**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px, steps set with `sizes` in `terra.config.js`) and `u--hover-tint-{letter}` (a faint 10% wash of the color on hover). Additive.
+**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px) and `u--hover-tint-{letter}` (a faint wash of the color on hover). It also opens more of the package to `terra.config.js`: `sizes`, `shadows`, `opacity`, `zIndex`, `offsets`, `tint`, `time` and `ease` (every one optional, with Terra's values as the default; see `terra.config.example.js`). Additive.
 
 **0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`) and the button `c--btn-a--sixth` for dangerous actions such as delete (rojizo text, a faint tint on hover). Additive.
 

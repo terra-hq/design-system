@@ -34,6 +34,38 @@ if (cfg.sizes) {
   if (bad.length) { console.error(`sizes steps must be whole numbers, 1 or higher, and not 25, 50, 75 or 100 (those are the percentage classes). Got ${bad.join(', ')}. Each step is that number x 8px.`); process.exit(1) }
   vars.push(`$size-steps: ${list(cfg.sizes)}`)
 }
+const fail = m => { console.error(m); process.exit(1) }
+if (cfg.shadows) vars.push(`$shadow-options: (${Object.entries(cfg.shadows).map(([k, v]) => `${k}: (${v})`).join(', ')})`)
+if (cfg.opacity) {
+  const bad = Object.entries(cfg.opacity).filter(([k, v]) => !/^\d+$/.test(k) || typeof v !== 'number' || v < 0 || v > 1)
+  if (bad.length) fail(`opacity must map whole numbers (the class) to a value from 0 to 1, for example { 70: 0.7 }. Check: ${bad.map(([k]) => k).join(', ')}`)
+  vars.push(`$opacity-values: ${map(cfg.opacity)}`)
+}
+if (cfg.zIndex) {
+  const bad = cfg.zIndex.filter(n => !Number.isInteger(n) || n < 0)
+  if (bad.length) fail(`zIndex steps must be whole numbers, 0 or higher (got ${bad.join(', ')}).`)
+  vars.push(`$z-index-values: ${list(cfg.zIndex)}`)
+}
+if (cfg.offsets) {
+  const bad = Object.keys(cfg.offsets).filter(k => !/^\d+$/.test(k))
+  if (bad.length) fail(`offsets must map whole numbers (the class) to a CSS length, for example { 0: '0', 100: '100%' }. Check: ${bad.join(', ')}`)
+  vars.push(`$offset-values: ${map(cfg.offsets)}`)
+}
+if (cfg.tint !== undefined) {
+  if (typeof cfg.tint !== 'number' || cfg.tint < 0 || cfg.tint > 1) fail('tint must be a number from 0 to 1 (the strength of the hover wash, 0.1 by default).')
+  vars.push(`$tint-alpha: ${cfg.tint}`)
+}
+if (cfg.time) {
+  const bad = Object.entries(cfg.time).filter(([k, v]) => !['a', 'b', 'c'].includes(k) || !/^\d*\.?\d+m?s$/.test(v))
+  if (bad.length) fail(`time takes the keys a, b and c with values such as '0.1s' or '150ms'. Check: ${bad.map(([k]) => k).join(', ')}`)
+  for (const [k, v] of Object.entries(cfg.time)) vars.push(`$time-${k}: ${v}`)
+}
+if (cfg.ease) {
+  const ok = ['standard-a', 'standard-b', 'entrance-a', 'entrance-b', 'exit-a', 'exit-b']
+  const bad = Object.keys(cfg.ease).filter(k => !ok.includes(k))
+  if (bad.length) fail(`ease takes the keys ${ok.join(', ')}. Check: ${bad.join(', ')}`)
+  for (const [k, v] of Object.entries(cfg.ease)) vars.push(`$ease-${k}: ${v}`)
+}
 if (cfg.minWidth) {
   const bad = cfg.minWidth.filter(n => !Number.isInteger(n) || n < 1)
   if (bad.length) { console.error(`minWidth steps must be whole numbers, 1 or higher (got ${bad.join(', ')}). Each step is that number x 8px.`); process.exit(1) }
