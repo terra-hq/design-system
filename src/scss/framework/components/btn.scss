@@ -2,8 +2,11 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 @use "./helpers" as *;
 
-// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary · c--btn-d on Noche (white fill, for dark sections) · c--btn-e on Noche, quiet (no fill, white text).
-// Sizes are modifiers of the variant: --small, --medium (the default) and --large.
+// Terra way (BEM, reserved modifiers): c--btn-a is the button, the modifier changes it.
+//   c--btn-a primary · --second secondary · --third tertiary
+//   --fourth on Noche (white fill, for dark sections) · --fifth on Noche, quiet (no fill, white text)
+//   sizes --small, --medium (the default) and --large:  <a class="c--btn-a c--btn-a--second c--btn-a--small">
+// The letters c--btn-b, -c, -d and -e keep working as before (same look, own sizes); prefer the modifiers.
 $btn-ink: pick(a);
 $btn-paper: pick(b, a);
 
@@ -116,6 +119,55 @@ $btn-paper: pick(b, a);
     @include btn-size($v, small, $measure * 4, 13px, $measure * 1.75, $measure * 1.5);
     @include btn-size($v, medium, $measure * 5, 14px, $measure * 2.5, $measure * 1.5);
     @include btn-size($v, large, $measure * 6, 16px, $measure * 3.5, $measure * 2);
+}
+
+// Modifiers of c--btn-a. They come after the base and the letters so they win at equal specificity.
+.c--btn-a--second {
+    background: transparent;
+    color: $btn-ink;
+}
+.c--btn-a--third {
+    padding: 0 $measure * 1.5;
+    border-color: transparent;
+    background: transparent;
+    color: $btn-ink;
+}
+.c--btn-a--fourth {
+    border-color: $btn-paper;
+    background: $btn-paper;
+    color: $btn-ink;
+}
+.c--btn-a--fifth {
+    padding: 0 $measure * 1.5;
+    border-color: transparent;
+    background: transparent;
+    color: $btn-paper;
+}
+.c--btn-a--second:active,
+.c--btn-a--fourth:active {
+    transform: scale(0.98);
+}
+@media (hover: hover) {
+    .c--btn-a--second:hover {
+        background: $btn-ink;
+        color: $btn-paper;
+    }
+    .c--btn-a--third:hover {
+        background: rgba($btn-ink, 0.06);
+    }
+    .c--btn-a--fourth:hover {
+        background: transparent;
+        color: $btn-paper;
+    }
+    .c--btn-a--fifth:hover {
+        background: rgba($btn-paper, 0.12);
+    }
+}
+// third and fifth are narrower: keep that padding with every size.
+@each $m in (third, fifth) {
+    .c--btn-a--#{$m}.c--btn-a--small { padding-inline: $measure * 1.5; }
+    .c--btn-a--#{$m}.c--btn-a--medium { padding-inline: $measure * 1.5; }
+    .c--btn-a--#{$m}.c--btn-a--large { padding-inline: $measure * 2; }
 }
 
 @media (prefers-reduced-motion: reduce) {
