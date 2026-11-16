@@ -65,3 +65,9 @@ Done: sections 1, 2 and 3. The breakpoints are Punky's (`min-width`, `tablets` 5
 
 Pending: section 4 (each design-system-only name proposed with Punky's grammar and approved by the team) and the migration
 of every project that used the old names.
+
+## Status (0.11.0, local)
+
+States are written in the grammar of Punky's breakpoints: `u--{property}-[breakpoint]-[state]-{value}`. The breakpoint comes first
+(`u--background-tablets-hover-c`). Done: hover (color, border, background, also with a breakpoint and as `group-hover`), focus
+(`u--outline-focus-{letter}`), active (`u--transform-active-scale-{n}`) and disabled (`u--opacity-disabled-{n}`).

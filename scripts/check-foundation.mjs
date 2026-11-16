@@ -1,5 +1,5 @@
-// Fails if any rule from the frozen 0.10.0 build is missing from the current dist/style.css. 0.10.0 is the release that took
-// Punky's syntax (names and mobile-first breakpoints) and reset the baseline; before it the baseline was 0.0.9.
+// Fails if any rule from the frozen 0.11.0 build is missing from the current dist/style.css. 0.11.0 is the release that wrote the states in
+// Punky's grammar; the baseline before it was 0.10.0 (Punky's names and breakpoints) and, before that, 0.0.9.
 // Adding rules is fine; changing or removing existing ones is not.
 // One deliberate exception: the font-family VALUE (Arial -> Uncut Sans in 0.1.0), see norm() below.
 import { readFileSync } from 'node:fs'
@@ -32,7 +32,7 @@ function rules(css) {
   return out
 }
 
-const frozen = rules(readFileSync(new URL('./frozen/style-0.10.0.css', import.meta.url), 'utf8'))
+const frozen = rules(readFileSync(new URL('./frozen/style-0.11.0.css', import.meta.url), 'utf8'))
 const now = rules(readFileSync(new URL('../dist/style.css', import.meta.url), 'utf8'))
 const missing = [...frozen].filter(r => !now.has(r))
 if (missing.length) { console.error(`${missing.length} frozen rules changed or missing:\n` + missing.slice(0, 10).join('\n')); process.exit(1) }
