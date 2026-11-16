@@ -5,6 +5,9 @@
 // the browser gives the backdrop, the focus trap and Esc. White panel, 20px radius, float-lg, up to 480px wide
 // (c--modal-a--second: 640px, for forms). Lay the inside out with utilities.
 .c--modal-a {
+    // The package reset sets margin: 0 on everything, which removes the auto margin a modal dialog uses to sit in the
+    // middle of the screen. Put it back, and the inset the browser gives a modal.
+    margin: auto;
     box-sizing: border-box;
     width: calc(100% - #{$measure * 4});
     max-width: $measure * 60;
@@ -17,6 +20,9 @@
     overflow: auto;
     max-height: calc(100vh - #{$measure * 6});
 
+    &:modal {
+        inset: 0;
+    }
     &::backdrop {
         background: rgba(pick(a), 0.5);
     }

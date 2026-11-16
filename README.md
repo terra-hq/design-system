@@ -173,6 +173,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
+**0.5.1** fixes `c--modal-a`: the package reset (`margin: 0` on everything) removed the auto margin of a modal dialog, so it opened in the top left corner. It is centered again.
+
 **0.5.0** adds the form system and two more components. Forms follow the Terra pattern (a wrapper with `__item`): `c--group-a`, `c--label-a`, `c--legend-a`, `c--input-a`, `c--textarea-a`, `c--select-a`, `c--checkbox-a`, `c--radio-a` and `c--error-a`, with the states `--error`, `--valid` and `--disabled` on the wrapper. Also `c--table-a` (on `<table>`) and `c--modal-a` (on a native `<dialog>`; `c--modal-a--second` is wider). Additive.
 
 **0.4.3** adds `minWidth` to `terra.config.js` (the steps of `u--min-width-{n}`) and fixes the hover of `c--btn-a--fifth` (the text turned Noche on a dark bar). Additive.
