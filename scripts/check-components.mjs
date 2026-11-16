@@ -10,7 +10,7 @@ const want = [
     'u--order-last', 'u--order-none', ...Array.from({ length: 11 }, (_, i) => `u--order-${i + 2}`),
     'u--text-decoration-underline', 'u--text-decoration-line-through', 'u--text-decoration-none',
     'u--animation-scale-in', 'u--animation-slide-left', 'u--animation-shake', 'u--animation-shimmer',
-    'u--min-height-screen', 'u--top-0', 'u--top-100', 'u--right-0', 'u--bottom-0', 'u--left-0', 'u--z-index-20', 'u--z-index-40', 'u--truncate', 'u--flex-mobile-full', 'u--min-width-14rem', 'u--flex-1', 'u--flex-none', 'u--min-width-0', 'u--divide-edge', ...[100, 85, 70, 50].map(n => `u--opacity-${n}`),
+    'u--min-height-screen', 'u--top-0', 'u--top-100', 'u--right-0', 'u--bottom-0', 'u--left-0', 'u--z-index-20', 'u--z-index-40', 'u--flex-grow-1', 'u--min-width-30', 'u--flex-1', 'u--flex-none', 'u--min-width-0', 'u--divide-edge', ...[100, 85, 70, 50].map(n => `u--opacity-${n}`),
     ...['d', 'e', 'g', 'h', 'i'].map(c => `c--tag-a--${c}`)]],
   [icons, ['arrow-right', 'arrow-left', 'check', 'close', 'plus', 'search', 'chevron-down', 'external', 'download', 'copy', 'mail', 'info', 'menu'].map(n => `c--icon-a--${n}`)],
   [forms, ['forma', 'diana', 'stanley', 'mistyk', 'melos', 'prismo', 'mendia', 'boba', 'ebb', 'gollum', 'punky', 'infinito'].map(n => `c--terraform-a--${n}`)],

@@ -1,6 +1,0 @@
-// u--truncate: one line, cut with an ellipsis (give a flex child u--min-width-0 too).
-.u--truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
