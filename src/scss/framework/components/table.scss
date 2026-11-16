@@ -1,0 +1,36 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--table-a: put it on <table>. Header on Morning Haze (12px 500), rows at least 44px with 1px rules, text left.
+// Wrap it in c--card-wrapper-b with u--overflow-auto so it scrolls inside its card.
+.c--table-a {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
+
+    th,
+    td {
+        padding: $measure * 1.25 $measure * 2;
+        border-bottom: 1px solid rgba(pick(a), 0.14);
+        vertical-align: middle;
+    }
+    th {
+        background: pick(c, b);
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(pick(a), 0.7);
+        white-space: nowrap;
+    }
+    tr {
+        min-height: $measure * 5.5;
+    }
+    tbody tr:last-child td {
+        border-bottom: 0;
+    }
+}
+@media (hover: hover) {
+    .c--table-a tbody tr:hover td {
+        background: rgba(pick(c, b), 0.6);
+    }
+}

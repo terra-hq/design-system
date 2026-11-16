@@ -1,0 +1,26 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--modal-a: put it on a native <dialog>. Open it with dialog.showModal() and close it with dialog.close():
+// the browser gives the backdrop, the focus trap and Esc. White panel, 20px radius, float-lg, up to 480px wide
+// (c--modal-a--second: 640px, for forms). Lay the inside out with utilities.
+.c--modal-a {
+    box-sizing: border-box;
+    width: calc(100% - #{$measure * 4});
+    max-width: $measure * 60;
+    padding: $measure * 3;
+    border: 0;
+    border-radius: radius(d, $measure * 2.5);
+    background: pick(b, a);
+    color: pick(a);
+    box-shadow: 0 24px 64px rgb(15 15 15 / 0.2);
+    overflow: auto;
+    max-height: calc(100vh - #{$measure * 6});
+
+    &::backdrop {
+        background: rgba(pick(a), 0.5);
+    }
+}
+.c--modal-a--second {
+    max-width: $measure * 80;
+}

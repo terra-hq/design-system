@@ -1,0 +1,221 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// Forms, the Terra way: a wrapper carries the look and its __item is the native control.
+//   <div class="c--group-a">
+//     <label class="c--label-a" for="name">Name</label>
+//     <div class="c--input-a"><input class="c--input-a__item" id="name" type="text"></div>
+//     <span class="c--error-a">Required</span>
+//   </div>
+// Wrappers: c--input-a, c--textarea-a, c--select-a. States are modifiers of the wrapper: --error, --valid, --disabled.
+// Checkbox and radio: <div class="c--checkbox-a"><input class="c--checkbox-a__item" type="checkbox" id="x"><label class="c--checkbox-a__title" for="x">Text</label></div>
+// c--legend-a goes on the <legend> of a fieldset that is a c--group-a.
+$form-edge: rgba(pick(a), 0.3);
+$form-edge-hover: rgba(pick(a), 0.55);
+$form-faint: rgba(pick(a), 0.45);
+
+.c--group-a {
+    display: flex;
+    flex-direction: column;
+    gap: $measure * 0.75;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.c--label-a,
+.c--legend-a {
+    font-family: $type-a;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: pick(a);
+}
+.c--legend-a {
+    display: block;
+    padding: 0;
+    margin-bottom: $measure * 0.75;
+}
+
+.c--input-a,
+.c--textarea-a,
+.c--select-a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid $form-edge;
+    border-radius: radius(b, $measure * 1.5);
+    background: pick(b, a);
+    transition: border-color $time-a $ease-standard-a;
+
+    &:hover {
+        border-color: $form-edge-hover;
+    }
+    &:focus-within {
+        outline: 2px solid pick(a);
+        outline-offset: 1px;
+    }
+    &__item {
+        flex: 1;
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        min-height: $measure * 4.75 - 0.125rem;
+        padding: 0 $measure * 1.5;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: pick(a);
+        font-family: $type-a;
+        font-size: 14px;
+        line-height: 1.4;
+
+        &::placeholder {
+            color: $form-faint;
+        }
+    }
+    // Error: a Noche edge twice as thick (drawn inside, so nothing moves). Valid: the dark green edge.
+    &--error {
+        border-color: pick(a);
+        box-shadow: inset 0 0 0 1px pick(a);
+    }
+    &--valid {
+        border-color: pick(e, a);
+    }
+    &--disabled {
+        background: pick(c, b);
+        pointer-events: none;
+
+        .c--input-a__item,
+        .c--textarea-a__item,
+        .c--select-a__item {
+            color: $form-faint;
+        }
+    }
+}
+.c--textarea-a {
+    align-items: stretch;
+
+    &__item {
+        min-height: $measure * 12;
+        padding-block: $measure * 1.25;
+        resize: vertical;
+    }
+}
+// The select draws its own chevron, inset like the text.
+.c--select-a__item {
+    padding-right: $measure * 4;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") right $measure * 1.5 center / 16px no-repeat;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+// Checkbox and radio: the real input covers the whole box (invisible), the drawing is the ::before of the title.
+@mixin check($name, $shape) {
+    .c--#{$name}-a {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        min-height: $measure * 2;
+
+        &__item {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        &__title {
+            position: relative;
+            display: block;
+            padding-left: $measure * 3;
+            font-family: $type-a;
+            font-size: 14px;
+            line-height: 1.4;
+            color: pick(a);
+            cursor: pointer;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 50%;
+                transform: translateY(-50%);
+                box-sizing: border-box;
+                width: $measure * 2;
+                height: $measure * 2;
+                border: 1px solid $form-edge;
+                border-radius: $shape;
+                background: pick(b, a) center / 100% no-repeat;
+                transition: border-color $time-a $ease-standard-a, background-color $time-a $ease-standard-a;
+            }
+        }
+        &__item:hover + .c--#{$name}-a__title::before {
+            border-color: $form-edge-hover;
+        }
+        &__item:focus-visible + .c--#{$name}-a__title::before {
+            outline: 2px solid pick(a);
+            outline-offset: 2px;
+        }
+        &__item:disabled + .c--#{$name}-a__title {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+@include check(checkbox, $measure * 0.75);
+@include check(radio, 50%);
+
+// Checked: a checkbox is a Noche fill with a white tick, a radio is a Noche ring with a Noche dot.
+.c--checkbox-a__item:checked + .c--checkbox-a__title::before {
+    border-color: pick(a);
+    background-color: pick(a);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
+}
+.c--radio-a__item:checked + .c--radio-a__title::before {
+    border-color: pick(a);
+    background-image: radial-gradient(circle, #{pick(a)} 0 38%, transparent 42%);
+}
+
+// The message under a field: Noche text with a small orange dot, hidden when empty.
+.c--error-a {
+    display: flex;
+    align-items: center;
+    gap: $measure;
+    font-family: $type-a;
+    font-size: 12px;
+    line-height: 1.4;
+    color: pick(a);
+
+    &::before {
+        content: "";
+        flex: none;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: pick(h, a);
+    }
+    &:empty {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .c--input-a,
+    .c--textarea-a,
+    .c--select-a,
+    .c--checkbox-a__title::before,
+    .c--radio-a__title::before {
+        transition: none;
+    }
+}
