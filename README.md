@@ -73,7 +73,7 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 
 | Component | Classes |
 |---|---|
-| Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections) + `--small`, `--medium`, `--large` |
+| Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections), `c--btn-e` (on Noche: no fill, white text) + `--small`, `--medium`, `--large` |
 | Card | `c--card-wrapper-a`, `c--card-wrapper-b` |
 | Tag | `c--tag-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) |
 | Icon | `c--icon-a` + size (`--small` 16px, `--medium` 24px, `--large` 32px) + type (`--check`, `--arrow-right`…) |

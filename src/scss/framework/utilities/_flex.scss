@@ -1,3 +1,5 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
 // u--flex-1: grow and shrink from zero (take the free space). u--flex-none: keep the natural size.
 // u--min-width-0: let a flex child shrink below its content (long titles wrap instead of overflowing).
 .u--flex-1 {
@@ -8,4 +10,10 @@
 }
 .u--min-width-0 {
     min-width: 0;
+}
+// u--flex-mobile-full: on phones the element takes a whole row of a wrapping flex parent (a search box under the bar).
+@media screen and ($viewport-type: $mobile) {
+    .u--flex-mobile-full {
+        flex: 1 1 100%;
+    }
 }

@@ -2,7 +2,7 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 @use "./helpers" as *;
 
-// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary · c--btn-d on Noche (white fill, for dark sections).
+// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary · c--btn-d on Noche (white fill, for dark sections) · c--btn-e on Noche, quiet (no fill, white text).
 // Sizes are modifiers of the variant: --small, --medium (the default) and --large.
 $btn-ink: pick(a);
 $btn-paper: pick(b, a);
@@ -10,7 +10,8 @@ $btn-paper: pick(b, a);
 .c--btn-a,
 .c--btn-b,
 .c--btn-c,
-.c--btn-d {
+.c--btn-d,
+.c--btn-e {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -57,6 +58,12 @@ $btn-paper: pick(b, a);
     background: $btn-paper;
     color: $btn-ink;
 }
+.c--btn-e {
+    padding: 0 $measure * 1.5;
+    border-color: transparent;
+    background: transparent;
+    color: $btn-paper;
+}
 .c--btn-b {
     background: transparent;
     color: $btn-ink;
@@ -89,6 +96,9 @@ $btn-paper: pick(b, a);
     .c--btn-c:hover {
         background: rgba($btn-ink, 0.06);
     }
+    .c--btn-e:hover {
+        background: rgba($btn-paper, 0.12);
+    }
 }
 
 // --small 32px · --medium 40px (the default, written out so it can be forced) · --large 48px
@@ -97,12 +107,12 @@ $btn-paper: pick(b, a);
         height: $height;
         padding-inline: $px;
         font-size: $font;
-        @if $v == c {
+        @if $v == c or $v == e {
             padding-inline: $px-c;
         }
     }
 }
-@each $v in (a, b, c, d) {
+@each $v in (a, b, c, d, e) {
     @include btn-size($v, small, $measure * 4, 13px, $measure * 1.75, $measure * 1.5);
     @include btn-size($v, medium, $measure * 5, 14px, $measure * 2.5, $measure * 1.5);
     @include btn-size($v, large, $measure * 6, 16px, $measure * 3.5, $measure * 2);
@@ -112,7 +122,8 @@ $btn-paper: pick(b, a);
     .c--btn-a,
     .c--btn-b,
     .c--btn-c,
-    .c--btn-d {
+    .c--btn-d,
+    .c--btn-e {
         transition: none;
     }
 }
