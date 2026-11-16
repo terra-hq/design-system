@@ -30,8 +30,8 @@ if (cfg.spacing) {
 }
 if (cfg.spacing) vars.push(`$space-values: ${list(cfg.spacing)}`)
 if (cfg.sizes) {
-  const bad = cfg.sizes.filter(n => !Number.isInteger(n) || n < 1)
-  if (bad.length) { console.error(`sizes steps must be whole numbers, 1 or higher (got ${bad.join(', ')}). Each step is that number x 8px.`); process.exit(1) }
+  const bad = cfg.sizes.filter(n => !Number.isInteger(n) || n < 1 || [25, 50, 75, 100].includes(n))
+  if (bad.length) { console.error(`sizes steps must be whole numbers, 1 or higher, and not 25, 50, 75 or 100 (those are the percentage classes). Got ${bad.join(', ')}. Each step is that number x 8px.`); process.exit(1) }
   vars.push(`$size-steps: ${list(cfg.sizes)}`)
 }
 if (cfg.minWidth) {
