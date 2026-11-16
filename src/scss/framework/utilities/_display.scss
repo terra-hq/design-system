@@ -1,6 +1,7 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 
 $display-values: (
+  grid: grid,
     block: block,
     none: none,
     inline-block:inline-block,
@@ -14,12 +15,12 @@ $display-values: (
 
 $display-breakpoints: (
    all: $all,
-  desktop: $desktop,
-  laptop: $laptop,
-  tabletl: $tabletl,
-  tabletm: $tabletm,
   tablets: $tablets,
-  mobile: $mobile,
+  tabletm: $tabletm,
+  tabletl: $tabletl,
+  laptop: $laptop,
+  desktop: $desktop,
+  wide: $wide,
 );
 
 @mixin display-utility($display-prop, $breakpoints) {

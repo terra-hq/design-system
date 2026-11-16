@@ -55,3 +55,13 @@ Open point: the design system also has `px`, `py`, `mx`, `my` (and Punky does no
 3. Section 3 added.
 4. Section 4: each name proposed with Punky's grammar and approved by the team before it is written.
 5. Documentation, migration script, one release.
+
+## Status (0.10.0, local)
+
+Done: sections 1, 2 and 3. The breakpoints are Punky's (`min-width`, `tablets` 580, `tabletm` 810, `tabletl` 1024, `laptop` 1300,
+`desktop` 1570, `wide` 1700; `mobile` is gone); spacing is `u--p-4`, `u--mt-4`, `u--mx-auto`; text alignment is `u--text-center`;
+`u--display-grid`, `u--overflow-clip`, `u--text-uppercase` and `f--order-*` were ported from Punky. The values of the brand
+(type scale, spacing steps) are kept, written mobile-first. The frozen baseline moved to 0.10.0.
+
+Pending: section 4 (each design-system-only name proposed with Punky's grammar and approved by the team) and the migration
+of every project that used the old names.

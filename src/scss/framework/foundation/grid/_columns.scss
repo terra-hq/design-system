@@ -23,12 +23,12 @@ $available-columns: (
 
 $columns-breakpoints: (
   all: $all,
-  desktop: $desktop,
-  laptop: $laptop,
-  tabletl: $tabletl,
-  tabletm: $tabletm,
   tablets: $tablets,
-  mobile: $mobile,
+  tabletm: $tabletm,
+  tabletl: $tabletl,
+  laptop: $laptop,
+  desktop: $desktop,
+  wide: $wide,
 );
 @mixin build-columns ($size,$bkpt,$availablecolumns) {
     @for $i from 1 through $columns {
@@ -77,12 +77,12 @@ $available-offset: (
 
 $offset-breakpoints: (
   all: $all,
-  desktop: $desktop,
-  laptop: $laptop,
-  tabletl: $tabletl,
-  tabletm: $tabletm,
   tablets: $tablets,
-  mobile: $mobile,
+  tabletm: $tabletm,
+  tabletl: $tabletl,
+  laptop: $laptop,
+  desktop: $desktop,
+  wide: $wide,
 );
 @mixin build-offset ($size,$bkpt,$availableoffset) {
     @for $i from 0 through $columns {
@@ -113,3 +113,44 @@ $offset-breakpoints: (
 }
 /* End Responsive Offset */
 
+
+
+/* Start Responsive Order (as Punky): f--order-1 and f--order-tabletm-1 */
+$available-order: (
+    1,
+) !default;
+
+$order-breakpoints: (
+    all: $all,
+    tabletm: $tabletm,
+    tabletl: $tabletl,
+);
+
+@mixin build-order ($size,$bkpt,$availableorder) {
+    @for $i from 0 through $columns {
+        @if ($size == 'all') {
+            @each $order in $availableorder {
+                @if $i == $order {
+                    .f--order-#{$order}{
+                        @include make-order($order);
+                    }
+                }
+            }
+        }@else{
+            @each $order in $availableorder {
+                @if $i == $order {
+                    .f--order-#{$size}-#{$order}{
+                        @media all and (#{$viewport-type}: #{$bkpt}){
+                            @include make-order($order);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@each $size, $bkpt in $order-breakpoints {
+    @include build-order($size,$bkpt, $available-order);
+}
+/* End Responsive Order */

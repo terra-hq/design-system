@@ -6,9 +6,9 @@
   padding-right: $half-gutter-width;
   padding-left: $half-gutter-width;
   width: $g-container-width;
-  max-width: $g-container-max-width;
-  @media all and ($viewport-type: $mobile){
-    max-width: $g-container-width-mobile;
+  max-width: $g-container-width-mobile;
+  @media all and ($viewport-type: $tablets) {
+    max-width: $g-container-max-width;
   }
 }
 
