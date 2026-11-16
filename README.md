@@ -73,7 +73,7 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 
 | Component | Classes |
 |---|---|
-| Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections) + `--small`, `--medium`, `--large` |
+| Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections), `c--btn-e` (on Noche: no fill, white text) + `--small`, `--medium`, `--large` |
 | Card | `c--card-wrapper-a`, `c--card-wrapper-b` |
 | Tag | `c--tag-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) |
 | Icon | `c--icon-a` + size (`--small` 16px, `--medium` 24px, `--large` 32px) + type (`--check`, `--arrow-right`…) |
@@ -169,6 +169,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 **0.4.0** makes `f--font-a`, `f--font-b` and `f--font-c` (32px and up) weight 700 by default; add `u--font-regular` to get the old 400. It also adds `u--opacity-*`, `u--flex-1`, `u--flex-none`, `u--min-width-0`, `u--divide-edge` the tag colors `c--tag-a--d|e|g|h|i` and the button `c--btn-d` for dark sections. Everything is additive: the frozen 0.0.9 rules are unchanged.
 
 **0.4.1** adds `u--min-height-screen` (at least the height of the viewport, for full-screen pages such as a login). Additive.
+
+**0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x `$measure`, a `!default` map), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
 **0.3.2** aligns six palette colors with the Terra Brand Guide.
 

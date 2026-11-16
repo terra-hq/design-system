@@ -1,0 +1,11 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// u--min-width-{n}: floor of n x $measure (n = 10 is 5rem, n = 30 is 15rem), for menus and popovers whose
+// content is short. The steps are a !default map: a project can set its own before importing the package.
+$min-width-steps: (10, 20, 30, 40) !default;
+
+@each $n in $min-width-steps {
+    .u--min-width-#{$n} {
+        min-width: $n * $measure;
+    }
+}
