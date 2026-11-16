@@ -173,7 +173,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
-**0.6.0** adds `c--accordion-a` (on a `<details>`, with `c--accordion-a__title` on its `<summary>`) and `c--diff-a` (on a `<pre>`, with `c--diff-a__add`, `__del`, `__skip` and `__mark`) for review screens. Additive.
+**0.6.0** adds `c--accordion-a` (on a `<details>`, with `c--accordion-a__title` on its `<summary>`) and `c--diff-a` (on a `<pre>`, with `c--diff-a__same`, `__add`, `__del`, `__skip` and `__mark`) for review screens. Additive.
 
 **0.5.1** fixes `c--modal-a`: the package reset (`margin: 0` on everything) removed the auto margin of a modal dialog, so it opened in the top left corner. It is centered again. Also adds `u--my-auto` and `u--m-auto` next to `u--mx-auto`.
 
