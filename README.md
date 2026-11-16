@@ -73,9 +73,9 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 
 | Component | Classes |
 |---|---|
-| Button | `c--btn-a`, `c--btn-b`, `c--btn-c` + `--small`, `--medium`, `--large` |
+| Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections) + `--small`, `--medium`, `--large` |
 | Card | `c--card-wrapper-a`, `c--card-wrapper-b` |
-| Tag | `c--tag-a` |
+| Tag | `c--tag-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) |
 | Icon | `c--icon-a` + size (`--small` 16px, `--medium` 24px, `--large` 32px) + type (`--check`, `--arrow-right`…) |
 | Terraform | `c--terraform-a` + size (`--small` 32px, `--medium` 64px, `--large` 128px) + shape (`--forma`, `--diana`…) |
 | Terraform trio | `c--terraform-trio-a` around three terraforms |
@@ -165,6 +165,10 @@ export default {
 Every key is optional. "Replaces" means what you don't list is not generated, which also makes the file smaller (about 80 kB with this config, against 113 kB by default). Breakpoints, grid and shadows are not configurable yet.
 
 ## What's new
+
+**0.4.0** makes `f--font-a`, `f--font-b` and `f--font-c` (32px and up) weight 700 by default; add `u--font-regular` to get the old 400. It also adds `u--opacity-*`, `u--flex-1`, `u--flex-none`, `u--min-width-0`, `u--divide-edge` the tag colors `c--tag-a--d|e|g|h|i` and the button `c--btn-d` for dark sections. Everything is additive: the frozen 0.0.9 rules are unchanged.
+
+**0.3.2** aligns six palette colors with the Terra Brand Guide.
 
 **0.3.1** adds the link to the documentation in Terra Docs. The CSS is the same as 0.3.0.
 

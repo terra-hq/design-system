@@ -1,6 +1,7 @@
+// f--font-a, b and c (headlines, 32px and up) are bold (700) by default; d, e and f (24px and down) are regular (400).
 @use "@scss/framework/_var/_vars.scss" as *;
 
-@mixin make-font-a($weight: 400) {
+@mixin make-font-a($weight: 700) {
   font-family: $type-a;
   font-weight: $weight;
   line-height: 1.1;
@@ -10,7 +11,7 @@
   }
 }
 
-@mixin make-font-b($weight: 400) {
+@mixin make-font-b($weight: 700) {
   font-family: $type-a;
   font-weight: $weight;
   line-height: 1.3;
@@ -20,7 +21,7 @@
   }
 }
 
-@mixin make-font-c($weight: 400) {
+@mixin make-font-c($weight: 700) {
   font-family: $type-a;
   font-weight: $weight;
   line-height: 1.3;

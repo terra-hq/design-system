@@ -1,0 +1,10 @@
+@use "sass:map";
+@use "@scss/framework/_var/_vars.scss" as *;
+
+// u--divide-edge: a 1px rule between the children (not before the first one). Noche at 14%, the same edge
+// that c--card-wrapper-* uses. Replaces a border-top on every row but the first.
+$divide-ink: if(map.has-key($color-options, a), map.get($color-options, a), #0f0f0f);
+
+.u--divide-edge > * + * {
+    border-top: 1px solid rgba($divide-ink, 0.14);
+}

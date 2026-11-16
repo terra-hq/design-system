@@ -1,0 +1,8 @@
+// u--opacity-{n}: opacity of the element. Used for secondary text (Noche at lower strength).
+$opacity-values: (100: 1, 85: 0.85, 70: 0.7, 50: 0.5) !default;
+
+@each $name, $value in $opacity-values {
+    .u--opacity-#{$name} {
+        opacity: $value;
+    }
+}

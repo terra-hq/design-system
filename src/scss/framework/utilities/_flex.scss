@@ -1,0 +1,11 @@
+// u--flex-1: grow and shrink from zero (take the free space). u--flex-none: keep the natural size.
+// u--min-width-0: let a flex child shrink below its content (long titles wrap instead of overflowing).
+.u--flex-1 {
+    flex: 1 1 0%;
+}
+.u--flex-none {
+    flex: none;
+}
+.u--min-width-0 {
+    min-width: 0;
+}

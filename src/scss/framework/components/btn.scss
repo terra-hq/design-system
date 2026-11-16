@@ -2,14 +2,15 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 @use "./helpers" as *;
 
-// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary.
+// c--btn-a primary · c--btn-b secondary · c--btn-c tertiary · c--btn-d on Noche (white fill, for dark sections).
 // Sizes are modifiers of the variant: --small, --medium (the default) and --large.
 $btn-ink: pick(a);
 $btn-paper: pick(b, a);
 
 .c--btn-a,
 .c--btn-b,
-.c--btn-c {
+.c--btn-c,
+.c--btn-d {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -51,6 +52,11 @@ $btn-paper: pick(b, a);
     background: $btn-ink;
     color: $btn-paper;
 }
+.c--btn-d {
+    border-color: $btn-paper;
+    background: $btn-paper;
+    color: $btn-ink;
+}
 .c--btn-b {
     background: transparent;
     color: $btn-ink;
@@ -62,7 +68,8 @@ $btn-paper: pick(b, a);
     color: $btn-ink;
 }
 .c--btn-a:active,
-.c--btn-b:active {
+.c--btn-b:active,
+.c--btn-d:active {
     transform: scale(0.98);
 }
 
@@ -70,6 +77,10 @@ $btn-paper: pick(b, a);
     .c--btn-a:hover {
         background: transparent;
         color: $btn-ink;
+    }
+    .c--btn-d:hover {
+        background: transparent;
+        color: $btn-paper;
     }
     .c--btn-b:hover {
         background: $btn-ink;
@@ -91,7 +102,7 @@ $btn-paper: pick(b, a);
         }
     }
 }
-@each $v in (a, b, c) {
+@each $v in (a, b, c, d) {
     @include btn-size($v, small, $measure * 4, 13px, $measure * 1.75, $measure * 1.5);
     @include btn-size($v, medium, $measure * 5, 14px, $measure * 2.5, $measure * 1.5);
     @include btn-size($v, large, $measure * 6, 16px, $measure * 3.5, $measure * 2);
@@ -100,7 +111,8 @@ $btn-paper: pick(b, a);
 @media (prefers-reduced-motion: reduce) {
     .c--btn-a,
     .c--btn-b,
-    .c--btn-c {
+    .c--btn-c,
+    .c--btn-d {
         transition: none;
     }
 }

@@ -24,3 +24,14 @@
         background: pick(f);
     }
 }
+
+// Color of the outline and the dot: c--tag-a--{d,e,g,h,i} (the default, without modifier, is cielo).
+@each $name in (d, e, g, h, i) {
+    .c--tag-a--#{$name} {
+        border-color: pick($name);
+
+        &::before {
+            background: pick($name);
+        }
+    }
+}

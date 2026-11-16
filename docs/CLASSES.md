@@ -52,7 +52,7 @@ $color-i: #f78bd8;
   - Letters `a` to `e` by default (extend it with `backgrounds` in `terra.config.js`)
   - Examples: `.f--background-a`, `.f--background-b`, `.f--background-e`
 
-- **Typography:** `.f--font-#{letter}` (`a` to `f`). Sets family, size, line height, weight 400 and the responsive size. Add `.u--font-*` to change only the weight.
+- **Typography:** `.f--font-#{letter}` (`a` to `f`). Sets family, size, line height, weight and the responsive size. `a`, `b` and `c` (32px and up) are weight 700; `d`, `e` and `f` are 400. Add `.u--font-*` to change only the weight.
   - One breakpoint, 810px: `a` 80px → 64px, `b` 56px → 40px, `c` 32px → 26px, `d` 24px → 20px. `e` (16px) and `f` (12px) never change.
   - Family: Uncut Sans, system-ui, sans-serif. The package does not ship the font files.
 
@@ -179,6 +179,12 @@ Also available: `px` / `py` (padding on an axis), `mx` / `my` (margin on an axis
 **With breakpoints:** `.u--mb-desktop-2`, `.u--p-mobile-4`, `.u--mt-tablets-1`, `.u--gap-mobile-2`, etc.
 
 - **Border** `.u--border-#{letter}`: a 1px solid border in a palette color. Examples: `.u--border-a`, `.u--border-e`
+
+- **Divide** `.u--divide-edge`: a 1px rule (Noche at 14%) between the children of the element, not before the first one. Put it on a `ul` and the rows get their separators.
+
+- **Flex** `.u--flex-1` (grow and shrink from zero, takes the free space), `.u--flex-none` (keeps its size) and `.u--min-width-0` (lets a flex child shrink below its content).
+
+- **Opacity** `.u--opacity-100`, `.u--opacity-85`, `.u--opacity-70`, `.u--opacity-50`: for secondary text.
 
 - **Text-align** `.u--text-align-#{$name}` or `.u--text-align-#{$breakpoint-name}-#{$name}`
 
