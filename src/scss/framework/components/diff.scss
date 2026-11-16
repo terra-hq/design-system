@@ -1,0 +1,55 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--diff-a: put it on a <pre>. Each line is a <span> with a role: c--diff-a__add, c--diff-a__del or c--diff-a__skip
+// ("… 12 unchanged lines"). Inside a line, c--diff-a__mark is the changed sign (+ or -) and a <mark> is a changed word.
+// The sign carries the meaning and the tint only helps, so it reads without color.
+.c--diff-a {
+    box-sizing: border-box;
+    max-height: $measure * 48;
+    margin: 0;
+    padding: $measure * 1.5 0;
+    overflow: auto;
+    border: 1px solid rgba(pick(a), 0.14);
+    border-radius: radius(b, $measure * 1.5);
+    background: pick(c, b);
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: pick(a);
+
+    &__add,
+    &__del,
+    &__skip {
+        display: block;
+        min-height: 1.5em;
+        padding: 0 $measure * 2;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+    }
+    &__add,
+    &__del {
+        background: rgba(pick(a), 0.1);
+    }
+    &__skip {
+        margin: $measure * 0.5 0;
+        border-block: 1px dashed rgba(pick(a), 0.3);
+        font-style: italic;
+    }
+    &__mark {
+        display: inline-block;
+        width: 1.5ch;
+        font-weight: 500;
+        user-select: none;
+    }
+    mark {
+        padding: 0 0.1em;
+        border-radius: $measure * 0.5;
+        background: rgba(pick(a), 0.2);
+        color: inherit;
+    }
+    &__del mark {
+        text-decoration: line-through;
+        text-decoration-thickness: 1px;
+    }
+}

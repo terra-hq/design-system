@@ -1,0 +1,53 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// c--accordion-a: put it on a native <details>; its <summary> is c--accordion-a__title. A flat card (white, 1px edge,
+// 12px corners) whose title row shows a + that turns into a − when open. Anything after the summary is the body:
+// lay it out with utilities.
+.c--accordion-a {
+    box-sizing: border-box;
+    border: 1px solid rgba(pick(a), 0.14);
+    border-radius: radius(b, $measure * 1.5);
+    background: pick(b, a);
+    padding: $measure * 1.25 $measure * 2;
+    transition: border-color $time-b $ease-standard-a;
+
+    &[open] {
+        padding-block: $measure * 1.5 $measure * 2;
+    }
+    &__title {
+        display: flex;
+        align-items: center;
+        gap: $measure * 1.5;
+        list-style: none;
+        cursor: pointer;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+        &::after {
+            content: "+";
+            margin-left: auto;
+            font-size: 1.25rem;
+            line-height: 1;
+            opacity: 0.5;
+        }
+    }
+    &[open] > &__title {
+        margin-bottom: $measure * 1.5;
+
+        &::after {
+            content: "-";
+        }
+    }
+}
+@media (hover: hover) {
+    .c--accordion-a:hover {
+        border-color: pick(a);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .c--accordion-a {
+        transition: none;
+    }
+}
