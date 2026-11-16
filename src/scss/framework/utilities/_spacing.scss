@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "@scss/framework/_var/_vars.scss" as *;
 
 
@@ -61,6 +62,25 @@
   
   @include make-spaces($space-values, $space-prefixes,$space-breakpoints);
 
+  // The same classes with the name of the CSS property, so they read like it: u--padding-y-4 is u--py-4.
+  // They are separate rules (not a longer selector list) because the short ones are frozen and must stay as they are.
+  $space-long: (
+    p: padding, pt: padding-top, pr: padding-right, pb: padding-bottom, pl: padding-left,
+    m: margin, mt: margin-top, mr: margin-right, mb: margin-bottom, ml: margin-left,
+    px: padding-x, py: padding-y, mx: margin-x, my: margin-y,
+    gap: gap, row-gap: row-gap, col-gap: column-gap,
+  );
+  $space-prefixes-long: ();
+  @each $short, $props in $space-prefixes {
+    @if map.get($space-long, $short) != $short {
+      $space-prefixes-long: map.merge($space-prefixes-long, (map.get($space-long, $short): $props));
+    }
+  }
+  @include make-spaces($space-values, $space-prefixes-long, $space-breakpoints);
+
 .u--mx-auto { margin-left: auto; margin-right: auto; }
 .u--my-auto { margin-top: auto; margin-bottom: auto; }
 .u--m-auto { margin: auto; }
+.u--margin-x-auto { margin-left: auto; margin-right: auto; }
+.u--margin-y-auto { margin-top: auto; margin-bottom: auto; }
+.u--margin-auto { margin: auto; }

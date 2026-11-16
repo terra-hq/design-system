@@ -190,7 +190,7 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
-**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px) and `u--hover-tint-{letter}` (a faint wash of the color on hover). It also opens more of the package to `terra.config.js`: `sizes`, `shadows`, `opacity`, `zIndex`, `offsets`, `tint`, `time` and `ease` (every one optional, with Terra's values as the default; see `terra.config.example.js`). Additive.
+**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px) and `u--hover-tint-{letter}` (a faint wash of the color on hover). It also opens more of the package to `terra.config.js`: `sizes`, `shadows`, `opacity`, `zIndex`, `offsets`, `tint`, `time` and `ease` (every one optional, with Terra's values as the default; see `terra.config.example.js`). Spacing classes also exist with the name of the CSS property: `u--padding-y-4` is `u--py-4`, `u--margin-x-auto` is `u--mx-auto` (the short names are unchanged). Additive.
 
 **0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`) and the button `c--btn-a--sixth` for dangerous actions such as delete (rojizo text, a faint tint on hover). Additive.
 
