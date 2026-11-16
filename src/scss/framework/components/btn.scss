@@ -154,6 +154,7 @@ $btn-paper: pick(b, a);
     }
     .c--btn-a--third:hover {
         background: rgba($btn-ink, 0.06);
+        color: $btn-ink;
     }
     .c--btn-a--fourth:hover {
         background: transparent;
@@ -161,6 +162,7 @@ $btn-paper: pick(b, a);
     }
     .c--btn-a--fifth:hover {
         background: rgba($btn-paper, 0.12);
+        color: $btn-paper;
     }
 }
 // third and fifth are narrower: keep that padding with every size.

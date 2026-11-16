@@ -173,6 +173,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
+**0.4.3** adds `minWidth` to `terra.config.js` (the steps of `u--min-width-{n}`) and fixes the hover of `c--btn-a--fifth` (the text turned Noche on a dark bar). Additive.
+
 **0.3.2** aligns six palette colors with the Terra Brand Guide.
 
 **0.3.1** adds the link to the documentation in Terra Docs. The CSS is the same as 0.3.0.
