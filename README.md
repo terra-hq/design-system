@@ -98,7 +98,7 @@ import '@terrahq/design-system/terraforms.css'
 <i class="c--terraform-a c--terraform-a--forma f--color-d"></i>
 ```
 
-Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
+Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
 
 A Terraform is used **alone or in a trio**: three different shapes in three different colors. Never two, and never the same shape or color twice in a trio.
 
@@ -172,6 +172,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 **0.4.1** adds `u--min-height-screen` (at least the height of the viewport, for full-screen pages such as a login). Additive.
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
+
+**0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`). Additive.
 
 **0.6.0** adds `c--diff-a` (on a `<pre>`, with `c--diff-a__same`, `__add`, `__del`, `__skip` and `__mark`) for review screens, and `u--cursor-pointer`. Additive.
 
