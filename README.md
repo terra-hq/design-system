@@ -170,6 +170,8 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.1** adds `u--min-height-screen` (at least the height of the viewport, for full-screen pages such as a login). Additive.
 
+**0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x `$measure`, a `!default` map), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
+
 **0.3.2** aligns six palette colors with the Terra Brand Guide.
 
 **0.3.1** adds the link to the documentation in Terra Docs. The CSS is the same as 0.3.0.
