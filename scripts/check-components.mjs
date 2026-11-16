@@ -4,7 +4,7 @@ const read = f => readFileSync(new URL(`../dist/${f}`, import.meta.url), 'utf8')
 const style = read('style.css'), icons = read('icons.css'), forms = read('terraforms.css')
 const sizes = ['small', 'medium', 'large']
 const want = [
-  [style, ['c--btn-a', 'c--btn-b', 'c--btn-c', ...['a', 'b', 'c'].flatMap(v => sizes.map(s => `c--btn-${v}--${s}`)),
+  [style, ['c--btn-a', 'c--btn-b', 'c--btn-c', ...['a', 'b', 'c', 'd'].flatMap(v => sizes.map(s => `c--btn-${v}--${s}`)), 'c--btn-d',
     'c--card-wrapper-a', 'c--card-wrapper-b', 'c--tag-a', 'c--icon-a', 'c--terraform-a', 'c--terraform-trio-a',
     ...sizes.map(s => `c--icon-a--${s}`), ...sizes.map(s => `c--terraform-a--${s}`),
     'u--order-last', 'u--order-none', ...Array.from({ length: 11 }, (_, i) => `u--order-${i + 2}`),
