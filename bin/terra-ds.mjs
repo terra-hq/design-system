@@ -51,9 +51,10 @@ if (cfg.offsets) {
   if (bad.length) fail(`offsets must map whole numbers (the class) to a CSS length, for example { 0: '0', 100: '100%' }. Check: ${bad.join(', ')}`)
   vars.push(`$offset-values: ${map(cfg.offsets)}`)
 }
-if (cfg.tint !== undefined) {
-  if (typeof cfg.tint !== 'number' || cfg.tint < 0 || cfg.tint > 1) fail('tint must be a number from 0 to 1 (the strength of the hover wash, 0.1 by default).')
-  vars.push(`$tint-alpha: ${cfg.tint}`)
+for (const [key, variable, dflt] of [['tint', 'tint-alpha', 0.1], ['tintHover', 'tint-hover-alpha', 0.2]]) {
+  if (cfg[key] === undefined) continue
+  if (typeof cfg[key] !== 'number' || cfg[key] < 0 || cfg[key] > 1) fail(`${key} must be a number from 0 to 1 (the strength of the wash, ${dflt} by default).`)
+  vars.push(`$${variable}: ${cfg[key]}`)
 }
 if (cfg.time) {
   const bad = Object.entries(cfg.time).filter(([k, v]) => !['a', 'b', 'c'].includes(k) || !/^\d*\.?\d+m?s$/.test(v))

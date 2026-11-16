@@ -17,7 +17,8 @@ export default {
   opacity: { 100: 1, 85: 0.85, 70: 0.7, 50: 0.5 }, // u--opacity-* (this is the default)
   zIndex: [0, 10, 20, 40],                         // u--z-index-* (this is the default)
   offsets: { 0: '0', 100: '100%' },                // u--top-*, u--right-*, u--bottom-*, u--left-* (this is the default)
-  tint: 0.1,                                       // strength of u--hover-tint-* (this is the default)
+  tint: 0.1,                                       // strength of u--tint-*, the faint wash of a color (this is the default)
+  tintHover: 0.2,                                  // strength of u--hover-tint-*, stronger on hover (this is the default)
 
   // Motion
   time: { a: '0.1s', b: '0.3s', c: '0.6s' },       // micro-interactions, expansion, background dimming (this is the default)

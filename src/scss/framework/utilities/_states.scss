@@ -25,10 +25,10 @@
         }
     }
 
-    // u--hover-tint-{letter}: a faint wash of the color (10%) on hover, for quiet buttons: pair it with the same f--color-{letter}
+    // u--hover-tint-{letter}: a stronger wash of the color (20%) on hover, for quiet buttons: pair it with the same f--color-{letter}
     @each $name, $color in $color-options {
         .u--hover-tint-#{$name}:hover {
-            background-color: rgba($color, $tint-alpha);
+            background-color: rgba($color, $tint-hover-alpha);
         }
     }
 
@@ -53,6 +53,14 @@
 // u--group is a marker: it sets only a custom property so the class exists in the CSS.
 .u--group {
     --u-group: 1;
+}
+
+// u--tint-{letter}: a faint wash of the color as the background (10% by default), for quiet buttons and tags.
+// Pair it with the same f--color-{letter} and, for a stronger wash on hover, u--hover-tint-{letter}.
+@each $name, $color in $color-options {
+    .u--tint-#{$name} {
+        background-color: rgba($color, $tint-alpha);
+    }
 }
 
 // u--focus-ring: a 2px ring in color a, only for keyboard focus
