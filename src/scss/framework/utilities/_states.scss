@@ -25,6 +25,13 @@
         }
     }
 
+    // u--hover-tint-{letter}: a faint wash of the color (10%) on hover, for quiet buttons: pair it with the same f--color-{letter}
+    @each $name, $color in $color-options {
+        .u--hover-tint-#{$name}:hover {
+            background-color: rgba($color, $tint-alpha);
+        }
+    }
+
     // u--group on a parent, u--group-hover-* on its children
     @each $name, $color in $color-options {
         .u--group:hover .u--group-hover-color-#{$name} {

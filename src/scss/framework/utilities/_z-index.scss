@@ -1,5 +1,6 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+
 // u--z-index-{n}: stacking order. 20 = sticky bars, 40 = dropdowns and popovers over them.
-$z-index-values: (0, 10, 20, 40) !default;
 
 @each $value in $z-index-values {
     .u--z-index-#{$value} {
