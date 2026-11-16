@@ -51,10 +51,6 @@ if (cfg.offsets) {
   if (bad.length) fail(`offsets must map whole numbers (the class) to a CSS length, for example { 0: '0', 100: '100%' }. Check: ${bad.join(', ')}`)
   vars.push(`$offset-values: ${map(cfg.offsets)}`)
 }
-if (cfg.tint !== undefined) {
-  if (typeof cfg.tint !== 'number' || cfg.tint < 0 || cfg.tint > 1) fail('tint must be a number from 0 to 1 (the strength of the hover wash, 0.1 by default).')
-  vars.push(`$tint-alpha: ${cfg.tint}`)
-}
 if (cfg.time) {
   const bad = Object.entries(cfg.time).filter(([k, v]) => !['a', 'b', 'c'].includes(k) || !/^\d*\.?\d+m?s$/.test(v))
   if (bad.length) fail(`time takes the keys a, b and c with values such as '0.1s' or '150ms'. Check: ${bad.map(([k]) => k).join(', ')}`)

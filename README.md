@@ -98,7 +98,7 @@ import '@terrahq/design-system/terraforms.css'
 <i class="c--terraform-a c--terraform-a--forma f--color-d"></i>
 ```
 
-Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
+Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash`, `pencil` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
 
 A Terraform is used **alone or in a trio**: three different shapes in three different colors. Never two, and never the same shape or color twice in a trio.
 
@@ -170,7 +170,6 @@ export default {
   opacity: { 100: 1, 85: 0.85, 70: 0.7, 50: 0.5 }, // u--opacity-* (this is the default)
   zIndex: [0, 10, 20, 40],                         // u--z-index-* (this is the default)
   offsets: { 0: '0', 100: '100%' },                // u--top-*, u--right-*, u--bottom-*, u--left-* (this is the default)
-  tint: 0.1,                                       // strength of u--hover-tint-* (this is the default)
 
   // Motion
   time: { a: '0.1s', b: '0.3s', c: '0.6s' },       // micro-interactions, expansion, background dimming (this is the default)
@@ -190,9 +189,11 @@ Every key is optional. "Replaces" means what you don't list is not generated, wh
 
 **0.4.2** adds `u--top|right|bottom|left-0|100`, `u--z-index-0|10|20|40`, `u--min-width-{n}` (n x 8px, steps set with `minWidth` in `terra.config.js`), `u--flex-grow-1`, and the button modifiers of Terra: `c--btn-a--second|third|fourth|fifth` (the letters `c--btn-b` to `c--btn-e` stay as aliases). Additive.
 
+**0.9.0** adds the icon `c--icon-a--pencil` and removes `u--hover-tint-*` (and the `tint` option), which was named after an effect and not after a CSS property. A quiet button is now an outline plus the hover utilities that already exist.
+
 **0.8.0** renames the spacing classes so they read like the CSS property, and the short names are gone (this is the one release that is not additive, while the package is still in development): `u--p-4` is now `u--padding-4`, `u--pt-4` is `u--padding-top-4`, `u--px-4` is `u--padding-x-4`, `u--py-4` is `u--padding-y-4`, and the same for `u--margin-*`. `u--mx-auto`, `u--my-auto` and `u--m-auto` are `u--margin-x-auto`, `u--margin-y-auto` and `u--margin-auto`, and `u--col-gap-*` is `u--column-gap-*`. Breakpoint versions follow: `u--p-mobile-4` is `u--padding-mobile-4`. To migrate, replace the names in your HTML; the frozen 0.0.9 rules were renamed with them, nothing else changed.
 
-**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px) and `u--hover-tint-{letter}` (a faint wash of the color on hover). It also opens more of the package to `terra.config.js`: `sizes`, `shadows`, `opacity`, `zIndex`, `offsets`, `tint`, `time` and `ease` (every one optional, with Terra's values as the default; see `terra.config.example.js`). Spacing classes also exist with the name of the CSS property: `u--padding-y-4` is `u--py-4`, `u--margin-x-auto` is `u--mx-auto` (the short names are unchanged). Additive.
+**0.7.0** adds what a button needs to be built from utilities alone: `u--height-{n}` and `u--width-{n}` (a fixed height or width of n x 8px). It also opens more of the package to `terra.config.js`: `sizes`, `shadows`, `opacity`, `zIndex`, `offsets`, `time` and `ease` (every one optional, with Terra's values as the default; see `terra.config.example.js`). Spacing classes also exist with the name of the CSS property: `u--padding-y-4` is `u--py-4`, `u--margin-x-auto` is `u--mx-auto` (the short names are unchanged). Additive.
 
 **0.6.1** adds the icon `c--icon-a--trash` (in `icons.css`) and the button `c--btn-a--sixth` for dangerous actions such as delete (rojizo text, a faint tint on hover). Additive.
 

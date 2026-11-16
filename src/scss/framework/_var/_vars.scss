@@ -45,7 +45,8 @@ $size-steps: (2, 3, 4, 5, 6, 8, 10, 12) !default;
 $type-a: 'Uncut Sans', system-ui, sans-serif !default;
 
 // * LAYOUT
-$viewport-type: max-width;
+// Mobile-first, like Punky: a breakpoint class applies from that width up.
+$viewport-type: min-width;
 $columns: 12;
 $gutter-width: 32px;
 $half-gutter-width: $gutter-width * 0.5;
@@ -57,23 +58,23 @@ $g-container-max-width: 1300px;
 $g-container-width: 90%;
 $g-container-width-mobile: 95%;
 
-// * breakpoints
+// * breakpoints (the same names and widths as Punky)
 $all: 0;
-$desktop: 1700px;
-$laptop: 1570px;
-$tabletl: 1300px;
-$tabletm: 1024px;
-$tablets: 810px;
-$mobile: 580px;
+$tablets: 580px;
+$tabletm: 810px;
+$tabletl: 1024px;
+$laptop: 1300px;
+$desktop: 1570px;
+$wide: 1700px;
 
 $breakpoints-grid: (
     all: $all,
-    desktop: $desktop,
-    laptop: $laptop,
-    tabletl: $tabletl,
-    tabletm: $tabletm,
     tablets: $tablets,
-    mobile: $mobile,
+    tabletm: $tabletm,
+    tabletl: $tabletl,
+    laptop: $laptop,
+    desktop: $desktop,
+    wide: $wide,
 ) !default;
 
 /*
@@ -100,8 +101,6 @@ $opacity-values: (100: 1, 85: 0.85, 70: 0.7, 50: 0.5) !default;
 $z-index-values: (0, 10, 20, 40) !default;
 // Offsets for u--top-*, u--right-*, u--bottom-* and u--left-*
 $offset-values: (0: 0, 100: 100%) !default;
-// Strength of the wash in u--hover-tint-* (0 to 1)
-$tint-alpha: 0.1 !default;
 
 // * Time
 $time-a: 0.1s !default; // * Micro-interactions such as button and toggle

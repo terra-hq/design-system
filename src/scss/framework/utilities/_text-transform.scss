@@ -1,0 +1,47 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "sass:meta";
+
+$text-transform-values: (
+  // capitalize: capitalize,
+  uppercase: uppercase,
+  // lowercase:lowercase,
+  // none:none,
+);
+
+$text-transform-breakpoints: (
+  all: $all,
+  // tablets: $tablets,
+  // tabletm: $tabletm,
+  //tabletl: $tabletl,
+  // laptop: $laptop,
+  // desktop: $desktop,
+  // wide: $wide,
+);
+
+@mixin text-transform-utility($text-prop, $breakpoints) {
+  @each $breakpoint-name, $breakpoint-value in $breakpoints {
+    @if ($breakpoint-value == 0) {
+      @each $name, $property in $text-prop {
+        .u--text-#{$name} {
+          text-transform: $property;
+        }
+      }
+    } @else {
+      @media screen and ($viewport-type: $breakpoint-value) {
+        @each $name, $property in $text-prop {
+          .u--text-#{$breakpoint-name}-#{$name} {
+            text-transform: $property;
+          }
+        }
+      }
+    }
+  }
+}
+@if meta.variable-exists(text-transform-breakpoints) {
+  @include text-transform-utility(
+    $text-transform-values,
+    $text-transform-breakpoints
+  );
+} @else {
+  @include text-transform-utility($text-transform-values, $breakpoints-grid);
+}
