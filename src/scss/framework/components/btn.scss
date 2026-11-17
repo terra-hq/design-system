@@ -3,9 +3,14 @@
 @use "./helpers" as *;
 
 // Terra way (BEM, reserved modifiers): c--btn-a is the button, the modifier changes it.
-//   c--btn-a primary · --second secondary · --third tertiary
-//   --fourth on Noche (white fill, for dark sections) · --fifth on Noche, quiet (no fill, white text)
-//   --sixth danger (no fill, rojizo text, a faint rojizo tint on hover): delete, remove
+//   c--btn-a primary · --second secondary · --third tertiary (no fill, no outline; a soft tint and the shape change on hover)
+//   --fourth on Noche (white fill, for dark sections) · --fifth tertiary on Noche (no fill, white text, a white tint on hover)
+// A button has no colour of its own. Only an ICON BUTTON (--icon) that is a SYSTEM ACTION (edit, delete, archive, share, approve: what you do
+// to an object) takes the colour of its intent on its icon, and only on hover or keyboard focus. A button with a label never does, and
+// neither does one that navigates or loads content (Load More, Contact): the classes do nothing without --icon.
+// at rest every action is neutral, and the label never changes (the four colours do not reach 4.5:1 as text on white):
+//   --danger rojizo (delete, remove) · --warning sol (archive, disable) · --info cielo (share, details) · --success neon (approve, publish)
+//   <button class="c--btn-a c--btn-a--third c--btn-a--icon c--btn-a--danger" aria-label="Delete"><i class="c--icon-a c--icon-a--trash"></i></button>
 //   sizes --small, --medium (the default) and --large:  <a class="c--btn-a c--btn-a--second c--btn-a--small">
 // The letters c--btn-b, -c, -d and -e keep working as before (same look, own sizes); prefer the modifiers.
 $btn-ink: pick(a);
@@ -31,6 +36,7 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
     padding: 0 $measure * 2.5;
     border: 1px solid $btn-ink;
     --c-btn-r: #{$measure * 2.5};
+    --c-btn-h: #{$measure * 5};
     border-radius: radius(full, 999px);
     font-family: $type-a;
     font-size: 14px;
@@ -46,8 +52,9 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
         border-radius $time-b $ease-standard-a,
         transform $time-a $ease-standard-a;
 
+    // the same ring as a link: 2px in ink, 2px outside (white on a Noche surface, below)
     &:focus-visible {
-        outline: 2px solid pick(f);
+        outline: 2px solid $btn-ink;
         outline-offset: 2px;
     }
     &:disabled,
@@ -60,6 +67,13 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
         width: 1.25em;
         height: 1.25em;
     }
+}
+
+.c--btn-d:focus-visible,
+.c--btn-e:focus-visible,
+.c--btn-a--fourth:focus-visible,
+.c--btn-a--fifth:focus-visible {
+    outline-color: $btn-paper;
 }
 
 .c--btn-a {
@@ -96,7 +110,7 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
 }
 
 @media (hover: hover) {
-    .c--btn-a:not(.c--btn-a--third, .c--btn-a--fourth, .c--btn-a--fifth, .c--btn-a--sixth):hover {
+    .c--btn-a:not(.c--btn-a--fourth):hover {
         border-radius: $btn-hover-r;
         @if $btn-primary-hover-bg {
             background: $btn-primary-hover-bg;
@@ -122,6 +136,7 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
 @mixin btn-size($v, $name, $height, $font, $px, $px-c) {
     .c--btn-#{$v}--#{$name} {
         --c-btn-r: #{$height * 0.5};
+        --c-btn-h: #{$height};
         height: $height;
         padding-inline: $px;
         font-size: $font;
@@ -137,13 +152,18 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
 }
 
 // Modifiers of c--btn-a. They come after the base and the letters so they win at equal specificity.
+// --icon: an icon button, as wide as it is tall (a circle at rest, radius-a on hover like the others). It takes any variant and any size:
+//   <button class="c--btn-a c--btn-a--third c--btn-a--icon" aria-label="Edit"><i class="c--icon-a c--icon-a--pencil"></i></button>
+.c--btn-a.c--btn-a--icon {
+    width: var(--c-btn-h);
+    padding-inline: 0;
+}
 .c--btn-a--second {
     border-color: $btn-second-edge;
     background: $btn-second-fill;
     color: $btn-ink;
 }
 .c--btn-a--third {
-    padding: 0 $measure * 1.5;
     border-color: transparent;
     background: transparent;
     color: $btn-ink;
@@ -154,16 +174,9 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
     color: $btn-ink;
 }
 .c--btn-a--fifth {
-    padding: 0 $measure * 1.5;
     border-color: transparent;
     background: transparent;
     color: $btn-paper;
-}
-.c--btn-a--sixth {
-    padding: 0 $measure * 1.5;
-    border-color: transparent;
-    background: transparent;
-    color: pick(h, a);
 }
 .c--btn-a--second:active,
 .c--btn-a--fourth:active {
@@ -190,19 +203,25 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
         background: rgba($btn-paper, 0.12);
         color: $btn-paper;
     }
-    .c--btn-a--sixth:hover {
-        background: rgba(pick(h, a), 0.1);
-        color: pick(h, a);
-    }
 }
-// third and fifth are narrower: keep that padding with every size.
-@each $m in (third, fifth, sixth) {
-    .c--btn-a--#{$m}.c--btn-a--small { padding-inline: $measure * 1.5; }
-    .c--btn-a--#{$m}.c--btn-a--medium { padding-inline: $measure * 1.5; }
-    .c--btn-a--#{$m}.c--btn-a--large { padding-inline: $measure * 2; }
+
+// the intent colour, on the icon only
+.c--btn-a .c--icon-a {
+    transition: color $time-a $ease-standard-a;
+}
+@each $name, $letter in (danger: h, warning: g, info: f, success: d) {
+    @media (hover: hover) {
+        .c--btn-a--icon.c--btn-a--#{$name}:hover .c--icon-a {
+            color: pick($letter);
+        }
+    }
+    .c--btn-a--icon.c--btn-a--#{$name}:focus-visible .c--icon-a {
+        color: pick($letter);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
+    .c--btn-a .c--icon-a,
     .c--btn-a,
     .c--btn-b,
     .c--btn-c,

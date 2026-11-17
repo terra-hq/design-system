@@ -98,7 +98,7 @@ import '@terrahq/design-system/terraforms.css'
 <i class="c--terraform-a c--terraform-a--forma f--color-d"></i>
 ```
 
-Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `chevron-right`, `chevron-left`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash`, `pencil` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
+Icons: `arrow-right`, `arrow-left`, `check`, `close`, `plus`, `search`, `chevron-down`, `chevron-right`, `chevron-left`, `more`, `archive`, `share`, `external`, `download`, `copy`, `mail`, `info`, `menu`, `trash`, `pencil` (an initial set). Terraforms: `forma`, `diana`, `stanley`, `mistyk`, `melos`, `prismo`, `mendia`, `boba`, `ebb`, `gollum`, `punky`, `infinito`.
 
 A Terraform is used **alone or in a trio**: three different shapes in three different colors. Never two, and never the same shape or color twice in a trio.
 

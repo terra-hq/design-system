@@ -96,6 +96,16 @@
     transition: opacity $time-b $ease-standard-a;
 }
 
+// A link that cannot be followed (aria-disabled="true") is shown like a disabled button: 50%, no hover, no pointer.
+.c--link-a[aria-disabled="true"],
+.c--link-b[aria-disabled="true"],
+.c--link-c[aria-disabled="true"],
+.c--link-d[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 @media (hover: hover) {
     .c--link-a:hover,
     .c--link-c:hover {
