@@ -10,6 +10,12 @@
 // The letters c--btn-b, -c, -d and -e keep working as before (same look, own sizes); prefer the modifiers.
 $btn-ink: pick(a);
 $btn-paper: pick(b, a);
+// States a design decision can change: set in _vars.scss, or from terra.config.js with `buttons`. null = DESIGN.md's rule.
+$btn-second-fill: if($btn-second-bg, $btn-second-bg, $btn-paper);
+$btn-second-edge: if($btn-second-border, $btn-second-border, $btn-ink);
+// On hover the primary and the secondary only change shape: the capsule becomes a rounded rectangle (radius-a). Their colors stay.
+// A project can still ask for a color change with the $btn-*-hover-* variables: null (the default) means no change.
+$btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
 
 .c--btn-a,
 .c--btn-b,
@@ -24,6 +30,7 @@ $btn-paper: pick(b, a);
     height: $measure * 5;
     padding: 0 $measure * 2.5;
     border: 1px solid $btn-ink;
+    --c-btn-r: #{$measure * 2.5};
     border-radius: radius(full, 999px);
     font-family: $type-a;
     font-size: 14px;
@@ -36,6 +43,7 @@ $btn-paper: pick(b, a);
         background-color $time-a $ease-standard-a,
         color $time-a $ease-standard-a,
         border-color $time-a $ease-standard-a,
+        border-radius $time-b $ease-standard-a,
         transform $time-a $ease-standard-a;
 
     &:focus-visible {
@@ -55,6 +63,8 @@ $btn-paper: pick(b, a);
 }
 
 .c--btn-a {
+    // half of its height: a capsule that can morph smoothly to radius-a on hover (999px could not be animated)
+    border-radius: var(--c-btn-r);
     background: $btn-ink;
     color: $btn-paper;
 }
@@ -86,9 +96,11 @@ $btn-paper: pick(b, a);
 }
 
 @media (hover: hover) {
-    .c--btn-a:hover {
-        background: transparent;
-        color: $btn-ink;
+    .c--btn-a:not(.c--btn-a--third, .c--btn-a--fourth, .c--btn-a--fifth, .c--btn-a--sixth):hover {
+        border-radius: $btn-hover-r;
+        @if $btn-primary-hover-bg {
+            background: $btn-primary-hover-bg;
+        }
     }
     .c--btn-d:hover {
         background: transparent;
@@ -109,6 +121,7 @@ $btn-paper: pick(b, a);
 // --small 32px · --medium 40px (the default, written out so it can be forced) · --large 48px
 @mixin btn-size($v, $name, $height, $font, $px, $px-c) {
     .c--btn-#{$v}--#{$name} {
+        --c-btn-r: #{$height * 0.5};
         height: $height;
         padding-inline: $px;
         font-size: $font;
@@ -125,7 +138,8 @@ $btn-paper: pick(b, a);
 
 // Modifiers of c--btn-a. They come after the base and the letters so they win at equal specificity.
 .c--btn-a--second {
-    background: transparent;
+    border-color: $btn-second-edge;
+    background: $btn-second-fill;
     color: $btn-ink;
 }
 .c--btn-a--third {
@@ -157,8 +171,12 @@ $btn-paper: pick(b, a);
 }
 @media (hover: hover) {
     .c--btn-a--second:hover {
-        background: $btn-ink;
-        color: $btn-paper;
+        @if $btn-second-hover-bg {
+            background: $btn-second-hover-bg;
+        }
+        @if $btn-second-hover-text {
+            color: $btn-second-hover-text;
+        }
     }
     .c--btn-a--third:hover {
         background: rgba($btn-ink, 0.06);

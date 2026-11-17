@@ -13,7 +13,8 @@
     "build": "tsc && vite build && node scripts/build-masks.mjs",
     "preview": "vite preview",
     "check": "node scripts/check-foundation.mjs && node scripts/check-components.mjs",
-    "prepublishOnly": "npm run build && npm run check"
+    "prepublishOnly": "npm run build && npm run check",
+    "watch": "node --watch-path=src/scss --watch-preserve-output scripts/watch.mjs"
   },
   "devDependencies": {
     "@types/node": "^20.8.5",
