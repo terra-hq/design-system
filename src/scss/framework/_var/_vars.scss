@@ -44,6 +44,16 @@ $size-steps: (2, 3, 4, 5, 6, 8, 10, 12) !default;
 // Terra's typeface. The package does not ship the font files: load Uncut Sans yourself, or the fallbacks are used.
 $type-a: 'Uncut Sans', system-ui, sans-serif !default;
 
+// * BUTTONS
+// What a design decision can change. null = the default described here.
+// Set them from terra.config.js with `buttons`: { hoverRadius, primaryHover, secondRest, secondBorder, secondHover, secondHoverText }.
+$btn-hover-radius: null !default; // primary and secondary on hover: the capsule becomes this radius (default radius-a, 8px)
+$btn-second-bg: null !default; // c--btn-a--second at rest: white
+$btn-second-border: null !default; // c--btn-a--second border: Noche
+$btn-primary-hover-bg: null !default; // c--btn-a on hover: no color change (set a color to add one)
+$btn-second-hover-bg: null !default; // c--btn-a--second on hover: no color change
+$btn-second-hover-text: null !default; // c--btn-a--second label on hover: no color change
+
 // * LAYOUT
 // Mobile-first, like Punky: a breakpoint class applies from that width up.
 $viewport-type: min-width;

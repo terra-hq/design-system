@@ -51,6 +51,12 @@ if (cfg.offsets) {
   if (bad.length) fail(`offsets must map whole numbers (the class) to a CSS length, for example { 0: '0', 100: '100%' }. Check: ${bad.join(', ')}`)
   vars.push(`$offset-values: ${map(cfg.offsets)}`)
 }
+if (cfg.buttons) {
+  const keys = { hoverRadius: 'btn-hover-radius', primaryHover: 'btn-primary-hover-bg', secondRest: 'btn-second-bg', secondBorder: 'btn-second-border', secondHover: 'btn-second-hover-bg', secondHoverText: 'btn-second-hover-text' }
+  const bad = Object.keys(cfg.buttons).filter(k => !keys[k])
+  if (bad.length) fail(`buttons takes the keys ${Object.keys(keys).join(', ')}. Check: ${bad.join(', ')}`)
+  for (const [k, v] of Object.entries(cfg.buttons)) vars.push(`$${keys[k]}: ${v}`)
+}
 if (cfg.time) {
   const bad = Object.entries(cfg.time).filter(([k, v]) => !['a', 'b', 'c'].includes(k) || !/^\d*\.?\d+m?s$/.test(v))
   if (bad.length) fail(`time takes the keys a, b and c with values such as '0.1s' or '150ms'. Check: ${bad.map(([k]) => k).join(', ')}`)

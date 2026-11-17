@@ -1,0 +1,121 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// Hyperlinks, taken from the Terra website (g--link-01, --second and --third). Each variant is its own letter, in pairs:
+// the first two are for a light surface, the last two for a Noche surface, and the second of each pair has no underline.
+//   c--link-a   ink, with a 1px underline under the text; on hover the underline retracts to the left
+//   c--link-b   ink, no underline; on hover it fades to 60%
+//   c--link-c   white, with the underline, for a Noche surface; on hover the underline retracts
+//   c--link-d   white, no underline, for a Noche surface; on hover it fades to 60%
+// A link is as big as its text, also inside a flex row or column (a card), like a button: it never stretches, so the underline
+// stays under the letters and never runs edge to edge.
+// Modifiers, for any letter:
+//   --strong    weight 500, for a link that stands on its own line; the underline gets a little thicker
+//   --bold      weight 700; the underline thicker still
+// The underline is proportional to the text: 1px at 16px, and it grows with the size (CSS cannot read a weight, hence --strong and --bold).
+//   --external  adds the ↗ that marks a link leaving the product
+//   --icon      lines up a c--icon-a (16px) placed inside the link, before the text or after it. A link with an icon never animates
+//               the underline: it has none and fades on hover, so on a or c it behaves like b or d (prefer b and d, they say it plainly)
+// Never an accent color: a link is ink (or white). The size is the one of the text around it.
+.c--link-a,
+.c--link-b,
+.c--link-c,
+.c--link-d {
+    width: fit-content;
+    height: fit-content;
+    color: pick(a);
+    text-decoration: none;
+    cursor: pointer;
+
+    &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+}
+.c--link-a,
+.c--link-c {
+    // the box hugs the letters (also when the link is a flex item, where the line height would otherwise push the underline away)
+    line-height: 1.1;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    --c-link-line: max(1px, 0.0625em);
+    background-size: 100% var(--c-link-line);
+    // a link that wraps keeps its underline under every line
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-size $time-b $ease-standard-a;
+}
+.c--link-b,
+.c--link-d {
+    transition: opacity $time-b $ease-standard-a;
+}
+.c--link-c,
+.c--link-d {
+    color: pick(b, a);
+}
+.c--link-a--strong,
+.c--link-b--strong,
+.c--link-c--strong,
+.c--link-d--strong {
+    --c-link-line: max(1px, 0.075em);
+    font-weight: 500;
+}
+.c--link-a--bold,
+.c--link-b--bold,
+.c--link-c--bold,
+.c--link-d--bold {
+    --c-link-line: max(1px, 0.1em);
+    font-weight: 700;
+}
+.c--link-a--icon,
+.c--link-b--icon,
+.c--link-c--icon,
+.c--link-d--icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    .c--icon-a {
+        vertical-align: baseline;
+    }
+}
+.c--link-a--external::after,
+.c--link-b--external::after,
+.c--link-c--external::after,
+.c--link-d--external::after {
+    content: "\2197";
+    display: inline-block;
+    margin-left: 0.25em;
+}
+
+.c--link-a--icon,
+.c--link-c--icon {
+    background-image: none;
+    transition: opacity $time-b $ease-standard-a;
+}
+
+@media (hover: hover) {
+    .c--link-a:hover,
+    .c--link-c:hover {
+        background-size: 0% var(--c-link-line);
+    }
+    .c--link-b:hover,
+    .c--link-d:hover,
+    .c--link-a--icon:hover,
+    .c--link-c--icon:hover {
+        opacity: 0.6;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .c--link-a--icon,
+    .c--link-c--icon,
+    .c--link-a,
+    .c--link-b,
+    .c--link-c,
+    .c--link-d {
+        transition: none;
+    }
+}

@@ -227,6 +227,7 @@ Named `c--name-variant--modifier`. Sizes, icon types and Terraform shapes are mo
 | Button | `c--btn-a` `c--btn-b` `c--btn-c`, each with `--small` `--medium` `--large` |
 | Card | `c--card-wrapper-a` `c--card-wrapper-b` |
 | Tag | `c--tag-a` |
+| Link | `c--link-a` `c--link-b` `c--link-c` `c--link-d`, with `--strong` `--bold` `--external` `--icon` |
 | Icon | `c--icon-a` + `--small` `--medium` `--large` + a type from `dist/icons.css` |
 | Terraform | `c--terraform-a` + `--small` `--medium` `--large` + a shape from `dist/terraforms.css` |
 | Terraform trio | `c--terraform-trio-a` |
