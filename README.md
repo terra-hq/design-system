@@ -63,7 +63,7 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 <button class="c--btn-a">save</button>
 <button class="c--btn-b c--btn-b--small">cancel</button>
 
-<!-- card: the wrapper is the box, put anything inside. Variant b has no padding, for an image at the edge -->
+<!-- card: the wrapper is the box, put anything inside. Variant b has no padding, for an image at the edge. The element decides the hover: <a href> and <button> cards react (border turns Noche, pointer, focus ring); <div>, <article>, <aside> and <section> cards do nothing -->
 <article class="c--card-wrapper-a">
   <span class="c--tag-a">new</span>
   <h3 class="f--font-c u--font-medium">project atlas</h3>

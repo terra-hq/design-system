@@ -3,6 +3,8 @@
 
 // c--card-wrapper-a is the box of a card: put anything inside. Flat, as the brand asks: on hover the border turns
 // Noche, with no shadow and no movement.
+// The element decides whether the card reacts: a card on <a href> or <button> is clickable as a whole, so it gets the
+// hover, the pointer and a keyboard focus ring. A card on <div>, <article>, <aside> or <section> is not, and does nothing.
 // c--card-wrapper-b has no padding, so an image can reach the edge; add the inner space with utilities (u--p-3).
 .c--card-wrapper-a,
 .c--card-wrapper-b {
@@ -24,9 +26,26 @@
     overflow: hidden;
 }
 
+a[href].c--card-wrapper-a,
+a[href].c--card-wrapper-b,
+button.c--card-wrapper-a,
+button.c--card-wrapper-b {
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+    font-family: inherit;
+
+    &:focus-visible {
+        outline: 2px solid pick(f);
+        outline-offset: 2px;
+    }
+}
+
 @media (hover: hover) {
-    .c--card-wrapper-a:hover,
-    .c--card-wrapper-b:hover {
+    a[href].c--card-wrapper-a:hover,
+    a[href].c--card-wrapper-b:hover,
+    button.c--card-wrapper-a:hover,
+    button.c--card-wrapper-b:hover {
         border-color: pick(a);
     }
 }
