@@ -225,6 +225,7 @@ Named `c--name-variant--modifier`. Sizes, icon types and Terraform shapes are mo
 | Component | Classes |
 |---|---|
 | Button | `c--btn-a` `c--btn-b` `c--btn-c`, each with `--small` `--medium` `--large` |
+| Button, icon and intent | `c--btn-a--icon` (a circle); `--danger` `--warning` `--info` `--success` colour only the icon, on hover |
 | Card | `c--card-wrapper-a` `c--card-wrapper-b` |
 | Tag | `c--tag-a` |
 | Link | `c--link-a` `c--link-b` `c--link-c` `c--link-d`, with `--strong` `--bold` `--external` `--icon` |
