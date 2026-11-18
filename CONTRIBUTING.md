@@ -42,6 +42,16 @@ docs/CLASSES.md                 class reference
 4. `npm run build && npm run check`.
 5. Document it: add the classes to `docs/CLASSES.md`. The full documentation site lives in Terra Docs, outside this repo.
 
+## Adding or changing a component
+
+Every time a component is added or changed, go through this list. The configuration is part of the component, not something added afterwards.
+
+1. **Read the config, do not hard-code.** Colours with `pick(letter)`, corners with `radius(letter, fallback)`, time and curve with `$time-*` and `$ease-*`, the typeface with `$type-a`. No literal colour, radius or duration in a component.
+2. **Design decisions get a block.** If a project could reasonably want to change one thing in one state (an opacity, a hover shape, a fill), give the component its own option, like `buttons` and `pills`: a variable with `!default` in `_vars.scss` (`null` when the default is "do nothing"), the key in `bin/terra-ds.mjs` with a check on the value, and the example in `terra.config.example.js`.
+3. **Try it with a config of your own.** Build with a small `terra.config.mjs` (another palette, another radius, another time, and your new option) and read the CSS. Also try a palette with only `a` and `b`: it must build, and every missing letter falls back to `a`.
+4. **Say what it reads, in the same release.** In Terra Docs: the list "What each component reads from `terra.config.js`" in `components/naming`, the option itself in `configure` (the listing and its section, with what it changes, where you see it and the default), and `design.md`.
+5. **Release.** Bump the version, freeze the baseline (`scripts/frozen`), `npm run build && npm run check`, publish, and only then bump the version Terra Docs pins and describe it.
+
 ## Documentation
 
 This repo only holds the code and `docs/CLASSES.md`. The documentation site (guides, examples, the design reference) lives in Terra Docs, so there is no docs app to build or deploy here.
