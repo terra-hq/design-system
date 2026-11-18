@@ -35,3 +35,101 @@
         }
     }
 }
+
+// The element decides, like the cards: a <span class="c--tag-a"> does nothing (the outline above, no hover). An <a href> or a
+// <button> with c--tag-a is clickable: no outline, its accent at 10% as a fill and, on hover or when selected
+// (aria-pressed="true" or aria-current="true"), the corners go from capsule to radius-a and the fill to 20%.
+// The washes live here, not in the palette. The rest corners are half the height (12px): a 999px radius cannot be animated.
+// One shape for the three: 24px high, 16px at the sides, an 8px dot. The dot is taken out of the flow (absolute) so the baseline of the
+// tag is the baseline of its label: inside a line of text the label sits on the same baseline as the words around it.
+span.c--tag-a,
+a.c--tag-a,
+button.c--tag-a {
+    position: relative;
+    height: 24px;
+    padding: 0 $measure * 2 0 $measure * 4;
+
+    &::before {
+        position: absolute;
+        top: 50%;
+        left: $measure * 2;
+        width: $measure;
+        height: $measure;
+        margin-top: $measure * -0.5;
+    }
+}
+
+a.c--tag-a,
+button.c--tag-a {
+    --c-tag: #{pick(f)};
+    border: 0;
+    border-radius: 12px;
+    background: rgba(pick(f), 0.1);
+    color: inherit; // Noche text on a light surface, white on a dark one: it follows the surface
+    font-family: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color $time-b $ease-standard-a,
+        border-radius $time-b $ease-standard-a;
+
+    &::before {
+        background: var(--c-tag);
+    }
+
+    &[aria-pressed="true"],
+    &[aria-current="true"] {
+        border-radius: radius(a, $measure);
+        background: rgba(pick(f), 0.2);
+    }
+
+    &:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: 2px;
+    }
+}
+
+@media (hover: hover) {
+    a.c--tag-a:hover,
+    button.c--tag-a:hover {
+        border-radius: radius(a, $measure);
+        background: rgba(pick(f), 0.2);
+    }
+}
+
+@each $name in (d, e, g, h, i) {
+    a.c--tag-a--#{$name},
+    button.c--tag-a--#{$name} {
+        --c-tag: #{pick($name)};
+        background: rgba(pick($name), 0.1);
+
+        &[aria-pressed="true"],
+        &[aria-current="true"] {
+            background: rgba(pick($name), 0.2);
+        }
+    }
+    @media (hover: hover) {
+        a.c--tag-a--#{$name}:hover,
+        button.c--tag-a--#{$name}:hover {
+            background: rgba(pick($name), 0.2);
+        }
+    }
+}
+
+// On a dark surface the label is white: the clickable tag inherits its colour from the surface (put f--color-b on it), and --second
+// makes sure (white label, white focus ring). The outline of a <span> and the dot keep their accent, on light and on dark.
+.c--tag-a--second {
+    color: pick(b);
+
+    &:focus-visible {
+        outline-color: pick(b);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    a.c--tag-a,
+    button.c--tag-a {
+        transition: none;
+    }
+}

@@ -75,21 +75,21 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 |---|---|
 | Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections), `c--btn-e` (on Noche: no fill, white text) + `--small`, `--medium`, `--large` |
 | Card | `c--card-wrapper-a`, `c--card-wrapper-b` |
-| Tag (a pill that does nothing) | `c--tag-a` on a `<span>` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo). Outline and dot, no fill, no hover |
-| Pill (clickable) | `c--pill-a` on an `<a>` or a `<button>` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) + `--second` on Noche. Selected: `aria-pressed="true"` or `aria-current="true"` |
+| Tag / pill | `c--tag-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) + `--second` on Noche. **The element decides:** a `<span>` does nothing (outline and dot, no hover); an `<a href>` or `<button>` is clickable (a fill, and a hover). Selected: `aria-pressed="true"` or `aria-current="true"` |
 | Icon | `c--icon-a` + size (`--small` 16px, `--medium` 24px, `--large` 32px) + type (`--check`, `--arrow-right`…) |
 | Terraform | `c--terraform-a` + size (`--small` 32px, `--medium` 64px, `--large` 128px) + shape (`--forma`, `--diana`…) |
 | Terraform trio | `c--terraform-trio-a` around three terraforms |
 
-**Pills: outline when they do nothing, fill when they do something.** A pill that only labels is `<span class="c--tag-a">`: an outline and a dot, no fill, no hover. A pill you can click is `<a class="c--pill-a" href>` or `<button class="c--pill-a">`: the accent of its dot at 10% as a fill and, on hover or when selected, the corners go from capsule to 8px (like the buttons) and the fill to 20%. The fills live inside the component, they are not palette colours. A pill that is only visual is always a `<span>`.
+**Pills: outline when they do nothing, fill when they do something.** `c--tag-a` is both, and the element decides, like the cards. `<span class="c--tag-a">` does nothing: an outline and a dot, no fill, no hover. `<a class="c--tag-a" href>` and `<button class="c--tag-a">` are clickable: no outline, the accent of the dot at 10% as a fill and, on hover or when selected, the corners go from capsule to 8px (like the buttons) and the fill to 20%. The fills live inside the component, they are not palette colours. A pill that is only visual is always a `<span>`. **On a dark surface the label is white:** the clickable tag takes its text colour from the surface, and `c--tag-a--second` makes sure. The outline of a `<span>` and the dot keep their accent, on light and on dark. Inside a line of text the label of the tag sits on the baseline of the words around it (the dot is taken out of the flow). A `<span class="c--tag-a">` is now 24px high with an 8px dot, like the clickable one (it was 22px and 7px).
 
 ```html
-<a class="c--pill-a c--pill-a--d" href="#">docs</a>
-<button class="c--pill-a" aria-pressed="true">review</button>
-<div class="f--background-a"><a class="c--pill-a c--pill-a--second" href="#">docs</a></div>
+<span class="c--tag-a c--tag-a--e">live</span>
+<a class="c--tag-a c--tag-a--d" href="#">docs</a>
+<button class="c--tag-a" aria-pressed="true">review</button>
+<div class="f--background-a"><a class="c--tag-a c--tag-a--second" href="#">docs</a></div>
 ```
 
-**0.16.0** adds the colours `k` to `p` (the designer's tints: the accents 70% lighter, solid, each with `f--color-*`, `f--background-*` and `u--background-hover-*`) and the component `c--pill-a`. Everything is additive.
+**0.17.0** makes `c--tag-a` clickable when it is an `<a>` or a `<button>` (it replaces `c--pill-a` from 0.16.0, which was published for a few minutes and is gone). **0.16.0** added the colours `k` to `p` (the designer's tints: the accents 70% lighter, solid, each with `f--color-*`, `f--background-*` and `u--background-hover-*`). Everything is additive.
 
 **Icons and Terraforms** are CSS masks painted with the text color, so `f--color-*` tints them. Their types and shapes are in two extra files, so you only pay for what you use:
 
