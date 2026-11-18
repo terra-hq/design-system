@@ -1,5 +1,6 @@
 @use "@scss/framework/_var/_vars.scss" as *;
 @use "./helpers" as *;
+@use "@scss/framework/foundation/font/make-font" as *;
 
 // An outlined pill with a dot: the one splash of color the brand allows on a label.
 .c--tag-a {
@@ -40,30 +41,39 @@
 // <button> with c--tag-a is clickable: no outline, its accent at 10% as a fill and, on hover or when selected
 // (aria-pressed="true" or aria-current="true"), the corners go from capsule to radius-a and the fill to 20%.
 // The washes live here, not in the palette. The rest corners are half the height (12px): a 999px radius cannot be animated.
-// One shape for the three: 24px high, 16px at the sides, an 8px dot. The dot is taken out of the flow (absolute) so the baseline of the
-// tag is the baseline of its label: inside a line of text the label sits on the same baseline as the words around it.
+// One shape for the three, in em so it follows the font of the foundation: at the default 12px it is 24px high with 16px at the sides and
+// an 8px dot; put f--font-e, f--font-d, f--font-c... on the tag and the whole pill grows with it. The dot is taken out of the flow (absolute)
+// so the baseline of the tag is the baseline of its label: inside a line of text the label sits on the same baseline as the words around it.
 span.c--tag-a,
 a.c--tag-a,
 button.c--tag-a {
     position: relative;
-    height: 24px;
-    padding: 0 $measure * 2 0 $measure * 4;
+    height: 2em;
+    padding: 0 1.3333em 0 2.6667em;
 
     &::before {
         position: absolute;
         top: 50%;
-        left: $measure * 2;
-        width: $measure;
-        height: $measure;
-        margin-top: $measure * -0.5;
+        left: 1.3333em;
+        width: 0.6667em;
+        height: 0.6667em;
+        margin-top: -0.3333em;
     }
 }
+
+// The font of the foundation on the tag: f--font-a to f--font-f give the size (and its breakpoint), the tag keeps its weight 500 and a line of 1.
+.c--tag-a.f--font-a { @include make-font-a(500); line-height: 1; }
+.c--tag-a.f--font-b { @include make-font-b(500); line-height: 1; }
+.c--tag-a.f--font-c { @include make-font-c(500); line-height: 1; }
+.c--tag-a.f--font-d { @include make-font-d(500); line-height: 1; }
+.c--tag-a.f--font-e { @include make-font-e(500); line-height: 1; }
+.c--tag-a.f--font-f { @include make-font-f(500); line-height: 1; }
 
 a.c--tag-a,
 button.c--tag-a {
     --c-tag: #{pick(f)};
     border: 0;
-    border-radius: 12px;
+    border-radius: 1em; // half the height: a capsule that can morph smoothly to radius-a on hover (999px could not be animated)
     background: rgba(pick(f), 0.1);
     color: inherit; // Noche text on a light surface, white on a dark one: it follows the surface
     font-family: inherit;
@@ -91,8 +101,8 @@ button.c--tag-a {
 }
 
 @media (hover: hover) {
-    a.c--tag-a:hover,
-    button.c--tag-a:hover {
+    a.c--tag-a:hover:not([aria-disabled="true"]),
+    button.c--tag-a:hover:not(:disabled) {
         border-radius: radius(a, $measure);
         background: rgba(pick(f), 0.2);
     }
@@ -110,11 +120,18 @@ button.c--tag-a {
         }
     }
     @media (hover: hover) {
-        a.c--tag-a--#{$name}:hover,
-        button.c--tag-a--#{$name}:hover {
+        a.c--tag-a--#{$name}:hover:not([aria-disabled="true"]),
+        button.c--tag-a--#{$name}:hover:not(:disabled) {
             background: rgba(pick($name), 0.2);
         }
     }
+}
+
+// Disabled: the whole pill at 50% and the not-allowed cursor, like the buttons. No hover.
+a.c--tag-a[aria-disabled="true"],
+button.c--tag-a:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 // On a dark surface the label is white: the clickable tag inherits its colour from the surface (put f--color-b on it), and --second
