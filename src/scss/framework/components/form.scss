@@ -7,11 +7,12 @@
 //     <div class="c--input-a"><input class="c--input-a__item" id="name" type="text"></div>
 //     <span class="c--error-a">Required</span>
 //   </div>
+// A required field: <label class="c--label-a c--label-a--required"> adds the asterisk after the text.
 // Wrappers: c--input-a, c--textarea-a, c--select-a. States are modifiers of the wrapper: --error, --valid, --disabled.
 // Checkbox and radio: <div class="c--checkbox-a"><input class="c--checkbox-a__item" type="checkbox" id="x"><label class="c--checkbox-a__title" for="x">Text</label></div>
 // c--legend-a goes on the <legend> of a fieldset that is a c--group-a.
-$form-edge: rgba(pick(a), 0.3);
-$form-edge-hover: rgba(pick(a), 0.55);
+$form-edge: rgba(pick(a), 0.45); // 3:1 against white, the minimum for the edge of a control
+$form-edge-hover: rgba(pick(a), 0.85);
 $form-faint: rgba(pick(a), 0.45);
 
 .c--group-a {
@@ -32,6 +33,10 @@ $form-faint: rgba(pick(a), 0.45);
     line-height: 1.4;
     color: pick(a);
 }
+.c--label-a--required::after,
+.c--legend-a--required::after {
+    content: "*";
+}
 .c--legend-a {
     display: block;
     padding: 0;
@@ -48,7 +53,7 @@ $form-faint: rgba(pick(a), 0.45);
     width: 100%;
     min-width: 0;
     border: 1px solid $form-edge;
-    border-radius: radius(b, $measure * 1.5);
+    border-radius: radius(full, 999px); // a capsule, like the buttons
     background: pick(b, a);
     transition: border-color $time-a $ease-standard-a;
 
@@ -78,16 +83,17 @@ $form-faint: rgba(pick(a), 0.45);
             color: $form-faint;
         }
     }
-    // Error: a Noche edge twice as thick (drawn inside, so nothing moves). Valid: the dark green edge.
-    &--error {
-        border-color: pick(a);
-        box-shadow: inset 0 0 0 1px pick(a);
+    // Error: a rojizo edge twice as thick (drawn inside, so nothing moves; design decision, see meche.md). Valid: the dark green edge.
+    &--error,
+    &--error:hover {
+        border-color: pick(h, a);
+        box-shadow: inset 0 0 0 1px pick(h, a);
     }
     &--valid {
         border-color: pick(e, a);
     }
     &--disabled {
-        background: pick(c, b);
+        background: rgba(pick(a), 0.06);
         pointer-events: none;
 
         .c--input-a__item,
@@ -98,6 +104,7 @@ $form-faint: rgba(pick(a), 0.45);
     }
 }
 .c--textarea-a {
+    border-radius: radius(c, $measure * 2); // 16px: a capsule would be a fat pill at this height
     align-items: stretch;
 
     &__item {
@@ -140,7 +147,7 @@ $form-faint: rgba(pick(a), 0.45);
             display: block;
             padding-left: $measure * 3;
             font-family: $type-a;
-            font-size: 14px;
+            font-size: 1rem;
             line-height: 1.4;
             color: pick(a);
             cursor: pointer;
@@ -187,24 +194,86 @@ $form-faint: rgba(pick(a), 0.45);
     background-image: radial-gradient(circle, #{pick(a)} 0 38%, transparent 42%);
 }
 
-// The message under a field: Noche text with a small orange dot, hidden when empty.
-.c--error-a {
-    display: flex;
+// Toggle: a 32x20 capsule. Off is the edge track, on is the Noche track; the knob is white. Same markup as the checkbox, with role="switch":
+//   <div class="c--toggle-a"><input class="c--toggle-a__item" type="checkbox" role="switch" id="x"><label class="c--toggle-a__title" for="x">Email notifications</label></div>
+.c--toggle-a {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: $measure;
+    min-height: $measure * 2.5;
+
+    &__item {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+    &__title {
+        position: relative;
+        display: block;
+        padding-left: $measure * 5.5;
+        font-family: $type-a;
+        font-size: 1rem;
+        line-height: 1.4;
+        color: pick(a);
+        cursor: pointer;
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            transition: background-color $time-a $ease-standard-a, transform $time-a $ease-standard-a;
+        }
+        &::before {
+            left: 0;
+            width: $measure * 4;
+            height: $measure * 2.5;
+            transform: translateY(-50%);
+            border-radius: 999px;
+            background: $form-edge;
+        }
+        &::after {
+            left: $measure * 0.25;
+            width: $measure * 2;
+            height: $measure * 2;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            background: pick(b);
+        }
+    }
+    &__item:hover + .c--toggle-a__title::before {
+        background: $form-edge-hover;
+    }
+    // On: the track fills with the valid green (design decision, see meche.md).
+    &__item:checked + .c--toggle-a__title::before {
+        background: pick(e, a);
+    }
+    &__item:checked + .c--toggle-a__title::after {
+        transform: translate($measure * 1.5, -50%);
+    }
+    &__item:focus-visible + .c--toggle-a__title::before {
+        outline: 2px solid pick(a);
+        outline-offset: 2px;
+    }
+    &__item:disabled + .c--toggle-a__title {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// The error message, under a field or under the submit button of a form: rojizo text, hidden when empty.
+.c--error-a {
     font-family: $type-a;
     font-size: 12px;
     line-height: 1.4;
-    color: pick(a);
+    color: pick(h, a);
 
-    &::before {
-        content: "";
-        flex: none;
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: pick(h, a);
-    }
     &:empty {
         display: none;
     }
@@ -219,8 +288,7 @@ $chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
 
 .c--group-a--second {
     .c--label-a,
-    .c--legend-a,
-    .c--error-a {
+    .c--legend-a {
         color: pick(b);
     }
     .c--input-a,
@@ -246,15 +314,15 @@ $chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
     .c--select-a__item {
         background-image: $chevron-dark;
     }
-    // Error: a white edge twice as thick, the rojizo dot and the message in white. Valid: the neon edge. Disabled: white at 8%.
+    // Error: a rojizo edge twice as thick and the message in rojizo, the same as on light. Valid: the neon edge. Disabled: white at 8%.
     .c--input-a--error,
     .c--textarea-a--error,
     .c--select-a--error,
     .c--input-a--error:hover,
     .c--textarea-a--error:hover,
     .c--select-a--error:hover {
-        border-color: pick(b);
-        box-shadow: inset 0 0 0 1px pick(b);
+        border-color: pick(h, b);
+        box-shadow: inset 0 0 0 1px pick(h, b);
     }
     .c--input-a--valid,
     .c--textarea-a--valid,
@@ -272,6 +340,53 @@ $chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
             color: $form-faint-dark;
         }
     }
+    // Checkbox and radio on Noche: white text and edge; checked is a white fill with a Noche tick, a white ring with a white dot.
+    .c--checkbox-a__title,
+    .c--radio-a__title {
+        color: pick(b);
+
+        &::before {
+            border-color: $form-edge-dark;
+            background-color: pick(a);
+        }
+    }
+    .c--checkbox-a__item:hover + .c--checkbox-a__title::before,
+    .c--radio-a__item:hover + .c--radio-a__title::before {
+        border-color: $form-edge-dark-hover;
+    }
+    .c--checkbox-a__item:focus-visible + .c--checkbox-a__title::before,
+    .c--radio-a__item:focus-visible + .c--radio-a__title::before {
+        outline-color: pick(b);
+    }
+    .c--checkbox-a__item:checked + .c--checkbox-a__title::before {
+        border-color: pick(b);
+        background-color: pick(b);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
+    }
+    .c--radio-a__item:checked + .c--radio-a__title::before {
+        border-color: pick(b);
+        background-image: radial-gradient(circle, #{pick(b)} 0 38%, transparent 42%);
+    }
+    // Toggle on Noche: the track is white at 50% off and neon on, the knob is Noche.
+    .c--toggle-a__title {
+        color: pick(b);
+
+        &::before {
+            background: $form-edge-dark;
+        }
+        &::after {
+            background: pick(a);
+        }
+    }
+    .c--toggle-a__item:hover + .c--toggle-a__title::before {
+        background: $form-edge-dark-hover;
+    }
+    .c--toggle-a__item:checked + .c--toggle-a__title::before {
+        background: pick(d, b);
+    }
+    .c--toggle-a__item:focus-visible + .c--toggle-a__title::before {
+        outline-color: pick(b);
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -279,7 +394,9 @@ $chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'
     .c--textarea-a,
     .c--select-a,
     .c--checkbox-a__title::before,
-    .c--radio-a__title::before {
+    .c--radio-a__title::before,
+    .c--toggle-a__title::before,
+    .c--toggle-a__title::after {
         transition: none;
     }
 }

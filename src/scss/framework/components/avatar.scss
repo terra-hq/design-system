@@ -1,0 +1,87 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "./helpers" as *;
+
+// A person: a circle with a photo or, with no photo, the initials. 32px by default, --small 24px, --large 48px (the foundation scale).
+//   <span class="c--avatar-a">AL</span>
+//   <img class="c--avatar-a" src="ana.jpg" alt="Ana López">
+// --second is for a Noche surface (a white fill with Noche letters). --d --e --f --g --h --i draw a 1px identity ring in that accent
+// with a 2px gap (like the tags, the letter is the accent); an avatar with a ring is a marker, it is not clickable.
+// A <button> or <a> avatar (the account menu) draws a 1px Noche ring on hover and the 2px focus ring, like the links.
+.c--avatar-a {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: $measure * 4;
+    height: $measure * 4;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: pick(a);
+    color: pick(b);
+    font-family: $type-a;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    object-fit: cover;
+    outline: 1px solid transparent;
+    outline-offset: 2px;
+    transition: outline-color $time-a $ease-standard-a;
+
+    &--small {
+        width: $measure * 3;
+        height: $measure * 3;
+    }
+    &--large {
+        width: $measure * 6;
+        height: $measure * 6;
+        font-size: 16px;
+    }
+    &--second {
+        background: pick(b);
+        color: pick(a);
+    }
+}
+// A photo inside a button or a link fills the circle.
+.c--avatar-a > img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+a.c--avatar-a,
+button.c--avatar-a {
+    appearance: none;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:focus-visible {
+        outline: 2px solid pick(a);
+    }
+    &.c--avatar-a--second:focus-visible {
+        outline-color: pick(b);
+    }
+}
+@media (hover: hover) {
+    a.c--avatar-a:hover,
+    button.c--avatar-a:hover {
+        outline-color: pick(a);
+    }
+    a.c--avatar-a--second:hover,
+    button.c--avatar-a--second:hover {
+        outline-color: pick(b);
+    }
+}
+@each $name in (d, e, f, g, h, i) {
+    .c--avatar-a--#{$name} {
+        outline-color: pick($name);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .c--avatar-a {
+        transition: none;
+    }
+}

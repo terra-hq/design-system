@@ -4,6 +4,7 @@
 // dist/icons.css and dist/terraforms.css.
 // Order: icon before button, because the button restyles the icon placed inside it.
 @forward './tag.scss';
+@forward './avatar.scss';
 @forward './link.scss';
 @forward './icon.scss';
 @forward './terraform.scss';
