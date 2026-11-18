@@ -2,6 +2,9 @@
 @use "./helpers" as *;
 @use "@scss/framework/foundation/font/make-font" as *;
 
+// the corners on hover: the `pills.hoverRadius` of the config, or radius-a
+$pill-hover-r: if($pill-hover-radius, $pill-hover-radius, radius(a, $measure));
+
 // An outlined pill with a dot: the one splash of color the brand allows on a label.
 .c--tag-a {
     display: inline-flex;
@@ -74,7 +77,7 @@ button.c--tag-a {
     --c-tag: #{pick(f)};
     border: 0;
     border-radius: 1em; // half the height: a capsule that can morph smoothly to radius-a on hover (999px could not be animated)
-    background: rgba(pick(f), 0.1);
+    background: rgba(pick(f), $pill-rest-wash);
     color: inherit; // Noche text on a light surface, white on a dark one: it follows the surface
     font-family: inherit;
     text-decoration: none;
@@ -90,8 +93,8 @@ button.c--tag-a {
 
     &[aria-pressed="true"],
     &[aria-current="true"] {
-        border-radius: radius(a, $measure);
-        background: rgba(pick(f), 0.2);
+        border-radius: $pill-hover-r;
+        background: rgba(pick(f), $pill-hover-wash);
     }
 
     &:focus-visible {
@@ -103,8 +106,8 @@ button.c--tag-a {
 @media (hover: hover) {
     a.c--tag-a:hover:not([aria-disabled="true"]),
     button.c--tag-a:hover:not(:disabled) {
-        border-radius: radius(a, $measure);
-        background: rgba(pick(f), 0.2);
+        border-radius: $pill-hover-r;
+        background: rgba(pick(f), $pill-hover-wash);
     }
 }
 
@@ -112,17 +115,17 @@ button.c--tag-a {
     a.c--tag-a--#{$name},
     button.c--tag-a--#{$name} {
         --c-tag: #{pick($name)};
-        background: rgba(pick($name), 0.1);
+        background: rgba(pick($name), $pill-rest-wash);
 
         &[aria-pressed="true"],
         &[aria-current="true"] {
-            background: rgba(pick($name), 0.2);
+            background: rgba(pick($name), $pill-hover-wash);
         }
     }
     @media (hover: hover) {
         a.c--tag-a--#{$name}:hover:not([aria-disabled="true"]),
         button.c--tag-a--#{$name}:hover:not(:disabled) {
-            background: rgba(pick($name), 0.2);
+            background: rgba(pick($name), $pill-hover-wash);
         }
     }
 }

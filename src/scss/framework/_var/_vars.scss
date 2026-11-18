@@ -72,6 +72,12 @@ $btn-primary-hover-bg: null !default; // c--btn-a on hover: no color change (set
 $btn-second-hover-bg: null !default; // c--btn-a--second on hover: no color change
 $btn-second-hover-text: null !default; // c--btn-a--second label on hover: no color change
 
+// * PILLS
+// What a design decision can change in a clickable pill (c--tag-a on an <a> or a <button>). Set them from terra.config.js with `pills`: { restWash, hoverWash, hoverRadius }.
+$pill-rest-wash: 0.1 !default; // the fill at rest: the accent of the dot at this opacity (0 to 1)
+$pill-hover-wash: 0.2 !default; // the fill on hover and when selected: the same accent at this opacity (0 to 1)
+$pill-hover-radius: null !default; // the corners on hover and when selected: the capsule becomes this radius (default radius-a, 8px)
+
 // * LAYOUT
 // Mobile-first, like Punky: a breakpoint class applies from that width up.
 $viewport-type: min-width;

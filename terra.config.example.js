@@ -21,6 +21,9 @@ export default {
   // Buttons: the states a design decision can change (any CSS color; what you leave out keeps DESIGN.md's rule)
   buttons: { hoverRadius: '8px', secondRest: '#fff', secondBorder: '#0f0f0f' }, // these are the defaults; primaryHover, secondHover and secondHoverText (a color) are off by default: only the shape changes on hover
 
+  // Pills: a clickable pill (c--tag-a on an <a> or <button>). All optional.
+  pills: { restWash: 0.1, hoverWash: 0.2, hoverRadius: '8px' }, // the fill at rest, the fill on hover and when selected (0 to 1), the corners on hover; these are the defaults
+
   // Motion
   time: { a: '0.1s', b: '0.3s', c: '0.6s' },       // micro-interactions, expansion, background dimming (this is the default)
   ease: { 'standard-a': 'cubic-bezier(0.2, 0, 0.38, 0.9)' }, // also standard-b, entrance-a/b, exit-a/b
