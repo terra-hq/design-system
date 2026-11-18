@@ -78,6 +78,17 @@ $pill-rest-wash: 0.1 !default; // the fill at rest: the accent of the dot at thi
 $pill-hover-wash: 0.2 !default; // the fill on hover and when selected: the same accent at this opacity (0 to 1)
 $pill-hover-radius: null !default; // the corners on hover and when selected: the capsule becomes this radius (default radius-a, 8px)
 
+// * TABS
+// What a design decision can change in the tabs (c--tabs-a). Set it from terra.config.js with `tabs`: { accent, dropdownBelow }.
+$tabs-dropdown-below: tabletm !default; // the breakpoint (a name of the breakpoints list) below which the dropdown replaces the row
+$tabs-accent: g !default; // the letter of the palette used for the underline of the open and hovered tab (default g, sol)
+
+// * SEGMENT
+// What a design decision can change in the segment (c--segment-a). Set them from terra.config.js with `segment`: { chosen, chosenText, track }.
+$segment-chosen: b !default; // the letter of the palette that fills the chosen option (default b, white)
+$segment-chosen-text: a !default; // the letter of the palette for the label of the chosen option (default a, Noche)
+$segment-track: null !default; // the letter of the palette for the track (default: none, Noche at 6%); on a dark surface the track stays translucent white
+
 // * LAYOUT
 // Mobile-first, like Punky: a breakpoint class applies from that width up.
 $viewport-type: min-width;

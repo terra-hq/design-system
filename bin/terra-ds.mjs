@@ -64,6 +64,22 @@ if (cfg.pills) {
   for (const k of ['restWash', 'hoverWash']) if (k in cfg.pills && !(typeof cfg.pills[k] === 'number' && cfg.pills[k] >= 0 && cfg.pills[k] <= 1)) fail(`pills.${k} is an opacity from 0 to 1, for example 0.1. Got ${cfg.pills[k]}`)
   for (const [k, v] of Object.entries(cfg.pills)) vars.push(`$${keys[k]}: ${v}`)
 }
+if (cfg.tabs) {
+  const keys = { accent: 'tabs-accent', dropdownBelow: 'tabs-dropdown-below' }
+  const bad = Object.keys(cfg.tabs).filter(k => !keys[k])
+  if (bad.length) fail(`tabs takes the keys ${Object.keys(keys).join(', ')}. Check: ${bad.join(', ')}`)
+  if ('accent' in cfg.tabs && !/^[a-z]$/.test(cfg.tabs.accent)) fail(`tabs.accent is a letter of your palette, for example 'g'. Got ${cfg.tabs.accent}`)
+  const bps = ['tablets', 'tabletm', 'tabletl', 'laptop', 'desktop', 'wide']
+  if ('dropdownBelow' in cfg.tabs && !bps.includes(cfg.tabs.dropdownBelow)) fail(`tabs.dropdownBelow is a breakpoint: ${bps.join(', ')}. Got ${cfg.tabs.dropdownBelow}`)
+  for (const [k, v] of Object.entries(cfg.tabs)) vars.push(`$${keys[k]}: ${v}`)
+}
+if (cfg.segment) {
+  const keys = { chosen: 'segment-chosen', chosenText: 'segment-chosen-text', track: 'segment-track' }
+  const bad = Object.keys(cfg.segment).filter(k => !keys[k])
+  if (bad.length) fail(`segment takes the keys ${Object.keys(keys).join(', ')}. Check: ${bad.join(', ')}`)
+  for (const [k, v] of Object.entries(cfg.segment)) if (!/^[a-z]$/.test(v)) fail(`segment.${k} is a letter of your palette, for example 'n'. Got ${v}`)
+  for (const [k, v] of Object.entries(cfg.segment)) vars.push(`$${keys[k]}: ${v}`)
+}
 if (cfg.time) {
   const bad = Object.entries(cfg.time).filter(([k, v]) => !['a', 'b', 'c'].includes(k) || !/^\d*\.?\d+m?s$/.test(v))
   if (bad.length) fail(`time takes the keys a, b and c with values such as '0.1s' or '150ms'. Check: ${bad.map(([k]) => k).join(', ')}`)

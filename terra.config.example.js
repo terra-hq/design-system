@@ -24,6 +24,12 @@ export default {
   // Pills: a clickable pill (c--tag-a on an <a> or <button>). All optional.
   pills: { restWash: 0.1, hoverWash: 0.2, hoverRadius: '8px' }, // the fill at rest, the fill on hover and when selected (0 to 1), the corners on hover; these are the defaults
 
+  // Tabs: the underline of the open and hovered tab (c--tabs-a). Optional.
+  tabs: { accent: 'g', dropdownBelow: 'tabletm' }, // accent: a letter of your palette (default g, sol). dropdownBelow: below this breakpoint the dropdown replaces the row (default tabletm, 810px)
+
+  // Segment: the colours of the segmented control (c--segment-a). All optional; each is a letter of your palette.
+  segment: { chosen: 'b', chosenText: 'a' }, // the fill and the label of the chosen option (the defaults); track: 'c' would fill the track (default: Noche at 6%)
+
   // Motion
   time: { a: '0.1s', b: '0.3s', c: '0.6s' },       // micro-interactions, expansion, background dimming (this is the default)
   ease: { 'standard-a': 'cubic-bezier(0.2, 0, 0.38, 0.9)' }, // also standard-b, entrance-a/b, exit-a/b
