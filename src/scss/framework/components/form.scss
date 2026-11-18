@@ -27,7 +27,7 @@ $form-faint: rgba(pick(a), 0.45);
 .c--label-a,
 .c--legend-a {
     font-family: $type-a;
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 500;
     line-height: 1.4;
     color: pick(a);
@@ -64,14 +64,14 @@ $form-faint: rgba(pick(a), 0.45);
         box-sizing: border-box;
         width: 100%;
         min-width: 0;
-        min-height: $measure * 4.75 - 0.125rem;
+        min-height: $measure * 5 - 0.125rem; // the border makes it 40px: the height of the default button
         padding: 0 $measure * 1.5;
         border: 0;
         outline: 0;
         background: transparent;
         color: pick(a);
         font-family: $type-a;
-        font-size: 14px;
+        font-size: 1rem;
         line-height: 1.4;
 
         &::placeholder {
@@ -207,6 +207,70 @@ $form-faint: rgba(pick(a), 0.45);
     }
     &:empty {
         display: none;
+    }
+}
+
+// On Noche: c--group-a--second turns the label, the controls and the message into their dark form (white text, Noche fill, white edges).
+// Same rule as the buttons: the surface decides. A lone field on Noche goes inside a c--group-a too.
+$form-edge-dark: rgba(pick(b), 0.5);
+$form-edge-dark-hover: rgba(pick(b), 0.85);
+$form-faint-dark: rgba(pick(b), 0.45);
+$chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+
+.c--group-a--second {
+    .c--label-a,
+    .c--legend-a,
+    .c--error-a {
+        color: pick(b);
+    }
+    .c--input-a,
+    .c--textarea-a,
+    .c--select-a {
+        border-color: $form-edge-dark;
+        background: pick(a);
+
+        &:hover {
+            border-color: $form-edge-dark-hover;
+        }
+        &:focus-within {
+            outline-color: pick(b);
+        }
+        &__item {
+            color: pick(b);
+
+            &::placeholder {
+                color: $form-faint-dark;
+            }
+        }
+    }
+    .c--select-a__item {
+        background-image: $chevron-dark;
+    }
+    // Error: a white edge twice as thick, the rojizo dot and the message in white. Valid: the neon edge. Disabled: white at 8%.
+    .c--input-a--error,
+    .c--textarea-a--error,
+    .c--select-a--error,
+    .c--input-a--error:hover,
+    .c--textarea-a--error:hover,
+    .c--select-a--error:hover {
+        border-color: pick(b);
+        box-shadow: inset 0 0 0 1px pick(b);
+    }
+    .c--input-a--valid,
+    .c--textarea-a--valid,
+    .c--select-a--valid {
+        border-color: pick(d, b);
+    }
+    .c--input-a--disabled,
+    .c--textarea-a--disabled,
+    .c--select-a--disabled {
+        background: rgba(pick(b), 0.08);
+
+        .c--input-a__item,
+        .c--textarea-a__item,
+        .c--select-a__item {
+            color: $form-faint-dark;
+        }
     }
 }
 
