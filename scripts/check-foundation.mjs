@@ -1,4 +1,4 @@
-// Fails if any rule from the frozen 0.15.0 build is missing from the current dist/style.css. 0.15.0 is the release with fields at the foundation sizes and as capsules, the rojizo error, forms on Noche, the toggle, the avatar and color-j; the baselines before it were 0.14.0 (third and fifth button, icon button with intent colour, duplicate icon), 0.13.0 (links, shape-changing buttons), 0.12.0 (cards react only as links), 0.11.0 and 0.10.0.
+// Fails if any rule from the frozen 0.16.0 build is missing from the current dist/style.css. 0.16.0 is the release with the colours k to p (the designer's tints) and the clickable pill c--pill-a; the baselines before it were 0.15.0 (fields at the foundation sizes and as capsules, the rojizo error, forms on Noche, the toggle, the avatar and color-j), 0.14.0 (third and fifth button, icon button with intent colour, duplicate icon), 0.13.0 (links, shape-changing buttons), 0.12.0 (cards react only as links), 0.11.0 and 0.10.0.
 // Adding rules is fine; changing or removing existing ones is not.
 // One deliberate exception: the font-family VALUE (Arial -> Uncut Sans in 0.1.0), see norm() below.
 import { readFileSync } from 'node:fs'
@@ -31,7 +31,7 @@ function rules(css) {
   return out
 }
 
-const frozen = rules(readFileSync(new URL('./frozen/style-0.15.0.css', import.meta.url), 'utf8'))
+const frozen = rules(readFileSync(new URL('./frozen/style-0.16.0.css', import.meta.url), 'utf8'))
 const now = rules(readFileSync(new URL('../dist/style.css', import.meta.url), 'utf8'))
 const missing = [...frozen].filter(r => !now.has(r))
 if (missing.length) { console.error(`${missing.length} frozen rules changed or missing:\n` + missing.slice(0, 10).join('\n')); process.exit(1) }

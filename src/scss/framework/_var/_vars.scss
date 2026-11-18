@@ -19,6 +19,14 @@ $color-i: #f78bd8;
 /* Transparent white: white at 8%, only to fill a hover over Noche (u--background-hover-j). Never text, never a page background. */
 $color-j: rgba($color-b, 0.08);
 
+/* Tints (designer, Nov 2026): each accent at 70% lighter, solid. k emerald, l neon, m sol, n cielo, o rojizo, p blushed. */
+$color-k: #bae1ce;
+$color-l: #d8f7cf;
+$color-m: #ffe9bb;
+$color-n: #c5e2f3;
+$color-o: #fdd4c7;
+$color-p: #fddcf3;
+
 $color-options: (
     a: $color-a,
     b: $color-b,
@@ -30,10 +38,16 @@ $color-options: (
     h: $color-h,
     i: $color-i,
     j: $color-j,
+    k: $color-k,
+    l: $color-l,
+    m: $color-m,
+    n: $color-n,
+    o: $color-o,
+    p: $color-p,
 ) !default;
 
 // Which of $color-options also get an f--background-* class (keys missing from $color-options are skipped).
-$colorbg-keys: (a, b, c, d, e, j) !default;
+$colorbg-keys: (a, b, c, d, e, j, k, l, m, n, o, p) !default;
 
 // Spacing steps for u--p-*, u--m-* (x $measure)
 $space-values: (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15) !default;
