@@ -1,0 +1,14 @@
+// u--grid-cols-1 to u--grid-cols-12: a grid of that many equal columns (with u--display-grid). The columns can shrink below their content.
+// u--justify-items-center and u--place-items-center: centre what is inside each cell of the grid.
+// Made for a calendar (u--grid-cols-7: a week) and for any grid of equal cells; the gap is u--gap-* or u--column-gap-* / u--row-gap-*.
+@for $n from 1 through 12 {
+    .u--grid-cols-#{$n} {
+        grid-template-columns: repeat(#{$n}, minmax(0, 1fr));
+    }
+}
+.u--justify-items-center {
+    justify-items: center;
+}
+.u--place-items-center {
+    place-items: center;
+}

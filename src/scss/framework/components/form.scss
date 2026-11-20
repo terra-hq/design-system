@@ -1,4 +1,6 @@
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
 @use "./helpers" as *;
 
 // Forms, the Terra way: a wrapper carries the look and its __item is the native control.
@@ -11,15 +13,22 @@
 // Wrappers: c--input-a, c--textarea-a, c--select-a. States are modifiers of the wrapper: --error, --valid, --disabled.
 // Checkbox and radio: <div class="c--checkbox-a"><input class="c--checkbox-a__item" type="checkbox" id="x"><label class="c--checkbox-a__title" for="x">Text</label></div>
 // c--legend-a goes on the <legend> of a fieldset that is a c--group-a.
-$form-edge: rgba(pick(a), 0.45); // 3:1 against white, the minimum for the edge of a control
-$form-edge-hover: rgba(pick(a), 0.85);
-$form-faint: rgba(pick(a), 0.45);
+$form-edge: rgba(pick($forms-ink), 0.45); // 3:1 against white, the minimum for the edge of a control
+$form-edge-hover: rgba(pick($forms-ink), 0.85);
+$form-faint: rgba(pick($forms-ink), 0.45);
+// On Noche: c--group-a--second turns the label, the controls and the message into their dark form (white text, Noche fill, white edges).
+// Same rule as the buttons: the surface decides. A lone field on Noche goes inside a c--group-a too. Each component carries its own dark form
+// (`.c--group-a--second & { … }` inside its block), written after its light one.
+$form-edge-dark: rgba(pick($forms-paper), 0.5);
+$form-edge-dark-hover: rgba(pick($forms-paper), 0.85);
+$form-faint-dark: rgba(pick($forms-paper), 0.45);
+$chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
 
 .c--group-a {
-    display: flex;
-    flex-direction: column;
+    @extend .u--display-flex;
+    @extend .u--flex-direction-column;
+    @extend .u--min-width-0;
     gap: $measure * 0.75;
-    min-width: 0;
     margin: 0;
     padding: 0;
     border: 0;
@@ -27,18 +36,19 @@ $form-faint: rgba(pick(a), 0.45);
 
 .c--label-a,
 .c--legend-a {
-    font-family: $type-a;
-    font-size: 1rem;
-    font-weight: 500;
-    line-height: 1.4;
-    color: pick(a);
-}
-.c--label-a--required::after,
-.c--legend-a--required::after {
-    content: "*";
+    @extend .f--font-e;
+    @extend .u--font-medium;
+    color: pick($forms-ink);
+
+    &--required::after {
+        content: "*";
+    }
+    .c--group-a--second & {
+        color: pick($forms-paper);
+    }
 }
 .c--legend-a {
-    display: block;
+    @extend .u--display-block;
     padding: 0;
     margin-bottom: $measure * 0.75;
 }
@@ -46,38 +56,36 @@ $form-faint: rgba(pick(a), 0.45);
 .c--input-a,
 .c--textarea-a,
 .c--select-a {
-    position: relative;
-    display: flex;
-    align-items: center;
+    @extend .u--position-relative;
+    @extend .u--display-flex;
+    @extend .u--width-100;
+    @extend .u--min-width-0;
+    align-items: center; // not extended: the textarea sets it again (stretch)
     box-sizing: border-box;
-    width: 100%;
-    min-width: 0;
     border: 1px solid $form-edge;
-    border-radius: radius(full, 999px); // a capsule, like the buttons
-    background: pick(b, a);
+    border-radius: radius($forms-field-radius, 999px); // a capsule, like the buttons
+    background: pick($forms-paper, a);
     transition: border-color $time-a $ease-standard-a;
 
     &:hover {
         border-color: $form-edge-hover;
     }
     &:focus-within {
-        outline: 2px solid pick(a);
+        outline: 2px solid pick($forms-ink);
         outline-offset: 1px;
     }
     &__item {
+        @extend .f--font-e;
+        @extend .u--width-100;
+        @extend .u--min-width-0;
         flex: 1;
         box-sizing: border-box;
-        width: 100%;
-        min-width: 0;
         min-height: $measure * 5 - 0.125rem; // the border makes it 40px: the height of the default button
         padding: 0 $measure * 1.5;
         border: 0;
         outline: 0;
         background: transparent;
-        color: pick(a);
-        font-family: $type-a;
-        font-size: 1rem;
-        line-height: 1.4;
+        color: pick($forms-ink);
 
         &::placeholder {
             color: $form-faint;
@@ -86,14 +94,14 @@ $form-faint: rgba(pick(a), 0.45);
     // Error: a rojizo edge twice as thick (drawn inside, so nothing moves; design decision, see meche.md). Valid: the dark green edge.
     &--error,
     &--error:hover {
-        border-color: pick(h, a);
-        box-shadow: inset 0 0 0 1px pick(h, a);
+        border-color: pick($forms-error, a);
+        box-shadow: inset 0 0 0 1px pick($forms-error, a);
     }
     &--valid {
-        border-color: pick(e, a);
+        border-color: pick($forms-valid, a);
     }
     &--disabled {
-        background: rgba(pick(a), 0.06);
+        background: rgba(pick($forms-ink), 0.06);
         pointer-events: none;
 
         .c--input-a__item,
@@ -102,9 +110,50 @@ $form-faint: rgba(pick(a), 0.45);
             color: $form-faint;
         }
     }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+
+    // On Noche: white text, Noche fill, white edges.
+    .c--group-a--second & {
+        border-color: $form-edge-dark;
+        background: pick($forms-ink);
+
+        &:hover {
+            border-color: $form-edge-dark-hover;
+        }
+        &:focus-within {
+            outline-color: pick($forms-paper);
+        }
+        &__item {
+            color: pick($forms-paper);
+
+            &::placeholder {
+                color: $form-faint-dark;
+            }
+        }
+    }
+    // Error: a rojizo edge twice as thick and the message in rojizo, the same as on light. Valid: the neon edge. Disabled: white at 8%.
+    .c--group-a--second &--error,
+    .c--group-a--second &--error:hover {
+        border-color: pick($forms-error, b);
+        box-shadow: inset 0 0 0 1px pick($forms-error, b);
+    }
+    .c--group-a--second &--valid {
+        border-color: pick($forms-valid-dark, b);
+    }
+    .c--group-a--second &--disabled {
+        background: rgba(pick($forms-paper), 0.08);
+
+        .c--input-a__item,
+        .c--textarea-a__item,
+        .c--select-a__item {
+            color: $form-faint-dark;
+        }
+    }
 }
 .c--textarea-a {
-    border-radius: radius(c, $measure * 2); // 16px: a capsule would be a fat pill at this height
+    border-radius: radius($forms-area-radius, $measure * 2); // 16px: a capsule would be a fat pill at this height
     align-items: stretch;
 
     &__item {
@@ -114,43 +163,107 @@ $form-faint: rgba(pick(a), 0.45);
     }
 }
 // The select draws its own chevron, inset like the text.
-.c--select-a__item {
-    padding-right: $measure * 4;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") right $measure * 1.5 center / 16px no-repeat;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    cursor: pointer;
+.c--select-a {
+    &__item {
+        padding-right: $measure * 4;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") right $measure * 1.5 center / 16px no-repeat;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        @extend .u--overflow-hidden;
+        @extend .u--cursor-pointer;
+
+        .c--group-a--second & {
+            background-image: $chevron-dark;
+        }
+    }
+}
+// An icon inside a field, on the left or on the right: put it in the wrapper before the __item (left) or after it (right).
+//   <div class="c--input-a"><i class="c--input-a__icon c--icon-a c--icon-a--small c--icon-a--search" aria-hidden="true"></i><input class="c--input-a__item" type="search"></div>
+//   <div class="c--input-a"><input class="c--input-a__item" type="text"><i class="c--input-a__icon c--icon-a c--icon-a--small c--icon-a--calendar" aria-hidden="true"></i></div>
+// A decorative icon is an <i>, in mute. For an icon that does something (open the calendar), use a button of the system with the class:
+//   <button class="c--input-a__icon c--btn-a c--btn-a--third c--btn-a--icon c--btn-a--small" type="button" aria-label="Open the calendar"><i class="c--icon-a c--icon-a--small c--icon-a--calendar" aria-hidden="true"></i></button>
+// The same on a textarea or a select is not made: the icon is for the one-line field.
+.c--input-a {
+    &__icon {
+        @extend .u--flex-none;
+        margin-left: $measure * 1.5;
+
+        @include on-tag("i") {
+            color: rgba(pick($forms-ink), 0.7);
+            pointer-events: none;
+
+            .c--group-a--second & {
+                color: rgba(pick($forms-paper), 0.7);
+            }
+        }
+    }
+    &__icon + &__item {
+        padding-left: $measure;
+    }
+    &__item + &__icon {
+        margin-right: $measure * 1.5;
+        margin-left: 0;
+    }
+
+    // c--input-a__bd: the panel of a field that opens something under it (a calendar): a native popover. The button of the field (c--input-a__icon)
+    // points to it with popovertarget; the browser opens it, closes it on Esc or a click outside, and draws it above the page. It opens under the button,
+    // aligned to its right edge (the right edge of the field), and upwards when there is no room. What goes inside is up to you (the calendar is utilities and buttons).
+    //   <div class="c--input-a"><input class="c--input-a__item" type="text"><button class="c--input-a__icon c--btn-a c--btn-a--third c--btn-a--icon c--btn-a--small" popovertarget="date" aria-label="Open the calendar">…</button>
+    //     <div class="c--input-a__bd" id="date" popover role="dialog" aria-label="Choose a date">…</div></div>
+    &__bd {
+        box-sizing: border-box;
+        margin: 0;
+        padding: $measure * 2;
+        border: 1px solid rgba(pick($forms-ink), 0.14);
+        border-radius: radius(d, $measure * 2.5);
+        background: pick($forms-paper, a);
+        color: pick($forms-ink);
+        box-shadow: 0 2px 4px rgb(15 15 15 / 0.06), 0 12px 32px rgb(15 15 15 / 0.12);
+
+        @supports (position-area: bottom) {
+            inset: auto;
+            margin-block: $measure * 0.5;
+            position-area: bottom span-left;
+            position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+        }
+        &:popover-open {
+            display: flex;
+            gap: $measure * 2;
+        }
+        .c--group-a--second & {
+            border-color: rgba(pick($forms-paper), 0.18);
+            background: pick($forms-ink);
+            color: pick($forms-paper);
+        }
+    }
 }
 
 // Checkbox and radio: the real input covers the whole box (invisible), the drawing is the ::before of the title.
 @mixin check($name, $shape) {
     .c--#{$name}-a {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
+        @extend .u--position-relative;
+        @extend .u--display-inline-flex;
+        @extend .u--align-items-center;
         min-height: $measure * 2;
 
         &__item {
-            position: absolute;
+            @extend .u--position-absolute;
+            @extend .u--width-100;
+            @extend .u--cursor-pointer;
             inset: 0;
             z-index: 1;
-            width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
             opacity: 0;
-            cursor: pointer;
         }
         &__title {
-            position: relative;
-            display: block;
+            @extend .u--position-relative;
+            @extend .u--display-block;
+            @extend .u--cursor-pointer;
+            @extend .f--font-e;
             padding-left: $measure * 3;
-            font-family: $type-a;
-            font-size: 1rem;
-            line-height: 1.4;
-            color: pick(a);
-            cursor: pointer;
+            color: pick($forms-ink);
 
             &::before {
                 content: "";
@@ -163,65 +276,93 @@ $form-faint: rgba(pick(a), 0.45);
                 height: $measure * 2;
                 border: 1px solid $form-edge;
                 border-radius: $shape;
-                background: pick(b, a) center / 100% no-repeat;
+                background: pick($forms-paper, a) center / 100% no-repeat;
                 transition: border-color $time-a $ease-standard-a, background-color $time-a $ease-standard-a;
+
+                @media (prefers-reduced-motion: reduce) {
+                    transition: none;
+                }
             }
         }
-        &__item:hover + .c--#{$name}-a__title::before {
+        &__item:hover + &__title::before {
             border-color: $form-edge-hover;
         }
-        &__item:focus-visible + .c--#{$name}-a__title::before {
-            outline: 2px solid pick(a);
+        &__item:focus-visible + &__title::before {
+            outline: 2px solid pick($forms-ink);
             outline-offset: 2px;
         }
-        &__item:disabled + .c--#{$name}-a__title {
+        &__item:disabled + &__title {
             opacity: 0.5;
             cursor: not-allowed;
         }
+        // Checkbox and radio on Noche: white text and edge; checked is a white fill with a Noche tick, a white ring with a white dot.
+        .c--group-a--second &__title {
+            color: pick($forms-paper);
+
+            &::before {
+                border-color: $form-edge-dark;
+                background-color: pick($forms-ink);
+            }
+        }
+        .c--group-a--second &__item:hover + &__title::before {
+            border-color: $form-edge-dark-hover;
+        }
+        .c--group-a--second &__item:focus-visible + &__title::before {
+            outline-color: pick($forms-paper);
+        }
+        @content;
     }
 }
-@include check(checkbox, $measure * 0.75);
-@include check(radio, 50%);
-
 // Checked: a checkbox is a Noche fill with a white tick, a radio is a Noche ring with a Noche dot.
-.c--checkbox-a__item:checked + .c--checkbox-a__title::before {
-    border-color: pick(a);
-    background-color: pick(a);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
+@include check(checkbox, $measure * 0.75) {
+    &__item:checked + &__title::before {
+        border-color: pick($forms-chosen);
+        background-color: pick($forms-chosen);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
+    }
+    .c--group-a--second &__item:checked + &__title::before {
+        border-color: pick($forms-chosen-dark);
+        background-color: pick($forms-chosen-dark);
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
+    }
 }
-.c--radio-a__item:checked + .c--radio-a__title::before {
-    border-color: pick(a);
-    background-image: radial-gradient(circle, #{pick(a)} 0 38%, transparent 42%);
+@include check(radio, 50%) {
+    &__item:checked + &__title::before {
+        border-color: pick($forms-chosen);
+        background-image: radial-gradient(circle, #{pick($forms-chosen)} 0 38%, transparent 42%);
+    }
+    .c--group-a--second &__item:checked + &__title::before {
+        border-color: pick($forms-chosen-dark);
+        background-image: radial-gradient(circle, #{pick($forms-chosen-dark)} 0 38%, transparent 42%);
+    }
 }
 
 // Toggle: a 32x20 capsule. Off is the edge track, on is the Noche track; the knob is white. Same markup as the checkbox, with role="switch":
 //   <div class="c--toggle-a"><input class="c--toggle-a__item" type="checkbox" role="switch" id="x"><label class="c--toggle-a__title" for="x">Email notifications</label></div>
 .c--toggle-a {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
+    @extend .u--position-relative;
+    @extend .u--display-inline-flex;
+    @extend .u--align-items-center;
     min-height: $measure * 2.5;
 
     &__item {
-        position: absolute;
+        @extend .u--position-absolute;
+        @extend .u--width-100;
+        @extend .u--cursor-pointer;
         inset: 0;
         z-index: 1;
-        width: 100%;
         height: 100%;
         margin: 0;
         padding: 0;
         opacity: 0;
-        cursor: pointer;
     }
     &__title {
-        position: relative;
-        display: block;
+        @extend .u--position-relative;
+        @extend .u--display-block;
+        @extend .u--cursor-pointer;
+        @extend .f--font-e;
         padding-left: $measure * 5.5;
-        font-family: $type-a;
-        font-size: 1rem;
-        line-height: 1.4;
-        color: pick(a);
-        cursor: pointer;
+        color: pick($forms-ink);
 
         &::before,
         &::after {
@@ -229,6 +370,10 @@ $form-faint: rgba(pick(a), 0.45);
             position: absolute;
             top: 50%;
             transition: background-color $time-a $ease-standard-a, transform $time-a $ease-standard-a;
+
+            @media (prefers-reduced-motion: reduce) {
+                transition: none;
+            }
         }
         &::before {
             left: 0;
@@ -244,159 +389,206 @@ $form-faint: rgba(pick(a), 0.45);
             height: $measure * 2;
             transform: translateY(-50%);
             border-radius: 50%;
-            background: pick(b);
+            background: pick($forms-paper);
         }
     }
-    &__item:hover + .c--toggle-a__title::before {
+    &__item:hover + &__title::before {
         background: $form-edge-hover;
     }
     // On: the track fills with the valid green (design decision, see meche.md).
-    &__item:checked + .c--toggle-a__title::before {
-        background: pick(e, a);
+    &__item:checked + &__title::before {
+        background: pick($forms-track, a);
     }
-    &__item:checked + .c--toggle-a__title::after {
+    &__item:checked + &__title::after {
         transform: translate($measure * 1.5, -50%);
     }
-    &__item:focus-visible + .c--toggle-a__title::before {
-        outline: 2px solid pick(a);
+    &__item:focus-visible + &__title::before {
+        outline: 2px solid pick($forms-ink);
         outline-offset: 2px;
     }
-    &__item:disabled + .c--toggle-a__title {
+    &__item:disabled + &__title {
         opacity: 0.5;
         cursor: not-allowed;
+    }
+    // Toggle on Noche: the track is white at 50% off and neon on, the knob is Noche.
+    .c--group-a--second &__title {
+        color: pick($forms-paper);
+
+        &::before {
+            background: $form-edge-dark;
+        }
+        &::after {
+            background: pick($forms-ink);
+        }
+    }
+    .c--group-a--second &__item:hover + &__title::before {
+        background: $form-edge-dark-hover;
+    }
+    .c--group-a--second &__item:checked + &__title::before {
+        background: pick($forms-track-dark, b);
+    }
+    .c--group-a--second &__item:focus-visible + &__title::before {
+        outline-color: pick($forms-paper);
     }
 }
 
 // The error message, under a field or under the submit button of a form: rojizo text, hidden when empty.
 .c--error-a {
-    font-family: $type-a;
-    font-size: 12px;
-    line-height: 1.4;
-    color: pick(h, a);
+    @extend .f--font-f;
+    color: pick($forms-error, a);
 
     &:empty {
         display: none;
     }
 }
 
-// On Noche: c--group-a--second turns the label, the controls and the message into their dark form (white text, Noche fill, white edges).
-// Same rule as the buttons: the surface decides. A lone field on Noche goes inside a c--group-a too.
-$form-edge-dark: rgba(pick(b), 0.5);
-$form-edge-dark-hover: rgba(pick(b), 0.85);
-$form-faint-dark: rgba(pick(b), 0.45);
-$chevron-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+// c--input-picker-a: a field that picks a colour. Swatches of the palette as a shortcut, then a free colour and its hex.
+//   <div class="c--input-picker-a" role="group" aria-labelledby="brand-label">
+//     <button class="c--input-picker-a__item c--input-picker-a__item--d" type="button" aria-pressed="true" aria-label="Neon"></button>
+//     <button class="c--input-picker-a__item c--input-picker-a__item--f" type="button" aria-pressed="false" aria-label="Cielo"></button>
+//     <input class="c--input-picker-a__btn" type="color" value="#7ce55e" aria-label="Another colour">
+//     <input class="c--input-picker-a__content" type="text" value="#7ce55e" aria-label="Hex">
+//   </div>
+// A swatch takes its colour from the palette of the project: the letter of the modifier is the letter of the colour (--d neon, --f cielo…). The chosen
+// one has aria-pressed="true" and a ring. Choosing a swatch, writing the colour in the other two and the value is the page's script: the package gives the look.
+// A free colour that is the chosen one gets c--input-picker-a__btn--is-active (the same ring) and the swatches lose aria-pressed.
+// States are the modifiers of the field: --error, --valid, --disabled. On Noche it sits inside c--group-a--second.
+.c--input-picker-a {
+    @extend .u--display-flex;
+    @extend .u--flex-wrap-wrap;
+    @extend .u--align-items-center;
+    @extend .u--width-100;
+    @extend .u--min-width-0;
+    gap: $measure;
+    box-sizing: border-box;
+    min-height: $measure * 5; // 40px, like the field
+    padding: calc(#{$measure} - 1px) $measure * 1.5;
+    border: 1px solid $form-edge;
+    border-radius: radius($forms-field-radius, 999px);
+    background: pick($forms-paper, a);
+    color: pick($forms-ink);
+    transition: border-color $time-a $ease-standard-a;
 
-.c--group-a--second {
-    .c--label-a,
-    .c--legend-a {
-        color: pick(b);
+    &:hover {
+        border-color: $form-edge-hover;
     }
-    .c--input-a,
-    .c--textarea-a,
-    .c--select-a {
+    &:focus-within {
+        outline: 2px solid pick($forms-ink);
+        outline-offset: 1px;
+    }
+    &--error,
+    &--error:hover {
+        border-color: pick($forms-error, a);
+        box-shadow: inset 0 0 0 1px pick($forms-error, a);
+    }
+    &--valid {
+        border-color: pick($forms-valid, a);
+    }
+    &--disabled {
+        background: rgba(pick($forms-ink), 0.06);
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    &__item,
+    &__btn {
+        @extend .u--flex-none;
+        @extend .u--cursor-pointer;
+        box-sizing: border-box;
+        width: $measure * 3;
+        height: $measure * 3;
+        margin: 0;
+        padding: 0;
+        border-radius: 50%;
+    }
+    @each $letter, $color in $color-options {
+        &__item--#{$letter} {
+            background: $color;
+        }
+    }
+    &__item {
+        border: 1px solid rgba(pick($forms-ink), 0.14); // so white is still seen on white
+        transition: box-shadow $time-a $ease-standard-a;
+
+        &[aria-pressed="true"] {
+            box-shadow: 0 0 0 2px pick($forms-paper, a), 0 0 0 $measure * 0.5 pick($forms-ink);
+        }
+        &:focus-visible {
+            outline: 2px solid pick($forms-ink);
+            outline-offset: 2px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+    // The free colour: the native colour input, round, with a dashed edge so it reads as "another one" and not as one of the palette.
+    &__btn {
+        appearance: none;
+        border: 1px dashed rgba(pick($forms-ink), 0.7);
+        background: transparent;
+
+        &::-webkit-color-swatch-wrapper {
+            padding: 2px;
+        }
+        &::-webkit-color-swatch {
+            border: 0;
+            border-radius: 50%;
+        }
+        &::-moz-color-swatch {
+            border: 0;
+            border-radius: 50%;
+        }
+        &:focus-visible {
+            outline: 2px solid pick($forms-ink);
+            outline-offset: 2px;
+        }
+        // the free colour is the chosen one (no swatch is): the same ring as a chosen swatch
+        &--is-active {
+            box-shadow: 0 0 0 2px pick($forms-paper, a), 0 0 0 $measure * 0.5 pick($forms-ink);
+        }
+    }
+    // The hex: a literal, so it is in the mono face.
+    &__content {
+        @extend .f--font-e;
+        flex: 1;
+        min-width: 7ch;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: inherit;
+        font-family: $type-code; // the mono face, after the preset
+        text-transform: uppercase;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+
+    // On Noche
+    .c--group-a--second & {
         border-color: $form-edge-dark;
-        background: pick(a);
+        background: pick($forms-ink);
+        color: pick($forms-paper);
 
         &:hover {
             border-color: $form-edge-dark-hover;
         }
         &:focus-within {
-            outline-color: pick(b);
-        }
-        &__item {
-            color: pick(b);
-
-            &::placeholder {
-                color: $form-faint-dark;
-            }
+            outline-color: pick($forms-paper);
         }
     }
-    .c--select-a__item {
-        background-image: $chevron-dark;
+    .c--group-a--second &__item[aria-pressed="true"],
+    .c--group-a--second &__btn--is-active {
+        box-shadow: 0 0 0 2px pick($forms-ink), 0 0 0 $measure * 0.5 pick($forms-paper);
     }
-    // Error: a rojizo edge twice as thick and the message in rojizo, the same as on light. Valid: the neon edge. Disabled: white at 8%.
-    .c--input-a--error,
-    .c--textarea-a--error,
-    .c--select-a--error,
-    .c--input-a--error:hover,
-    .c--textarea-a--error:hover,
-    .c--select-a--error:hover {
-        border-color: pick(h, b);
-        box-shadow: inset 0 0 0 1px pick(h, b);
+    .c--group-a--second &__item {
+        border-color: rgba(pick($forms-paper), 0.3);
     }
-    .c--input-a--valid,
-    .c--textarea-a--valid,
-    .c--select-a--valid {
-        border-color: pick(d, b);
+    .c--group-a--second &__btn {
+        border-color: rgba(pick($forms-paper), 0.7);
     }
-    .c--input-a--disabled,
-    .c--textarea-a--disabled,
-    .c--select-a--disabled {
-        background: rgba(pick(b), 0.08);
-
-        .c--input-a__item,
-        .c--textarea-a__item,
-        .c--select-a__item {
-            color: $form-faint-dark;
-        }
-    }
-    // Checkbox and radio on Noche: white text and edge; checked is a white fill with a Noche tick, a white ring with a white dot.
-    .c--checkbox-a__title,
-    .c--radio-a__title {
-        color: pick(b);
-
-        &::before {
-            border-color: $form-edge-dark;
-            background-color: pick(a);
-        }
-    }
-    .c--checkbox-a__item:hover + .c--checkbox-a__title::before,
-    .c--radio-a__item:hover + .c--radio-a__title::before {
-        border-color: $form-edge-dark-hover;
-    }
-    .c--checkbox-a__item:focus-visible + .c--checkbox-a__title::before,
-    .c--radio-a__item:focus-visible + .c--radio-a__title::before {
-        outline-color: pick(b);
-    }
-    .c--checkbox-a__item:checked + .c--checkbox-a__title::before {
-        border-color: pick(b);
-        background-color: pick(b);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230f0f0f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5'/%3E%3C/svg%3E");
-    }
-    .c--radio-a__item:checked + .c--radio-a__title::before {
-        border-color: pick(b);
-        background-image: radial-gradient(circle, #{pick(b)} 0 38%, transparent 42%);
-    }
-    // Toggle on Noche: the track is white at 50% off and neon on, the knob is Noche.
-    .c--toggle-a__title {
-        color: pick(b);
-
-        &::before {
-            background: $form-edge-dark;
-        }
-        &::after {
-            background: pick(a);
-        }
-    }
-    .c--toggle-a__item:hover + .c--toggle-a__title::before {
-        background: $form-edge-dark-hover;
-    }
-    .c--toggle-a__item:checked + .c--toggle-a__title::before {
-        background: pick(d, b);
-    }
-    .c--toggle-a__item:focus-visible + .c--toggle-a__title::before {
-        outline-color: pick(b);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .c--input-a,
-    .c--textarea-a,
-    .c--select-a,
-    .c--checkbox-a__title::before,
-    .c--radio-a__title::before,
-    .c--toggle-a__title::before,
-    .c--toggle-a__title::after {
-        transition: none;
+    .c--group-a--second &__item:focus-visible,
+    .c--group-a--second &__btn:focus-visible {
+        outline-color: pick($forms-paper);
     }
 }

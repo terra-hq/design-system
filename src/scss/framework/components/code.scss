@@ -1,0 +1,30 @@
+@use "sass:map";
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "./helpers" as *;
+
+// c--code-a: a literal inside a sentence (an id, a slug, a key, a path, a class): <code class="c--code-a">aria-disabled</code>.
+// A mono face smaller than the text around it (`code.size`, 0.85em by default), so it never looks bigger than the words, on a soft tint of a colour
+// (`code.tint`, `code.wash`: the sol yellow at 12% by default, the way a clickable pill gets its fill). The text keeps the ink of
+// the surface. It is only the box of the literal: nothing goes inside it. It wraps with the line and keeps its tint on every line.
+// A block of code is not this: it is a <pre>.
+@function code-tint($value) {
+    @if map.has-key($color-options, $value) {
+        @return map.get($color-options, $value);
+    }
+    @return $value;
+}
+
+.c--code-a {
+    @extend .u--font-regular;
+    padding: 0.1em 0.4em;
+    border-radius: radius(a, $measure);
+    background: rgba(code-tint($code-tint), $code-wash);
+    color: inherit;
+    font-family: $type-code;
+    font-size: #{$code-size}em;
+    line-height: inherit;
+    overflow-wrap: anywhere;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}

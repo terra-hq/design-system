@@ -1,0 +1,127 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
+@use "./helpers" as *;
+
+// c--tooltip-a and c--tooltip-b: a short explanation that appears next to what it explains. a is the dark one (Noche fill, white text), for a light
+// surface; b is the white one (white fill, Noche text, a 1px edge), for a Noche surface or when the page wants the light one.
+//   <span class="c--tooltip-a">
+//     <a class="c--tooltip-a__item" href="#" aria-describedby="tip-1">inline tooltip</a>
+//     <span class="c--tooltip-a__bd" id="tip-1" role="tooltip">Further description. <a class="c--link-c" href="#">Read more</a></span>
+//   </span>
+// The wrapper holds the thing and its bubble. The thing is any element (a word, an icon button, a pill); give it c--tooltip-a__item to underline it with a dotted
+// line and the help cursor, as an inline word is. The bubble (__bd) opens above, centred, 8px away, with an arrow, up to 240px wide; it shows on hover (after 300ms)
+// and on keyboard focus, and it stays open while the pointer is on it or the focus is inside it, so it can hold a link when the text is short
+// (c--link-c inside the dark one, c--link-a inside the white one). No script: hover and focus are CSS. Esc to dismiss is the page's. --second opens it below instead of above. Give the thing aria-describedby pointing to the bubble.
+@each $letter, $dark in (a: true, b: false) {
+    .c--tooltip-#{$letter} {
+        @extend .u--position-relative;
+        @extend .u--display-inline-block;
+        @if $dark {
+            --tooltip-fill: #{pick($tooltip-ink)};
+            --tooltip-text: #{pick($tooltip-paper)};
+            --tooltip-edge: #{pick($tooltip-ink)};
+        } @else {
+            --tooltip-fill: #{pick($tooltip-paper, a)};
+            --tooltip-text: #{pick($tooltip-ink)};
+            --tooltip-edge: #{rgba(pick($tooltip-ink), 0.14)};
+        }
+
+        &__item {
+            @extend .u--text-decoration-none;
+            border-bottom: 1px dotted currentColor;
+            color: inherit;
+            cursor: help;
+        }
+
+        &__bd {
+            @extend .u--position-absolute;
+            @extend .f--font-f;
+            @extend .u--text-left;
+            @extend .u--text-decoration-none;
+            bottom: calc(100% + #{$measure});
+            left: 50%;
+            z-index: 40;
+            box-sizing: border-box;
+            width: max-content;
+            max-width: $measure * 30;
+            padding: $measure $measure * 1.5;
+            border: 1px solid var(--tooltip-edge);
+            border-radius: radius($tooltip-radius, $measure);
+            background: var(--tooltip-fill);
+            color: var(--tooltip-text);
+            box-shadow: 0 1px 2px rgb(15 15 15 / 0.06), 0 4px 16px rgb(15 15 15 / 0.08);
+            white-space: normal;
+            transform: translateX(-50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity $time-a $ease-standard-a, visibility $time-a $ease-standard-a;
+
+            // the arrow: a square turned 45 degrees on the lower edge; only its two outer edges draw the line
+            &::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                width: $measure;
+                height: $measure;
+                border-right: 1px solid var(--tooltip-edge);
+                border-bottom: 1px solid var(--tooltip-edge);
+                background: var(--tooltip-fill);
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+            // the space between the thing and the bubble still counts as the bubble, so the pointer can reach a link inside it
+            &::before {
+                content: "";
+                position: absolute;
+                top: 100%;
+                right: 0;
+                left: 0;
+                height: $measure;
+            }
+        }
+
+        // --second: the bubble opens below instead of above (when the thing is at the top of the page and there is no room over it)
+        &--second > &__bd {
+            top: calc(100% + #{$measure});
+            bottom: auto;
+
+            &::after {
+                top: auto;
+                bottom: 100%;
+                border: 0;
+                border-top: 1px solid var(--tooltip-edge);
+                border-left: 1px solid var(--tooltip-edge);
+                transform: translate(-50%, 50%) rotate(45deg);
+            }
+            &::before {
+                top: auto;
+                bottom: 100%;
+            }
+        }
+
+        &:focus-within > &__bd {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (hover: hover) {
+            &:hover > &__bd {
+                opacity: 1;
+                visibility: visible;
+                transition-delay: $tooltip-delay;
+            }
+        }
+
+        &__bd:hover {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &__bd {
+                transition: none;
+            }
+        }
+    }
+}

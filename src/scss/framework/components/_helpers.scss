@@ -1,4 +1,6 @@
+@use "sass:list";
 @use "sass:map";
+@use "sass:selector";
 @use "@scss/framework/_var/_vars.scss" as *;
 
 // A palette color, or the fallback when a custom palette does not have that letter.
@@ -14,4 +16,16 @@
         @return map.get($radius-options, $key);
     }
     @return $fallback;
+}
+
+// The parent selector with an element in front of it: `a[href]&, button&` is not valid Sass (& only goes at the start of a compound selector).
+//   .c--card-a, .c--card-b { @include on-tag("a[href]", "button") { cursor: pointer; } }  →  a[href].c--card-a, a[href].c--card-b, button.c--card-a, button.c--card-b
+@mixin on-tag($tags...) {
+    $list: ();
+    @each $tag in $tags {
+        $list: list.join($list, selector.unify($tag, &), comma);
+    }
+    @at-root #{$list} {
+        @content;
+    }
 }

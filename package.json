@@ -1,7 +1,7 @@
 {
   "name": "@terrahq/design-system",
   "private": false,
-  "version": "0.20.0",
+  "version": "0.21.0",
   "type": "module",
   "exports": {
     ".": "./dist/style.css",
@@ -12,7 +12,7 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/build-masks.mjs",
     "preview": "vite preview",
-    "check": "node scripts/check-foundation.mjs && node scripts/check-components.mjs",
+    "check": "node scripts/check-foundation.mjs && node scripts/check-components.mjs && node scripts/check-names.mjs && node scripts/check-config.mjs",
     "prepublishOnly": "npm run build && npm run check",
     "watch": "node --watch-path=src/scss --watch-preserve-output scripts/watch.mjs"
   },

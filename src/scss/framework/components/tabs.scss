@@ -1,12 +1,13 @@
 @use "sass:map";
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
 @use "./helpers" as *;
 
 // c--tabs-a: the sections of one page, with the same markup as the tabs of the collapsify package (terra-dev.es/js/collapsify).
 //   <div class="c--tabs-a f--font-e js--collapsify-tab">
 //     <div class="c--tabs-a__hd">
 //       <ul class="c--tabs-a__hd__list-group">
-//         <li class="c--tabs-a__hd__list-group__list-item"><button class="c--tabs-a__hd__list-group__list-item__link" type="button" data-tab-control="tab-01" aria-expanded="true">Clients <span class="c--tabs-a__count">12</span></button></li>
+//         <li class="c--tabs-a__hd__list-group__list-item"><button class="c--tabs-a__hd__list-group__list-item__link" type="button" data-tab-control="tab-01" aria-expanded="true">Clients <span class="c--tabs-a__hd__list-group__list-item__link__badge">12</span></button></li>
 //         <li class="c--tabs-a__hd__list-group__list-item"><button class="c--tabs-a__hd__list-group__list-item__link" type="button" data-tab-control="tab-02" aria-expanded="false">Projects</button></li>
 //       </ul>
 //       <div class="c--tabs-a__hd__wrapper">           // optional: the dropdown that replaces the row on a narrow screen
@@ -19,54 +20,28 @@
 // The row is text on a 1px rule. The open tab (aria-expanded="true", aria-selected="true" or aria-current) and the one under the pointer
 // get a 3px underline in the brand accent (sol by default, `tabs.accent` in terra.config.js), growing from the left.
 // The size is the font of the foundation: put f--font-c, f--font-d… on the c--tabs-a and spacing, underline and dropdown follow it (all in em).
-// If the header has a dropdown, the row is hidden below tabletm (810px, `tabs.dropdownBelow`) and the dropdown shows instead; add c--tabs-a--dropdown to show the dropdown at any width (many tabs, or long ones). Without a dropdown the row stays and scrolls.
+// The colours are the ones of the surface it is on (currentColor): on a Noche surface, with f--color-b on it, the label and the rule are white. There is no
+// version for dark. The other tabs are the same colour at 60%, and the rule is that colour at 14%.
+// If the header has a dropdown, the row is hidden below tabletm (810px, `tabs.dropdownBelow`) and the dropdown shows instead; add c--tabs-a--second to show the dropdown at any width (many tabs, or long ones). Without a dropdown the row stays and scrolls.
 // The bodies (__bd) are not styled: showing and hiding them is the job of collapsify, or of the page.
-// On Noche, add c--tabs-a--second.
-.c--tabs-a {
-    font-weight: 500;
-    line-height: 1;
-}
-
-.c--tabs-a__hd {
-    border-bottom: 1px solid rgba(pick(a), 0.14);
-
-    > ul {
-        display: flex;
-        gap: 2em;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        overflow-x: auto;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-    }
-    > ul > li {
-        flex: none;
-        margin: 0;
-        padding: 0;
-    }
-}
-
-.c--tabs-a__hd__list-group__list-item__link,
-.c--tabs-a [data-tab-control] {
-    position: relative;
-    display: inline-flex;
-    flex: none;
-    align-items: center;
+// One tab: the link of the row. It is written once and used for the BEM link and for any element with data-tab-control (collapsify's markup).
+@mixin tab-link {
+    @extend .u--position-relative;
+    @extend .u--display-inline-flex;
+    @extend .u--flex-none;
+    @extend .u--align-items-center;
+    @extend .u--text-decoration-none;
+    @extend .u--cursor-pointer;
     gap: 0.5em;
     margin: 0;
     padding: 0.75em 0;
     border: 0;
     background: none;
-    color: rgba(pick(a), 0.6);
+    color: inherit;
     font: inherit;
-    text-decoration: none;
     white-space: nowrap;
-    cursor: pointer;
-    transition: color $time-b $ease-standard-a;
+    opacity: 0.6;
+    transition: opacity $time-b $ease-standard-a;
 
     // the underline sits on the rule and grows from the left
     &::after {
@@ -86,7 +61,7 @@
     &[aria-selected="true"],
     &[aria-current="page"],
     &[aria-current="true"] {
-        color: pick(a);
+        opacity: 1;
 
         &::after {
             transform: scaleX(1);
@@ -101,123 +76,124 @@
 
     &:disabled,
     &[aria-disabled="true"] {
-        opacity: 0.5;
+        opacity: 0.35;
         cursor: not-allowed;
     }
-}
 
-@media (hover: hover) {
-    .c--tabs-a__hd__list-group__list-item__link:hover:not(:disabled):not([aria-disabled="true"]),
-    .c--tabs-a [data-tab-control]:hover:not(:disabled):not([aria-disabled="true"]) {
-        color: pick(a);
+    @media (hover: hover) {
+        &:hover:not(:disabled):not([aria-disabled="true"]) {
+            opacity: 1;
+
+            &::after {
+                transform: scaleX(1);
+            }
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
 
         &::after {
-            transform: scaleX(1);
+            transition: none;
         }
     }
 }
 
-// the number after the label: plain, in mute
-.c--tabs-a__count {
-    opacity: 0.6;
-    font-weight: 400;
-}
+.c--tabs-a {
+    @extend .u--font-medium;
+    color: inherit;
+    line-height: 1;
 
-// The dropdown: a native select, shown instead of the row below tabletm. Same corners as the selects of the forms would be too round here:
-// it is a plain 1px box with radius-a.
-.c--tabs-a__hd__wrapper {
-    display: none;
-    padding-bottom: 0.75em;
-}
-.c--tabs-a__hd__wrapper__item {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0.75em 1em;
-    border: 1px solid rgba(pick(a), 0.45);
-    border-radius: radius(a, $measure);
-    background: pick(b, a);
-    color: pick(a);
-    font: inherit;
-    line-height: 1.3;
-
-    &:focus-visible {
-        outline: 2px solid pick(a);
-        outline-offset: 1px;
-    }
-}
-// Below the breakpoint of `tabs.dropdownBelow` (tabletm, 810px, by default), or always with c--tabs-a--dropdown (many tabs, or long ones),
-// the dropdown replaces the row. Only when the header has a dropdown.
-@mixin tabs-as-dropdown {
-    .c--tabs-a__hd:has(.c--tabs-a__hd__wrapper) {
-        border-bottom: 0;
+    &__hd {
+        border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
 
         > ul {
-            display: none;
+            @extend .u--display-flex;
+            gap: 2em;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            overflow-x: auto;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+        > ul > li {
+            @extend .u--flex-none;
+            margin: 0;
+            padding: 0;
+        }
+
+        &__list-group {
+            &__list-item {
+                &__link {
+                    @include tab-link;
+
+                    // the number after the label: plain, in mute
+                    &__badge {
+                        @extend .u--font-regular;
+                        opacity: 0.6;
+                    }
+                }
+            }
+        }
+
+        // The dropdown: a native select, shown instead of the row below tabletm. A plain 1px box with radius-a, in the colour of the surface.
+        &__wrapper {
+            @extend .u--display-none;
+            padding-bottom: 0.75em;
+
+            &__item {
+                @extend .u--width-100;
+                box-sizing: border-box;
+                padding: 0.75em 1em;
+                border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+                border-radius: radius($tabs-radius, $measure);
+                background: transparent;
+                color: inherit;
+                font: inherit;
+                line-height: 1.3;
+
+                &:focus-visible {
+                    outline: 2px solid currentColor;
+                    outline-offset: 1px;
+                }
+                option {
+                    background: pick($tabs-dropdown-paper, a);
+                    color: pick($tabs-dropdown-ink);
+                }
+            }
         }
     }
-    .c--tabs-a__hd__wrapper {
-        display: block;
-    }
-}
-@media (max-width: map.get($breakpoints-grid, $tabs-dropdown-below) - 1px) {
-    @include tabs-as-dropdown;
-}
-.c--tabs-a--dropdown {
-    .c--tabs-a__hd:has(.c--tabs-a__hd__wrapper) {
-        border-bottom: 0;
-
-        > ul {
-            display: none;
-        }
-    }
-    .c--tabs-a__hd__wrapper {
-        display: block;
-    }
-}
-
-// On a Noche surface: white label, white rule; the underline stays the accent
-.c--tabs-a--second {
-    color: pick(b);
-
-    .c--tabs-a__hd {
-        border-bottom-color: rgba(pick(b), 0.18);
-    }
-    .c--tabs-a__hd__list-group__list-item__link,
     [data-tab-control] {
-        color: rgba(pick(b), 0.6);
+        @include tab-link;
+    }
 
-        &[aria-expanded="true"],
-        &[aria-selected="true"],
-        &[aria-current="page"],
-        &[aria-current="true"] {
-            color: pick(b);
+    // Below the breakpoint of `tabs.dropdownBelow` (tabletm, 810px, by default), or always with c--tabs-a--second (many tabs, or long ones),
+    // the dropdown replaces the row. Only when the header has a dropdown.
+    @media (max-width: map.get($breakpoints-grid, $tabs-dropdown-below) - 1px) {
+        &__hd:has(.c--tabs-a__hd__wrapper) {
+            border-bottom: 0;
+
+            > ul {
+                display: none;
+            }
+        }
+        &__hd__wrapper {
+            display: block;
         }
     }
-    .c--tabs-a__hd__wrapper__item {
-        border-color: rgba(pick(b), 0.45);
-        background: transparent;
-        color: pick(b);
+    &--second {
+        .c--tabs-a__hd:has(.c--tabs-a__hd__wrapper) {
+            border-bottom: 0;
 
-        &:focus-visible {
-            outline-color: pick(b);
+            > ul {
+                display: none;
+            }
         }
-        option {
-            color: pick(a);
+        .c--tabs-a__hd__wrapper {
+            display: block;
         }
-    }
-}
-@media (hover: hover) {
-    .c--tabs-a--second .c--tabs-a__hd__list-group__list-item__link:hover:not(:disabled):not([aria-disabled="true"]),
-    .c--tabs-a--second [data-tab-control]:hover:not(:disabled):not([aria-disabled="true"]) {
-        color: pick(b);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .c--tabs-a__hd__list-group__list-item__link,
-    .c--tabs-a [data-tab-control],
-    .c--tabs-a__hd__list-group__list-item__link::after,
-    .c--tabs-a [data-tab-control]::after {
-        transition: none;
     }
 }

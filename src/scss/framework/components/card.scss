@@ -1,4 +1,7 @@
+@use "sass:map";
+@use "sass:math";
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
 @use "./helpers" as *;
 
 // c--card-wrapper-a is the box of a card: put anything inside. Flat, as the brand asks: on hover the border turns
@@ -6,53 +9,143 @@
 // The element decides whether the card reacts: a card on <a href> or <button> is clickable as a whole, so it gets the
 // hover, the pointer and a keyboard focus ring. A card on <div>, <article>, <aside> or <section> is not, and does nothing.
 // c--card-wrapper-b has no padding, so an image can reach the edge; add the inner space with utilities (u--p-3).
+// Two cards and nothing else: what goes inside is utilities, foundations or a component (avatar, button, pill, link). --second: 20px corners. __artwork: the trio in the corner.
+//
+// SPACE INSIDE c--card-wrapper-a. Not one number: the space between the children of the card depends on what they are (design.md, Card,
+// "Space inside the card"). It is a margin-top on the later child, written in $measure, and it only reads the DIRECT children of the card:
+//   two texts (f--font-*)          the SMALLER text of the pair sets the visible gap: f and e 12px, d 14px, c 16px, b 20px, a 24px. The air each
+//                                  line carries inside its box (its leading, (line-height - 1) / 2 of the font size) is taken off, so the number is
+//                                  the space between letters
+//   a text and a pill, icon, avatar   $measure x 1.5 plus the half step of the text
+//   a text and a button or link       $measure x 2 plus the half step of the text
+//   anything else                  $measure x 1.5, as before
+// The rules are inside :where(), so they weigh nothing: a utility on a child (u--mt-2) still wins. The sizes, line heights and half steps of
+// the table are the ones of the foundation (foundation/font/_make-font.scss): change one there, change it here.
+$card-fonts: (
+    a: (lh: 1.1, size: 4rem, size-up: 5rem, half: 1.5, gap: 3),
+    b: (lh: 1.1, size: 2.5rem, size-up: 3.5rem, half: 1.5, gap: 2.5),
+    c: (lh: 1.3, size: 1.625rem, size-up: 2rem, half: 0.75, gap: 2),
+    d: (lh: 1.3, size: 1.25rem, size-up: 1.5rem, half: 0.75, gap: 1.75),
+    e: (lh: 1.4, size: 1rem, size-up: 1rem, half: 0.25, gap: 1.5),
+    f: (lh: 1.4, size: 0.75rem, size-up: 0.75rem, half: 0.25, gap: 1.5),
+);
+$card-letters: a, b, c, d, e, f;
+// a text of the card: an f--font-* that is not also a component (a pill with a font class is a pill)
+$card-text: ':not([class*="c--"])';
+$card-soft: ':is(.c--pill-a, .c--pill-b, .c--pill-c, .c--pill-d, .c--pill-e, .c--pill-f, .c--icon-a, .c--avatar-a, .c--avatar-b)';
+$card-hard: ':is(.c--btn-a, .c--link-a, .c--link-b, .c--link-c, .c--link-d)';
+
+@function card-size($letter, $up) {
+    @return map.get(map.get($card-fonts, $letter), if($up, size-up, size));
+}
+// what a line carries above and below the letters, inside its own box
+@function card-leading($letter, $up) {
+    @return math.div(map.get(map.get($card-fonts, $letter), lh) - 1, 2) * card-size($letter, $up);
+}
+@function card-half($letter) {
+    @return $measure * map.get(map.get($card-fonts, $letter), half);
+}
+@function card-pair-margin($prev, $next, $up) {
+    // the smaller text is the later letter of the pair
+    $small: if(index($card-letters, $prev) > index($card-letters, $next), $prev, $next);
+    $margin: $measure * map.get(map.get($card-fonts, $small), gap) - card-leading($prev, $up) - card-leading($next, $up);
+    @return if($margin < 0, 0, $margin);
+}
+@mixin card-text-pairs($up) {
+    @each $prev in $card-letters {
+        @each $next in $card-letters {
+            // above 810px only the pairs with a size that changes need the new number
+            @if not $up or card-size($prev, false) != card-size($prev, true) or card-size($next, false) != card-size($next, true) {
+                :where(& > .f--font-#{$prev}#{$card-text} + .f--font-#{$next}#{$card-text}) {
+                    margin-top: card-pair-margin($prev, $next, $up);
+                }
+            }
+        }
+    }
+}
 .c--card-wrapper-a,
 .c--card-wrapper-b {
-    display: flex;
-    flex-direction: column;
+    @extend .u--display-flex;
+    @extend .u--flex-direction-column;
+    @extend .u--min-width-0;
+    @extend .u--position-relative;
     box-sizing: border-box;
-    min-width: 0;
-    border: 1px solid rgba(pick(a), 0.14);
-    border-radius: radius(c, $measure * 2);
-    background: pick(b, a);
+    border: 1px solid rgba(pick($card-edge-ink), $card-edge);
+    border-radius: radius($card-radius, $measure * 2);
+    background: pick($card-paper, b);
     transition: border-color $time-b $ease-standard-a;
-}
-.c--card-wrapper-a {
-    padding: $measure * 3;
-    gap: $measure * 1.5;
-}
-.c--card-wrapper-b {
-    padding: 0;
-    overflow: hidden;
-}
 
-a[href].c--card-wrapper-a,
-a[href].c--card-wrapper-b,
-button.c--card-wrapper-a,
-button.c--card-wrapper-b {
-    cursor: pointer;
-    text-decoration: none;
-    text-align: left;
-    font-family: inherit;
-
-    &:focus-visible {
-        outline: 2px solid pick(f);
-        outline-offset: 2px;
+    // --second: the marketing card, with the rounder corners (20px). Interface cards keep 16px.
+    &--second {
+        border-radius: radius($card-radius-second, $measure * 2.5);
     }
-}
 
-@media (hover: hover) {
-    a[href].c--card-wrapper-a:hover,
-    a[href].c--card-wrapper-b:hover,
-    button.c--card-wrapper-a:hover,
-    button.c--card-wrapper-b:hover {
-        border-color: pick(a);
+    // __artwork: a Terraform trio (c--terraform-trio-a) in the top-right corner, $measure x 3 from the edges. It is out of the flow, so put it as the LAST child
+    // in the HTML: the space between the other children reads `> * + *`, and an artwork placed first would push the next one down. margin 0 beats that rule.
+    &__artwork {
+        @extend .u--position-absolute;
+        top: $measure * $card-padding;
+        right: $measure * $card-padding;
+        margin: 0;
     }
-}
 
-@media (prefers-reduced-motion: reduce) {
-    .c--card-wrapper-a,
-    .c--card-wrapper-b {
+    // --third: the highlighted card, Noche with white text, for ONE card of a list. The edge is white at 18% (as the header and the sidebar on Noche) and turns
+    // white on hover. Inside it, use what is made for Noche (c--link-c, c--link-d, c--btn-a--fifth, c--pill-a--second): the card sets the text colour, not the
+    // components. It combines with --second.
+    &--third {
+        border-color: rgba(pick($card-ink-on-dark, b), 0.18);
+        background: pick($card-paper-on-dark, a);
+        color: pick($card-ink-on-dark, b);
+    }
+
+    // A card on <a href> or <button> is clickable as a whole.
+    @include on-tag("a[href]", "button") {
+        cursor: pointer;
+        text-decoration: none;
+        text-align: left;
+        font-family: inherit;
+
+        &:focus-visible {
+            outline: 2px solid pick($card-focus, f);
+            outline-offset: 2px;
+        }
+        @media (hover: hover) {
+            &:hover {
+                border-color: pick($card-hover-edge);
+            }
+            &--third:hover {
+                border-color: pick($card-ink-on-dark, b);
+            }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
         transition: none;
     }
+}
+.c--card-wrapper-a {
+    padding: $measure * $card-padding;
+
+    // the space between the children: see SPACE INSIDE c--card-wrapper-a above
+    :where(& > * + *) {
+        margin-top: $measure * 1.5;
+    }
+    @include card-text-pairs(false);
+    @each $letter in $card-letters {
+        :where(& > .f--font-#{$letter}#{$card-text} + #{$card-soft}),
+        :where(& > #{$card-soft} + .f--font-#{$letter}#{$card-text}) {
+            margin-top: $measure * 1.5 + card-half($letter);
+        }
+        :where(& > .f--font-#{$letter}#{$card-text} + #{$card-hard}),
+        :where(& > #{$card-hard} + .f--font-#{$letter}#{$card-text}) {
+            margin-top: $measure * 2 + card-half($letter);
+        }
+    }
+    @media all and ($viewport-type: $tabletm) {
+        @include card-text-pairs(true);
+    }
+}
+.c--card-wrapper-b {
+    @extend .u--overflow-hidden;
+    padding: 0;
 }

@@ -65,6 +65,14 @@ $type-a: 'Uncut Sans', system-ui, sans-serif !default;
 // * BUTTONS
 // What a design decision can change. null = the default described here.
 // Set them from terra.config.js with `buttons`: { hoverRadius, primaryHover, secondRest, secondBorder, secondHover, secondHoverText }.
+// The same, as letters of the palette (and a key of `radius`): `buttons`: { ink, paper, radius, danger, warning, info, success }.
+$buttons-ink: a !default; // the fill of the primary and the label of the secondary: a letter of the palette. Set it with `buttons.ink`
+$buttons-paper: b !default; // the label of the primary and the fill of the secondary. Set it with `buttons.paper`
+$buttons-radius: full !default; // the corners at rest: a key of `radius`, the capsule by default. Set it with `buttons.radius`
+$buttons-danger: h !default; // the colour of the icon of a --danger icon button on hover, and of a --danger item of a menu. Set it with `buttons.danger`
+$buttons-warning: g !default; // --warning. Set it with `buttons.warning`
+$buttons-info: f !default; // --info. Set it with `buttons.info`
+$buttons-success: d !default; // --success. Set it with `buttons.success`
 $btn-hover-radius: null !default; // primary and secondary on hover: the capsule becomes this radius (default radius-a, 8px)
 $btn-second-bg: null !default; // c--btn-a--second at rest: white
 $btn-second-border: null !default; // c--btn-a--second border: Noche
@@ -73,21 +81,68 @@ $btn-second-hover-bg: null !default; // c--btn-a--second on hover: no color chan
 $btn-second-hover-text: null !default; // c--btn-a--second label on hover: no color change
 
 // * PILLS
-// What a design decision can change in a clickable pill (c--tag-a on an <a> or a <button>). Set them from terra.config.js with `pills`: { restWash, hoverWash, hoverRadius }.
+// What a design decision can change in a clickable pill (c--pill-a on an <a> or a <button>). Set them from terra.config.js with `pills`: { restWash, hoverWash, hoverRadius, kinds, radius, inkOnDark }.
 $pill-rest-wash: 0.1 !default; // the fill at rest: the accent of the dot at this opacity (0 to 1)
 $pill-hover-wash: 0.2 !default; // the fill on hover and when selected: the same accent at this opacity (0 to 1)
 $pill-hover-radius: null !default; // the corners on hover and when selected: the capsule becomes this radius (default radius-a, 8px)
+$pill-kinds: (f, e, g, h, d, i) !default; // the colours of the pills, a letter of the palette each: the first one is c--pill-a, the second c--pill-b… (default: a cielo, b emerald, c sol, d rojizo, e neon, f blushed). Set them with `pills.kinds`
+$pill-radius: full !default; // the corners of a pill that does nothing (a <span>): a key of `radius`, the capsule by default. Set it with `pills.radius`
+$pill-ink-on-dark: b !default; // the label and the focus ring of c--pill-a--second (a pill on a Noche surface): a letter of the palette. Set it with `pills.inkOnDark`
 
 // * TABS
 // What a design decision can change in the tabs (c--tabs-a). Set it from terra.config.js with `tabs`: { accent, dropdownBelow }.
 $tabs-dropdown-below: tabletm !default; // the breakpoint (a name of the breakpoints list) below which the dropdown replaces the row
+$tabs-radius: a !default; // the corners of the dropdown select: a key of `radius`. Set it with `tabs.radius`
+$tabs-dropdown-paper: b !default; // the fill of the options of the dropdown: a letter of the palette. Set it with `tabs.dropdownPaper`
+$tabs-dropdown-ink: a !default; // the text of the options of the dropdown: a letter of the palette. Set it with `tabs.dropdownInk`
 $tabs-accent: g !default; // the letter of the palette used for the underline of the open and hovered tab (default g, sol)
 
 // * SEGMENT
-// What a design decision can change in the segment (c--segment-a). Set them from terra.config.js with `segment`: { chosen, chosenText, track }.
+// What a design decision can change in the segment (c--segment-a). Set them from terra.config.js with `segment`: { chosen, chosenText, track, chosenOnDark, trackOnDark, ink, inkOnDark, radius }.
 $segment-chosen: b !default; // the letter of the palette that fills the chosen option (default b, white)
 $segment-chosen-text: a !default; // the letter of the palette for the label of the chosen option (default a, Noche)
 $segment-track: null !default; // the letter of the palette for the track (default: none, Noche at 6%); on a dark surface the track stays translucent white
+$segment-chosen-on-dark: null !default; // the same as `chosen`, on a dark surface (c--segment-b); null = it follows `chosen`. Set it with `segment.chosenOnDark`
+$segment-track-on-dark: null !default; // the letter for the track on a dark surface; null = white at 14%. Set it with `segment.trackOnDark`
+$segment-ink: a !default; // the label of the options that are not chosen, at 70% (and in full on hover), on a light surface. Set it with `segment.ink`
+$segment-ink-on-dark: b !default; // the same on a dark surface (and the translucent track). Set it with `segment.inkOnDark`
+$segment-radius: full !default; // the corners of the track and of the options: a key of `radius`. Set it with `segment.radius`
+
+// * WIZARD
+// What a design decision can change in the wizard (c--wizard-a and b). Set it from terra.config.js with `wizard`: { ink, circle, line }.
+$wizard-ink: null !default; // a letter of the palette that fixes the colour of the circles, the line and the text; null = the colour of the surface (currentColor). Set it with `wizard.ink`
+$wizard-circle: 4 !default; // the diameter of the circle in steps of $measure (4 is 32px). Set it with `wizard.circle`, a whole number from 3 to 8
+$wizard-line: 2px !default; // the thickness of the line between the circles. Set it with `wizard.line`, a number of pixels from 1 to 4
+
+// * SIDEBAR
+// What a design decision can change in the sidebar (c--sidebar-a). Set it from terra.config.js with `sidebar`: { dot, ink, paper, inkOnDark, paperOnDark, radius }.
+$sidebar-dot: d !default; // the letter of the palette for the dot of the current page (default d, neon)
+$sidebar-ink: a !default; // the text, the line and the capsule of the current page, on a light surface: a letter of the palette. Set it with `sidebar.ink`
+$sidebar-paper: b !default; // the label inside the capsule of the current page, on a light surface. Set it with `sidebar.paper`
+$sidebar-ink-on-dark: b !default; // the same as `ink`, on a Noche surface (c--sidebar-b). Set it with `sidebar.inkOnDark`
+$sidebar-paper-on-dark: a !default; // the same as `paper`, on a Noche surface. Set it with `sidebar.paperOnDark`
+$sidebar-radius: full !default; // the corners of a link and of the title of a group, and so of the capsule: a key of `radius`. Set it with `sidebar.radius`
+
+// * CODE
+// What a design decision can change in the literal inside a sentence (c--code-a). Set them from terra.config.js with `code`: { tint, wash, size, font }.
+$code-tint: g !default; // the colour of the tint: a key of the palette, or a colour written out (default g, sol)
+$code-wash: 0.12 !default; // how strong the tint is: the colour at this opacity, 0 to 1
+$code-size: 0.85 !default; // the size of the literal in em of the text around it: a mono face looks bigger than the same size of the text face, so it is smaller
+$type-code: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace !default; // the mono face; the package does not ship the font file
+
+// * LINK
+// What a design decision can change in the links (c--link-a to d). Set them from terra.config.js with `links`: { ink, inkOnDark, line, hoverFade, focusRadius }.
+// ink, inkOnDark and focusRadius take a key of the palette or of the radius, or a CSS value written out.
+$link-ink: a !default; // the colour of c--link-a and c--link-b, on a light surface (default a, Noche)
+$link-ink-on-dark: b !default; // the colour of c--link-c and c--link-d, on a dark surface (default b, white)
+$link-line: 0.0625 !default; // the thickness of the underline in em, 1px at 16px; --strong and --bold make it 1.2 and 1.6 times thicker
+$link-hover-fade: 0.6 !default; // the opacity a link without underline (b, d) or with an icon goes to on hover
+$link-focus-radius: null !default; // the corners of the focus ring (default: null, 4px); a key of radius, for example a
+
+// * ALERT
+// What a design decision can change in the alert (c--alert-a). Set it from terra.config.js with `alerts`: { wash, kinds }.
+$alert-wash: 0.1 !default; // the fill: the colour of the kind at this opacity (0 to 1); on a dark surface it is doubled
+$alert-kinds: (f, e, g, h) !default; // the colours of the alerts, a letter of the palette each: the first one is c--alert-a, the second c--alert-b… (default: a cielo, b emerald, c sol, d rojizo). Set them with `alerts.kinds`
 
 // * LAYOUT
 // Mobile-first, like Punky: a breakpoint class applies from that width up.
@@ -159,3 +214,80 @@ $ease-entrance-a: cubic-bezier(0, 0, 0.38, 0.9) !default; // * productive
 $ease-entrance-b: cubic-bezier(0.4, 0.14, 0.3, 1) !default; // * expresive
 $ease-exit-a: cubic-bezier(0.2, 0, 1, 0.9) !default; // * productive
 $ease-exit-b: cubic-bezier(0.4, 0.14, 1, 1) !default; // * expresive
+// What a design decision can change in the form fields (input, textarea, select, checkbox, radio, toggle, label, error).
+// Set it from terra.config.js with `forms`. Each one is a letter of the palette (the two radius ones, a key of `radius`).
+// The defaults are the ones of the design, so without `forms` nothing changes; changing one does not touch the other pieces.
+$forms-ink: a !default; // text, edges, focus ring and the fill of a disabled field
+$forms-paper: b !default; // the fill of a field and the knob of the toggle
+$forms-chosen: a !default; // the fill of a checked checkbox, the ring and the dot of a radio
+$forms-chosen-dark: b !default; // the same on a dark surface (c--group-a--second)
+$forms-track: e !default; // the track of a toggle that is on
+$forms-track-dark: d !default; // the same on a dark surface
+$forms-valid: e !default; // the edge of a valid field
+$forms-valid-dark: d !default; // the same on a dark surface
+$forms-error: h !default; // the edge of a field in error and the error message
+$forms-field-radius: full !default; // input and select
+$forms-area-radius: c !default; // textarea
+
+// What a design decision can change in the table (c--table-a, c--table-b). Set it from terra.config.js with `table`.
+// A letter of the palette each (`radius`, a key of `radius`; `hoverWash`, an opacity from 0 to 1). Without `table` nothing changes.
+$table-ink: a !default; // text, rules, the header text; on c--table-b the Noche card
+$table-paper: b !default; // the card; on c--table-b the text and the rules
+$table-header: c !default; // the header row of c--table-a
+$table-hover: g !default; // the row on hover
+$table-hover-wash: 0.08 !default; // how strong that tint is
+$table-focus: f !default; // the focus ring of a sortable header
+$table-radius: c !default; // the corners of the card
+
+// What a design decision can change in the card (c--card-wrapper-a, c--card-wrapper-b). Set it from terra.config.js with `card`.
+// A letter of the palette each (`radius` and `radiusSecond`, a key of `radius`; `edge`, an opacity from 0 to 1; `padding`, steps of $measure). The defaults are
+// the design, so without `card` nothing changes.
+$card-radius: c !default; // the corners of the card (16px)
+$card-radius-second: d !default; // the corners of --second, the marketing card (20px)
+$card-padding: 3 !default; // the padding of c--card-wrapper-a, in steps of $measure (3 is 24px); also where __artwork sits
+$card-edge-ink: a !default; // the colour of the edge
+$card-edge: 0.14 !default; // how strong the edge is at rest
+$card-hover-edge: a !default; // the edge of a card that is a link or a button, on hover
+$card-paper: b !default; // the fill
+$card-focus: f !default; // the focus ring of a card that is a link or a button
+$card-paper-on-dark: a !default; // the fill of --third, the highlighted card
+$card-ink-on-dark: b !default; // the text of --third; its edge is this colour at 18% and on hover
+
+// What a design decision can change in the menu (c--menu-a, c--menu-b). Set it from terra.config.js with `menu`.
+$menu-ink: a !default; // text and icons; on c--menu-b the Noche panel
+$menu-paper: b !default; // the panel; on c--menu-b the text, the edge and the icons
+$menu-hover: j !default; // the hover fill of an item on c--menu-b (on light it is the ink at 6%)
+$menu-focus: f !default; // the focus ring of an item
+$menu-radius: c !default; // the corners of the panel
+$menu-item-radius: b !default; // the corners of an item
+
+// What a design decision can change in the modal (c--modal-a, c--modal-b). Set it from terra.config.js with `modal`.
+$modal-ink: a !default; // text; on c--modal-b the Noche panel
+$modal-paper: b !default; // the panel; on c--modal-b the text and the edge
+$modal-scrim: a !default; // the colour behind the modal
+$modal-scrim-wash: 0.5 !default; // how strong it is
+$modal-radius: d !default; // the corners of the panel
+
+// What a design decision can change in the avatar (c--avatar-a, c--avatar-b, c--avatar-stack-a). Set it from terra.config.js with `avatar`.
+// A letter of the palette each. The defaults are the design, so without `avatar` nothing changes.
+$avatar-ink: a !default; // the fill of the initials, and the base of the fill and the edge of c--avatar-b
+$avatar-paper: b !default; // the letters of the initials
+$avatar-ink-on-dark: b !default; // the same as `ink`, on a Noche surface (--second)
+$avatar-paper-on-dark: a !default; // the same as `paper`, on a Noche surface
+$avatar-ring: a !default; // the ring on hover and on focus of a clickable avatar, on a light surface
+$avatar-ring-on-dark: b !default; // the same on a Noche surface
+$avatar-stack-edge: b !default; // the 2px edge between the avatars of a stack c--avatar-stack-a: the colour of the surface
+$avatar-stack-edge-on-dark: a !default; // the same for c--avatar-stack-b
+
+// What a design decision can change in the header (c--header-a, c--header-b). Set it from terra.config.js with `header`: { ink, paper, inkOnDark, paperOnDark, burgerBelow }.
+$header-ink: a !default; // the text, the line and the capsule of the current item, on a light surface: a letter of the palette. Set it with `header.ink`
+$header-paper: b !default; // the bar, and the label inside the capsule. Set it with `header.paper`
+$header-ink-on-dark: b !default; // the same as `ink`, on a Noche surface (c--header-b). Set it with `header.inkOnDark`
+$header-paper-on-dark: a !default; // the same as `paper`, on a Noche surface. Set it with `header.paperOnDark`
+$header-burger-below: tabletm !default; // the breakpoint (a name of the breakpoints list) below which the links go into the burger. Set it with `header.burgerBelow`
+
+// What a design decision can change in the tooltip (c--tooltip-a the dark one, c--tooltip-b the white one). Set it from terra.config.js with `tooltip`: { ink, paper, radius, delay }.
+$tooltip-ink: a !default; // the fill of the dark tooltip and the text of the white one: a letter of the palette. Set it with `tooltip.ink`
+$tooltip-paper: b !default; // the text of the dark tooltip and the fill of the white one. Set it with `tooltip.paper`
+$tooltip-radius: a !default; // the corners of the bubble: a key of `radius`. Set it with `tooltip.radius`
+$tooltip-delay: 0.3s !default; // how long the pointer rests on the thing before the bubble shows. Set it with `tooltip.delay`

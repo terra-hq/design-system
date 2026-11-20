@@ -65,7 +65,7 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 
 <!-- card: the wrapper is the box, put anything inside. Variant b has no padding, for an image at the edge. The element decides the hover: <a href> and <button> cards react (border turns Noche, pointer, focus ring); <div>, <article>, <aside> and <section> cards do nothing -->
 <article class="c--card-wrapper-a">
-  <span class="c--tag-a">new</span>
+  <span class="c--pill-a">new</span>
   <h3 class="f--font-c u--font-medium">project atlas</h3>
   <p class="f--font-e">Anything goes inside the wrapper.</p>
 </article>
@@ -74,22 +74,28 @@ Components are named `c--name-variant--modifier`. They follow `terra.config.js` 
 | Component | Classes |
 |---|---|
 | Button | `c--btn-a`, `c--btn-b`, `c--btn-c`, `c--btn-d` (on Noche: white fill for dark sections), `c--btn-e` (on Noche: no fill, white text) + `--small`, `--medium`, `--large` |
-| Card | `c--card-wrapper-a`, `c--card-wrapper-b` |
-| Tag / pill | `c--tag-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) + `--second` on Noche. **The element decides:** a `<span>` does nothing (outline and dot, no hover); an `<a href>` or `<button>` is clickable (a fill, and a hover). Selected: `aria-pressed="true"` or `aria-current="true"` |
+| Card | `c--card-wrapper-a`, `c--card-wrapper-b` (`--second`: 20px corners; `--third`: the highlighted card, Noche; `__artwork`: a Terraform trio in the corner; the `card` option sets the corners, the padding, the edge and the highlight) |
+| Tag / pill | `c--pill-a` + color `--d`, `--e`, `--g`, `--h`, `--i` (the default is cielo) + `--second` on Noche. **The element decides:** a `<span>` does nothing (outline and dot, no hover); an `<a href>` or `<button>` is clickable (a fill, and a hover). Selected: `aria-pressed="true"` or `aria-current="true"` |
 | Icon | `c--icon-a` + size (`--small` 16px, `--medium` 24px, `--large` 32px) + type (`--check`, `--arrow-right`…) |
 | Terraform | `c--terraform-a` + size (`--small` 32px, `--medium` 64px, `--large` 128px) + shape (`--forma`, `--diana`…) |
 | Terraform trio | `c--terraform-trio-a` around three terraforms |
 
-**Pills: outline when they do nothing, fill when they do something.** `c--tag-a` is both, and the element decides, like the cards. `<span class="c--tag-a">` does nothing: an outline and a dot, no fill, no hover. `<a class="c--tag-a" href>` and `<button class="c--tag-a">` are clickable: no outline, the accent of the dot at 10% as a fill and, on hover or when selected, the corners go from capsule to 8px (like the buttons) and the fill to 20%. The fills live inside the component, they are not palette colours. A pill that is only visual is always a `<span>`. **On a dark surface the label is white:** the clickable tag takes its text colour from the surface, and `c--tag-a--second` makes sure. The outline of a `<span>` and the dot keep their accent, on light and on dark. Inside a line of text the label of the tag sits on the baseline of the words around it (the dot is taken out of the flow). A `<span class="c--tag-a">` is now 24px high with an 8px dot, like the clickable one (it was 22px and 7px).
+**Pills: outline when they do nothing, fill when they do something.** `c--pill-a` is both, and the element decides, like the cards. `<span class="c--pill-a">` does nothing: an outline and a dot, no fill, no hover. `<a class="c--pill-a" href>` and `<button class="c--pill-a">` are clickable: no outline, the accent of the dot at 10% as a fill and, on hover or when selected, the corners go from capsule to 8px (like the buttons) and the fill to 20%. The fills live inside the component, they are not palette colours. A pill that is only visual is always a `<span>`. **On a dark surface the label is white:** the clickable tag takes its text colour from the surface, and `c--pill-a--second` makes sure. The outline of a `<span>` and the dot keep their accent, on light and on dark. Inside a line of text the label of the tag sits on the baseline of the words around it (the dot is taken out of the flow). A `<span class="c--pill-a">` is now 24px high with an 8px dot, like the clickable one (it was 22px and 7px).
 
 ```html
-<span class="c--tag-a c--tag-a--e">live</span>
-<a class="c--tag-a c--tag-a--d" href="#">docs</a>
-<button class="c--tag-a" aria-pressed="true">review</button>
-<div class="f--background-a"><a class="c--tag-a c--tag-a--second" href="#">docs</a></div>
+<span class="c--pill-a c--pill-a--e">live</span>
+<a class="c--pill-a c--pill-a--d" href="#">docs</a>
+<button class="c--pill-a" aria-pressed="true">review</button>
+<div class="f--background-a"><a class="c--pill-a c--pill-a--second" href="#">docs</a></div>
 ```
 
-**0.20.0** adds two components. `c--tabs-a` (tabs): text items on a rule with an accent underline on the open and hovered tab, the size from `f--font-*`, `c--tabs-a--second` for Noche, an optional `<select>` that replaces the row below a breakpoint (or always with `c--tabs-a--dropdown`), with the markup of the Punky and collapsify tabs. `c--segment-a` (segment, or segmented control): a sunk track that hugs its options, the chosen one raised, holding a label, an icon, a pill or a count. Two new options in `terra.config.js`: `tabs` (`accent`, `dropdownBelow`) and `segment` (`chosen`, `chosenText`, `track`). Everything is additive. **0.19.0** adds the `pills` option to `terra.config.js` (`restWash`, `hoverWash`, `hoverRadius`): the opacity of the fill of a clickable pill at rest and on hover, and its corners on hover; the defaults (0.1, 0.2, radius-a) give the same CSS as before. **0.18.0** makes the tag follow the font of the foundation: put `f--font-e`, `f--font-d`, `f--font-c`… on a `c--tag-a` and the whole pill (height, padding, dot, corners) grows with it; at the default 12px it is the same as before. A disabled tag (`<button disabled>` or `aria-disabled="true"`) is at 50% with the not-allowed cursor, like the buttons. **0.17.0** makes `c--tag-a` clickable when it is an `<a>` or a `<button>` (it replaces `c--pill-a` from 0.16.0, which was published for a few minutes and is gone). **0.16.0** added the colours `k` to `p` (the designer's tints: the accents 70% lighter, solid, each with `f--color-*`, `f--background-*` and `u--background-hover-*`). Everything is additive.
+**0.21.0** (in preparation) adds new components, an option block per component and a round of renames to Terra's reserved words. The full list, with where to read about each, is in the changelog of the docs (`/design-system/changelog`).
+
+- **Not additive against 0.20.0:** the pill is `c--pill-` (it was `c--tag-`: replace it in your HTML); every element and modifier is now a reserved word of Terra (`c--tabs-a__count` is `c--tabs-a__hd__list-group__list-item__link__badge`, `c--tabs-a--dropdown` is `c--tabs-a--second`, the `--external` of the links is an `__icon`, the diff lines are `__item` with `--second`, `--third` and `--fourth`); the Noche versions are letters (`c--segment-b`, and the tabs take the colour of the surface); a `<th scope="row">` in a table is no longer grey; a pill is no longer a content of a segment option (use `c--segment-a__item__badge`). `scripts/check-names.mjs` fails if a class uses a word that is not on the list of `scripts/reserved-names.mjs`.
+- **New components:** `c--input-picker-a` (a field that picks a colour: swatches of the palette, a free colour and its hex) and `c--wizard-a` and `b` (the steps of a flow as numbered circles joined by a line), `c--sidebar-a`, `c--alert-a` to `d`, `c--code-a`, `c--header-a` and `b` (the bar at the top; its height follows what is inside, and below 810px the links go into a burger), `c--menu-a` and `b` (a native popover opened by a button, or always visible; `--second` is flat) and `c--tooltip-a` (dark) and `b` (white).
+- **Changes to existing components:** the table (`__wrapper`, `__btn` for a sortable header, `--second` for the full grid, `c--table-b` on Noche), the modal (`__hd`, `__ft`, `c--modal-b`), the avatar (`c--avatar-b` for a photo with a neutral fill and an edge, `c--avatar-stack-a` for several in a row), the segment (`__item__badge`, a count), the input (`c--input-a__icon`, an icon on either side, and `c--input-a__bd`, the panel of a date field) and the pills (`c--pill-a` to `f`, one variant per colour).
+- **Utilities and icons:** `u--grid-cols-1` to `12`, `u--justify-items-center`, `u--place-items-center`, and the `calendar` icon.
+- **Options of `terra.config.js`:** a block per component, a letter of the palette per decision, and a key changes that component and nothing else: `sidebar`, `alerts`, `code`, `links`, `header`, `forms`, `table`, `menu`, `modal`, `avatar`, `tooltip`, `wizard` and `card` are new, and `pills`, `segment`, `tabs` and `buttons` get more keys. The defaults give the same CSS as before.
 
 **Icons and Terraforms** are CSS masks painted with the text color, so `f--color-*` tints them. Their types and shapes are in two extra files, so you only pay for what you use:
 

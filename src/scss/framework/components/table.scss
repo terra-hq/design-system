@@ -1,36 +1,228 @@
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
 @use "./helpers" as *;
 
 // c--table-a: put it on <table>. Header on Morning Haze (12px 500), rows at least 44px with 1px rules, text left.
-// Wrap it in c--card-wrapper-b with u--overflow-auto so it scrolls inside its card.
+// A row tints Sol yellow at 8% on hover (subtle, never a solid fill).
+// Wrap it in c--table-a__wrapper: the card (1px rule, 16px radius) that scrolls sideways when the table is wider than the screen.
+// The last column can hold a c--btn-a--icon that opens a c--menu-a (the "more" menu of the row).
 .c--table-a {
-    width: 100%;
+    @extend .f--font-e;
+    @extend .u--width-100;
+    @extend .u--text-left;
     border-collapse: collapse;
-    font-size: 14px;
-    text-align: left;
 
     th,
     td {
         padding: $measure * 1.25 $measure * 2;
-        border-bottom: 1px solid rgba(pick(a), 0.14);
+        border-bottom: 1px solid rgba(pick($table-ink), 0.14);
         vertical-align: middle;
     }
-    th {
-        background: pick(c, b);
-        font-size: 12px;
-        font-weight: 500;
-        color: rgba(pick(a), 0.7);
+    // Only the header row sits on Morning Haze. A <th scope="row"> in the body is the identifier of its row: Noche, 500, no fill.
+    thead th {
+        @extend .f--font-f;
+        @extend .u--font-medium;
+        background: pick($table-header, b);
+        color: rgba(pick($table-ink), 0.7);
         white-space: nowrap;
+    }
+    tbody th {
+        @extend .u--font-medium;
     }
     tr {
         min-height: $measure * 5.5;
     }
-    tbody tr:last-child td {
+    tbody tr:last-child td,
+    tbody tr:last-child th {
         border-bottom: 0;
     }
+    @media (hover: hover) {
+        tbody tr:hover td,
+        tbody tr:hover th {
+            background: rgba(pick($table-hover), $table-hover-wash);
+        }
+    }
+
+    // c--table-a__wrapper: the card around a table. overflow-x: auto, and the table keeps the width of its content
+    // instead of squeezing its columns, so a table with many columns scrolls inside its card.
+    &__wrapper {
+        box-sizing: border-box;
+        max-width: 100%;
+        overflow-x: auto;
+        border: 1px solid rgba(pick($table-ink), 0.14);
+        border-radius: radius($table-radius, $measure * 2);
+        background: pick($table-paper, a);
+
+        .c--table-a {
+            min-width: max-content;
+        }
+    }
+
+    // Rows are at least 44px (a cell's height is its minimum) and the numbers use tabular figures, so a column of figures lines up.
+    // Right-align a column of numbers with u--text-right on its cells.
+    tr > * {
+        height: $measure * 5.5;
+    }
+    tbody {
+        font-variant-numeric: tabular-nums;
+    }
+
+    // A sortable column: a <button> inside the <th> (c--table-a__btn) with a chevron. The page sorts and sets aria-sort
+    // ("ascending" or "descending"; "none" or no attribute on the others) on the <th>; the arrow shows only on the sorted column and on hover, and turns for ascending.
+    //   <th scope="col" aria-sort="ascending"><button class="c--table-a__btn">Page<i class="c--icon-a c--icon-a--small c--icon-a--chevron-down"></i></button></th>
+    &__btn {
+        @extend .u--display-inline-flex;
+        @extend .u--align-items-center;
+        @extend .u--cursor-pointer;
+        gap: $measure * 0.5;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+
+        .c--icon-a {
+            opacity: 0;
+            transition: opacity $time-a $ease-standard-a, transform $time-a $ease-standard-a;
+        }
+        &:focus-visible {
+            outline: 2px solid pick($table-focus);
+            outline-offset: 2px;
+        }
+    }
+    [aria-sort="ascending"] .c--table-a__btn,
+    [aria-sort="descending"] .c--table-a__btn {
+        color: pick($table-ink);
+        .c--icon-a {
+            opacity: 1;
+        }
+    }
+    [aria-sort="ascending"] .c--icon-a {
+        transform: rotate(180deg);
+    }
+    @media (hover: hover) {
+        &__btn:hover .c--icon-a {
+            opacity: 1;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        &__btn .c--icon-a {
+            transition: none;
+        }
+    }
+
+    // --second: the full grid. The same table with a 1px vertical rule between the cells too (the horizontal ones are already there), for data that lives
+    // in a grid: a calendar, a roster. By default a table has only horizontal rules.
+    &--second {
+        th,
+        td {
+            border-right: 1px solid rgba(pick($table-ink), 0.14);
+        }
+        tr > :last-child {
+            border-right: 0;
+        }
+    }
 }
-@media (hover: hover) {
-    .c--table-a tbody tr:hover td {
-        background: rgba(pick(c, b), 0.6);
+
+// c--table-b: the table on a Noche surface. The same layout; white text, rules at white 18%, the header at white 8%, and the
+// card is Noche with a white-18% edge. The hover is still Sol yellow at 8%. Use it with c--table-b__wrapper and c--table-b__btn.
+.c--table-b {
+    @extend .f--font-e;
+    @extend .u--width-100;
+    @extend .u--text-left;
+    border-collapse: collapse;
+    color: inherit;
+
+    th,
+    td {
+        height: $measure * 5.5;
+        padding: $measure * 1.25 $measure * 2;
+        border-bottom: 1px solid rgba(pick($table-paper), 0.18);
+        vertical-align: middle;
+    }
+    thead th {
+        @extend .f--font-f;
+        @extend .u--font-medium;
+        background: rgba(pick($table-paper), 0.08);
+        color: rgba(pick($table-paper), 0.7);
+        white-space: nowrap;
+    }
+    tbody th {
+        @extend .u--font-medium;
+    }
+    tbody {
+        font-variant-numeric: tabular-nums;
+    }
+    tbody tr:last-child td,
+    tbody tr:last-child th {
+        border-bottom: 0;
+    }
+    @media (hover: hover) {
+        tbody tr:hover td,
+        tbody tr:hover th {
+            background: rgba(pick($table-hover), $table-hover-wash);
+        }
+    }
+    &__wrapper {
+        box-sizing: border-box;
+        max-width: 100%;
+        overflow-x: auto;
+        border: 1px solid rgba(pick($table-paper), 0.18);
+        border-radius: radius($table-radius, $measure * 2);
+        background: pick($table-ink);
+        color: pick($table-paper);
+
+        .c--table-b {
+            min-width: max-content;
+        }
+    }
+    // the sortable column, as in c--table-a
+    &__btn {
+        @extend .u--display-inline-flex;
+        @extend .u--align-items-center;
+        @extend .u--cursor-pointer;
+        gap: $measure * 0.5;
+        padding: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+
+        .c--icon-a {
+            opacity: 0;
+            transition: opacity $time-a $ease-standard-a, transform $time-a $ease-standard-a;
+        }
+        &:focus-visible {
+            outline: 2px solid pick($table-paper);
+            outline-offset: 2px;
+        }
+    }
+    [aria-sort="ascending"] .c--table-b__btn,
+    [aria-sort="descending"] .c--table-b__btn {
+        color: pick($table-paper);
+        .c--icon-a {
+            opacity: 1;
+        }
+    }
+    [aria-sort="ascending"] .c--icon-a {
+        transform: rotate(180deg);
+    }
+    @media (hover: hover) {
+        &__btn:hover .c--icon-a {
+            opacity: 1;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        &__btn .c--icon-a {
+            transition: none;
+        }
+    }
+    &--second {
+        th,
+        td {
+            border-right: 1px solid rgba(pick($table-paper), 0.18);
+        }
+        tr > :last-child {
+            border-right: 0;
+        }
     }
 }

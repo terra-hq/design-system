@@ -1,0 +1,142 @@
+@use "sass:map";
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "./helpers" as *;
+
+// c--header-a and c--header-b: the bar at the top of a page. a is for a light surface, b for a Noche one; everything else is the same.
+//   <header class="c--header-a">
+//     <a class="c--header-a__logo" href="/">terra</a>
+//     <nav class="c--header-a__list-group" id="menu" popover aria-label="Main">
+//       <a class="c--btn-a c--btn-a--small" href="/docs" aria-current="page">Docs</a>
+//       <a class="c--btn-a c--btn-a--third c--btn-a--small" href="/blog">Blog</a>
+//     </nav>
+//     <div class="c--header-a__item-right"> icon buttons, the account menu… </div>
+//     <button class="c--header-a__btn c--btn-a c--btn-a--third c--btn-a--icon" popovertarget="menu" aria-label="Menu"><i class="c--icon-a c--icon-a--menu"></i></button>
+//   </header>
+// THE HEIGHT IS NOT FIXED. It is the padding (in em) plus what is inside: the logo, the items and the font. A taller logo makes a taller header,
+// and an f--font-* on the header (f--font-d, f--font-c…) makes the gaps and the padding grow with it, because they are in em.
+// The links are buttons of the system, as they were in the site: the tertiary (c--btn-a--third, c--btn-a--fifth on Noche) for the others, with its hover (a soft
+// tint and the change of shape), and the filled one (c--btn-a, c--btn-a--fourth on Noche) for the current page (aria-current="page"). The size is the button's
+// (--small, --medium, --large); the header grows around the tallest thing in it.
+// THE CURRENT LINK IS BOLD. When the items are links (c--link-b, c--link-d), the page you are on (aria-current="page") is weight 700: no capsule, no dot,
+// no underline (the underline of c--link-a goes away on hover, so it would read as a hover). Buttons keep their own: the filled one.
+// BURGER: when there is no room the items go into a menu. Below tabletm (810px) the list of links stops being a row and becomes a popover that the
+// burger button opens (the browser opens it, closes it on Esc or a click outside, and draws it above the page). It is the same markup: one list, no copy.
+// Above that width the burger is hidden and the list is a row.
+
+@each $letter, $dark in (a: false, b: true) {
+    .c--header-#{$letter} {
+        @extend .u--position-relative;
+        @extend .u--display-flex;
+        @extend .u--align-items-center;
+        @extend .u--width-100;
+        @if $dark {
+            --header-ink: #{pick($header-ink-on-dark)};
+            --header-line: #{rgba(pick($header-ink-on-dark), 0.18)};
+            --header-panel: #{pick($header-paper-on-dark)};
+        } @else {
+            --header-ink: #{pick($header-ink)};
+            --header-line: #{rgba(pick($header-ink), 0.14)};
+            --header-panel: #{pick($header-paper, a)};
+        }
+        gap: 1em;
+        box-sizing: border-box;
+        padding: 0.75em 1.5em;
+        border-bottom: 1px solid var(--header-line);
+        background: var(--header-panel);
+        color: var(--header-ink);
+
+        &__logo {
+            @extend .u--display-inline-flex;
+            @extend .u--flex-none;
+            @extend .u--align-items-center;
+            @extend .u--font-medium;
+            @extend .u--text-decoration-none;
+            gap: 0.5em;
+            color: var(--header-ink);
+
+            &:focus-visible {
+                outline: 2px solid var(--header-ink);
+                outline-offset: 2px;
+            }
+        }
+
+        // the list of links: a row above the breakpoint. It is a popover element, so the browser's panel styles are put back to a plain row here
+        &__list-group {
+            @extend .u--display-flex;
+            @extend .u--align-items-center;
+            @extend .u--overflow-visible;
+            position: static;
+            inset: auto;
+            gap: 0.2857em;
+            margin: 0 0 0 1em;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+        }
+
+        // links in the list: the current page is bold
+        &__list-group .c--link-b[aria-current="page"],
+        &__list-group .c--link-d[aria-current="page"] {
+            font-weight: 700;
+        }
+
+        // the right side: icon buttons, the account menu
+        &__item-right {
+            @extend .u--display-flex;
+            @extend .u--flex-none;
+            @extend .u--align-items-center;
+            gap: 0.5em;
+            margin-left: auto;
+        }
+
+        // the burger: hidden when the links fit
+        &__btn {
+            @extend .u--display-none;
+            margin-left: auto;
+        }
+
+        &__item-right ~ &__btn {
+            margin-left: 0;
+        }
+
+        // below the breakpoint: the burger shows and the list of links is a panel under it
+        @media (max-width: map.get($breakpoints-grid, $header-burger-below) - 1px) {
+            &__btn {
+                display: inline-flex;
+            }
+
+            &__list-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.1429em;
+                min-width: 14em;
+                margin: 0;
+                padding: 0.5em;
+                border: 1px solid var(--header-line);
+                border-radius: radius(c, $measure * 2);
+                background: var(--header-panel);
+                color: var(--header-ink);
+                box-shadow: 0 2px 4px rgb(15 15 15 / 0.06), 0 12px 32px rgb(15 15 15 / 0.12);
+
+                // without anchor positioning the browser centres the panel on the screen, which still works
+                @supports (position-area: bottom) {
+                    inset: auto;
+                    margin-block: 0.5em;
+                    position-area: bottom span-left;
+                    position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+                }
+            }
+
+            &__list-group .c--btn-a {
+                justify-content: flex-start;
+            }
+
+            &__list-group:not(:popover-open) {
+                display: none;
+            }
+        }
+    }
+
+}

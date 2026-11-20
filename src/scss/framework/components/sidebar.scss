@@ -1,0 +1,161 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "./helpers" as *;
+
+// c--sidebar-a and c--sidebar-b: a column of pages, in groups. a is for a light surface, b for a Noche surface (the way c--link-a and c--link-c are). The page you are on is a Noche capsule with a neon dot; a group can open and close.
+// Only reserved names, and the class follows the HTML: a group is an __item, its title the __hd, the chevron the __icon inside it, its pages the __bd.
+//   <nav class="c--sidebar-a f--font-e" aria-label="Components">
+//     <a class="c--sidebar-a__link" href="/components" aria-current="page">Components</a>
+//     <hr class="c--sidebar-a__dash">
+//     <details class="c--sidebar-a__item" open>
+//       <summary class="c--sidebar-a__item__hd">Navigation <i class="c--icon-a c--icon-a--small c--icon-a--chevron-down c--sidebar-a__item__hd__icon" aria-hidden="true"></i></summary>
+//       <div class="c--sidebar-a c--sidebar-a__item__bd"><a class="c--sidebar-a__link" href="/tabs">Tabs</a> …</div>
+//     </details>
+//   </nav>
+// The body of a group is itself a c--sidebar-a (it carries both classes): the same column, one level in. So a group can hold groups to any depth and the class
+// chain never gets longer than three names (Punky allows five).
+// The __hd can also be a <button> with aria-expanded (collapsify): the chevron turns with [aria-expanded="true"] as it does with [open].
+// The size is the font of the foundation (f--font-*), everything is in em. The chevron is the system's c--icon-a--chevron-down: it turns 180° in time-b,
+// and where the browser supports it (::details-content) the body slides open. The colour of the dot is `sidebar.dot` in terra.config.js.
+// On Noche, c--sidebar-b (with its own __link, __item…): the capsule is white with ink text.
+@each $letter, $dark in (a: false, b: true) {
+    .c--sidebar-#{$letter} {
+        @extend .u--display-flex;
+        @extend .u--flex-direction-column;
+        @if $dark {
+            --sidebar-ink: #{pick($sidebar-ink-on-dark)};
+            --sidebar-mute: #{rgba(pick($sidebar-ink-on-dark), 0.6)};
+            --sidebar-line: #{rgba(pick($sidebar-ink-on-dark), 0.18)};
+            --sidebar-chip: #{pick($sidebar-ink-on-dark)};
+            --sidebar-chip-text: #{pick($sidebar-paper-on-dark)};
+        } @else {
+            --sidebar-ink: #{pick($sidebar-ink)};
+            --sidebar-mute: #{rgba(pick($sidebar-ink), 0.6)};
+            --sidebar-line: #{rgba(pick($sidebar-ink), 0.14)};
+            --sidebar-chip: #{pick($sidebar-ink)};
+            --sidebar-chip-text: #{pick($sidebar-paper)};
+        }
+        gap: 0.2857em;
+        line-height: 1;
+
+        &__link,
+        &__item__hd {
+            @extend .u--display-flex;
+            @extend .u--align-items-center;
+            @extend .u--width-100;
+            @extend .u--text-left;
+            @extend .u--text-decoration-none;
+            @extend .u--cursor-pointer;
+            gap: 0.5714em;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0.7143em 1.1429em;
+            border: 0;
+            border-radius: radius($sidebar-radius, 999px);
+            background: none;
+            color: var(--sidebar-mute);
+            font: inherit;
+            list-style: none;
+            transition: color $time-b $ease-standard-a;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+            &:focus-visible {
+                outline: 2px solid var(--sidebar-ink);
+                outline-offset: 2px;
+            }
+            @media (prefers-reduced-motion: reduce) {
+                transition: none;
+            }
+        }
+
+        &__link {
+            &[aria-current="page"] {
+                background: var(--sidebar-chip);
+                color: var(--sidebar-chip-text);
+                font-weight: 500;
+
+                &::before {
+                    content: "";
+                    flex: none;
+                    width: 0.5714em;
+                    height: 0.5714em;
+                    border-radius: 50%;
+                    background: pick($sidebar-dot);
+                }
+            }
+            @media (hover: hover) {
+                &:not([aria-current="page"]):hover {
+                    color: var(--sidebar-ink);
+                }
+            }
+        }
+
+        &__item {
+            &__hd {
+                // a group's title: ink while open, mute while closed
+                color: var(--sidebar-ink);
+                font-weight: 500; // after the `font: inherit` of the shared block: not extended
+
+                @media (hover: hover) {
+                    &:hover {
+                        color: var(--sidebar-ink);
+                    }
+                }
+                &__icon {
+                    @extend .u--flex-none;
+                    margin-left: auto;
+                    transition: transform $time-b $ease-standard-a;
+
+                    @media (prefers-reduced-motion: reduce) {
+                        transition: none;
+                    }
+                }
+                &[aria-expanded="true"] > &__icon {
+                    transform: rotate(180deg);
+                }
+            }
+            &:not([open]) > &__hd:not([aria-expanded="true"]) {
+                color: var(--sidebar-mute);
+            }
+            &[open] > &__hd > &__hd__icon {
+                transform: rotate(180deg);
+            }
+            // the pages of a group, one level in (it is also a c--sidebar: the column and its gap come from there)
+            &__bd {
+                gap: 0.1429em;
+                padding: 0.1429em 0 0.4286em 0.8571em;
+            }
+            // the body slides open (height from 0 to its own), where ::details-content and interpolate-size exist
+            @supports (interpolate-size: allow-keywords) {
+                &::details-content {
+                    block-size: 0;
+                    overflow: clip;
+                    transition:
+                        block-size $time-b $ease-standard-a,
+                        content-visibility $time-b allow-discrete;
+                }
+                &[open]::details-content {
+                    block-size: auto;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                &::details-content {
+                    transition: none;
+                }
+            }
+        }
+
+        &__dash {
+            height: 1px;
+            margin: 0.5714em 0;
+            border: 0;
+            background: var(--sidebar-line);
+        }
+
+        @supports (interpolate-size: allow-keywords) {
+            interpolate-size: allow-keywords;
+        }
+    }
+}

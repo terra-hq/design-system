@@ -1,117 +1,111 @@
 @use "sass:map";
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
 @use "./helpers" as *;
 
-// c--segment-a: switches between views of the same content (list, grid, board), not between sections (that is c--tabs-a).
+// c--segment-a and c--segment-b: switches between views of the same content (list, grid, board), not between sections (that is c--tabs-a).
+// a is for a light surface, b for a Noche surface (the way c--link-a and c--link-c are); everything else is the same.
 //   <div class="c--segment-a f--font-e" role="group" aria-label="View">
 //     <button class="c--segment-a__item" type="button" aria-pressed="true">List</button>
 //     <button class="c--segment-a__item" type="button" aria-pressed="false">Grid</button>
 //     <button class="c--segment-a__item c--segment-a__item--icon" type="button" aria-pressed="false" aria-label="Board"><i class="c--icon-a c--icon-a--small c--icon-a--menu" aria-hidden="true"></i></button>
 //   </div>
-// An option holds anything inline: a label, a c--icon-a, a pill (c--tag-a with f--font-f) or a count. It is 2em high at least and grows with its
+// An option holds anything inline: a label, a c--icon-a or a count (<span class="c--segment-a__item__badge">12</span>: a plain number in mute). Never a pill. It is 2em high at least and grows with its
 // content; the options of a group are all as tall as the tallest.
 // A sunk capsule track that hugs its options (never as wide as its container). The chosen option is raised: a white capsule with ink text and float-sm.
-// The size is the font of the foundation: put f--font-c, f--font-d… on c--segment-a and the options and the track follow (all in em).
+// The size is the font of the foundation: put f--font-c, f--font-d… on the group and the options and the track follow (all in em).
 // The chosen option is the one with aria-pressed="true" (a group of buttons), aria-checked="true" (radios) or aria-current="true" (links).
-// Colours are a design decision of the project: `segment` in terra.config.js (chosen, chosenText, track).
-// --icon on an option: a square option with only an icon; it needs aria-label, and the group should have no more than three. On Noche: c--segment-a--second.
-.c--segment-a {
-    display: inline-flex;
-    align-self: flex-start;
-    gap: 0.1429em;
-    box-sizing: border-box;
-    width: fit-content;
-    max-width: 100%;
-    padding: 0.2143em;
-    border-radius: radius(full, 999px);
-    background: if($segment-track, pick($segment-track), rgba(pick(a), 0.06));
-    font-weight: 500;
-    line-height: 1;
-}
-
-.c--segment-a__item {
-    display: inline-flex;
-    flex: none;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    box-sizing: border-box;
-    min-height: 2em;
-    margin: 0;
-    padding: 0.2143em 0.8571em;
-    border: 0;
-    border-radius: radius(full, 999px);
-    background: transparent;
-    color: rgba(pick(a), 0.7);
-    font: inherit;
-    text-decoration: none;
-    white-space: nowrap;
-    cursor: pointer;
-    transition:
-        color $time-b $ease-standard-a,
-        background-color $time-b $ease-standard-a,
-        box-shadow $time-b $ease-standard-a;
-
-    &[aria-pressed="true"],
-    &[aria-checked="true"],
-    &[aria-current="true"] {
-        background: pick($segment-chosen, b);
-        color: pick($segment-chosen-text);
-        box-shadow: map.get($shadow-options, a);
-    }
-
-    &:focus-visible {
-        outline: 2px solid currentColor;
-        outline-offset: 2px;
-    }
-
-    &:disabled,
-    &[aria-disabled="true"] {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-}
-
-@media (hover: hover) {
-    .c--segment-a__item:hover:not(:disabled):not([aria-disabled="true"]) {
-        color: pick(a);
-    }
-}
-
-// only an icon: a square option
-.c--segment-a__item--icon {
-    width: 2em;
-    padding: 0;
-}
-
-// On a Noche surface: a translucent white track (`segment.track` does not apply); the chosen option keeps its colours
-.c--segment-a--second {
-    background: rgba(pick(b), 0.14);
-
-    .c--segment-a__item {
-        color: rgba(pick(b), 0.7);
-
-        &[aria-pressed="true"],
-        &[aria-checked="true"],
-        &[aria-current="true"] {
-            background: pick($segment-chosen, b);
-            color: pick($segment-chosen-text);
+// Colours are a design decision of the project: `segment` in terra.config.js (chosen, chosenText, track; track is only for a).
+// __item--icon on an option: a square option with only an icon; it needs aria-label, and the group should have no more than three.
+@each $letter, $dark in (a: false, b: true) {
+    .c--segment-#{$letter} {
+        @extend .u--display-inline-flex;
+        @extend .u--font-medium;
+        align-self: flex-start;
+        gap: 0.1429em;
+        box-sizing: border-box;
+        width: fit-content;
+        max-width: 100%;
+        padding: 0.2143em;
+        border-radius: radius($segment-radius, 999px);
+        @if $dark {
+            background: if($segment-track-on-dark, pick($segment-track-on-dark), rgba(pick($segment-ink-on-dark), 0.14));
+        } @else {
+            background: if($segment-track, pick($segment-track), rgba(pick($segment-ink), 0.06));
         }
-    }
-}
-@media (hover: hover) {
-    .c--segment-a--second .c--segment-a__item:hover:not(:disabled):not([aria-disabled="true"]) {
-        color: pick(b);
-    }
-    .c--segment-a--second .c--segment-a__item[aria-pressed="true"]:hover,
-    .c--segment-a--second .c--segment-a__item[aria-checked="true"]:hover,
-    .c--segment-a--second .c--segment-a__item[aria-current="true"]:hover {
-        color: pick($segment-chosen-text);
-    }
-}
+        line-height: 1;
 
-@media (prefers-reduced-motion: reduce) {
-    .c--segment-a__item {
-        transition: none;
+        &__item {
+            @extend .u--display-inline-flex;
+            @extend .u--flex-none;
+            @extend .u--align-items-center;
+            @extend .u--justify-content-center;
+            @extend .u--text-decoration-none;
+            @extend .u--cursor-pointer;
+            gap: 0.5em;
+            box-sizing: border-box;
+            min-height: 2em;
+            margin: 0;
+            padding: 0.2143em 0.8571em;
+            border: 0;
+            border-radius: radius($segment-radius, 999px);
+            background: transparent;
+            @if $dark {
+                color: rgba(pick($segment-ink-on-dark), 0.7);
+            } @else {
+                color: rgba(pick($segment-ink), 0.7);
+            }
+            font: inherit;
+            white-space: nowrap;
+            transition:
+                color $time-b $ease-standard-a,
+                background-color $time-b $ease-standard-a,
+                box-shadow $time-b $ease-standard-a;
+
+            &[aria-pressed="true"],
+            &[aria-checked="true"],
+            &[aria-current="true"] {
+                background: pick(if($dark and $segment-chosen-on-dark, $segment-chosen-on-dark, $segment-chosen), b);
+                color: pick($segment-chosen-text);
+                box-shadow: map.get($shadow-options, a);
+            }
+
+            &:focus-visible {
+                outline: 2px solid currentColor;
+                outline-offset: 2px;
+            }
+
+            &:disabled,
+            &[aria-disabled="true"] {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            @media (hover: hover) {
+                &:hover:not(:disabled):not([aria-disabled="true"]):not([aria-pressed="true"]):not([aria-checked="true"]):not([aria-current="true"]) {
+                    @if $dark {
+                        color: pick($segment-ink-on-dark);
+                    } @else {
+                        color: pick($segment-ink);
+                    }
+                }
+            }
+
+            // a count after the label: a plain number in mute, as in the tabs (never a pill: the option is already the control)
+            &__badge {
+                @extend .u--font-regular;
+                opacity: 0.6;
+            }
+
+            // only an icon: a square option
+            &--icon {
+                width: 2em;
+                padding: 0;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                transition: none;
+            }
+        }
     }
 }

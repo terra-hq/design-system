@@ -3,7 +3,7 @@
 // Icon types (c--icon-a--check) and Terraform shapes (c--terraform-a--forma) ship as separate files:
 // dist/icons.css and dist/terraforms.css.
 // Order: icon before button, because the button restyles the icon placed inside it.
-@forward './tag.scss';
+@forward './pill.scss';
 @forward './avatar.scss';
 @forward './link.scss';
 @forward './icon.scss';
@@ -12,7 +12,14 @@
 @forward './btn.scss';
 @forward './form.scss';
 @forward './table.scss';
+@forward './menu.scss';
+@forward './tooltip.scss';
 @forward './tabs.scss';
 @forward './segment.scss';
+@forward './wizard.scss';
+@forward './sidebar.scss';
+@forward './header.scss';
+@forward './alert.scss';
 @forward './modal.scss';
 @forward './diff.scss';
+@forward './code.scss';

@@ -1,5 +1,8 @@
 @use "sass:map";
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/font/make-font" as *;
+@use "@scss/framework/foundation/foundation";
 @use "./helpers" as *;
 
 // Terra way (BEM, reserved modifiers): c--btn-a is the button, the modifier changes it.
@@ -13,8 +16,8 @@
 //   <button class="c--btn-a c--btn-a--third c--btn-a--icon c--btn-a--danger" aria-label="Delete"><i class="c--icon-a c--icon-a--trash"></i></button>
 //   sizes --small, --medium (the default) and --large:  <a class="c--btn-a c--btn-a--second c--btn-a--small">
 // The letters c--btn-b, -c, -d and -e keep working as before (same look, own sizes); prefer the modifiers.
-$btn-ink: pick(a);
-$btn-paper: pick(b, a);
+$btn-ink: pick($buttons-ink);
+$btn-paper: pick($buttons-paper, a);
 // States a design decision can change: set in _vars.scss, or from terra.config.js with `buttons`. null = DESIGN.md's rule.
 $btn-second-fill: if($btn-second-bg, $btn-second-bg, $btn-paper);
 $btn-second-edge: if($btn-second-border, $btn-second-border, $btn-ink);
@@ -22,14 +25,39 @@ $btn-second-edge: if($btn-second-border, $btn-second-border, $btn-ink);
 // A project can still ask for a color change with the $btn-*-hover-* variables: null (the default) means no change.
 $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
 
+// --small 32px · --medium 40px (the default, written out so it can be forced) · --large 48px
+@mixin btn-size($name, $height, $font, $px) {
+    &--#{$name} {
+        --c-btn-r: #{$height * 0.5};
+        --c-btn-h: #{$height};
+        height: $height;
+        padding-inline: $px;
+        @if $font == f {
+            @include make-font-f(500);
+        } @else {
+            @include make-font-e(500);
+        }
+    }
+}
+// the three sizes of one letter; c and e (the ones with less padding) take the narrower side
+@mixin btn-sizes($narrow: false) {
+    @include btn-size(small, $measure * 4, f, if($narrow, $measure * 1.5, $measure * 1.75));
+    @include btn-size(medium, $measure * 5, e, if($narrow, $measure * 1.5, $measure * 2.5));
+    @include btn-size(large, $measure * 6, e, if($narrow, $measure * 2, $measure * 3.5));
+}
+
 .c--btn-a,
 .c--btn-b,
 .c--btn-c,
 .c--btn-d,
 .c--btn-e {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    @extend .u--display-inline-flex;
+    @extend .u--align-items-center;
+    @extend .u--justify-content-center;
+    @extend .f--font-e;
+    @extend .u--font-medium;
+    @extend .u--text-decoration-none;
+    @extend .u--cursor-pointer;
     gap: $measure;
     box-sizing: border-box;
     height: $measure * 5;
@@ -37,14 +65,8 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
     border: 1px solid $btn-ink;
     --c-btn-r: #{$measure * 2.5};
     --c-btn-h: #{$measure * 5};
-    border-radius: radius(full, 999px);
-    font-family: $type-a;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1;
+    border-radius: radius($buttons-radius, 999px);
     white-space: nowrap;
-    text-decoration: none;
-    cursor: pointer;
     transition:
         background-color $time-a $ease-standard-a,
         color $time-a $ease-standard-a,
@@ -67,166 +89,184 @@ $btn-hover-r: if($btn-hover-radius, $btn-hover-radius, radius(a, $measure));
         width: 1.25em;
         height: 1.25em;
     }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
 }
 
-.c--btn-d:focus-visible,
-.c--btn-e:focus-visible,
-.c--btn-a--fourth:focus-visible,
-.c--btn-a--fifth:focus-visible {
-    outline-color: $btn-paper;
-}
-
+// c--btn-a is the button; its modifiers come after the base and the letters so they win at equal specificity.
 .c--btn-a {
     // half of its height: a capsule that can morph smoothly to radius-a on hover (999px could not be animated)
     border-radius: var(--c-btn-r);
     background: $btn-ink;
     color: $btn-paper;
+
+    &:active {
+        transform: scale(0.98);
+    }
+    @media (hover: hover) {
+        &:not(.c--btn-a--fourth):hover {
+            border-radius: $btn-hover-r;
+            @if $btn-primary-hover-bg {
+                background: $btn-primary-hover-bg;
+            }
+        }
+    }
+    @include btn-sizes;
+
+    // --icon: an icon button, as wide as it is tall (a circle at rest, radius-a on hover like the others). It takes any variant and any size:
+    //   <button class="c--btn-a c--btn-a--third c--btn-a--icon" aria-label="Edit"><i class="c--icon-a c--icon-a--pencil"></i></button>
+    &.c--btn-a--icon {
+        width: var(--c-btn-h);
+        padding-inline: 0;
+    }
+    &--second {
+        border-color: $btn-second-edge;
+        background: $btn-second-fill;
+        color: $btn-ink;
+
+        &:active {
+            transform: scale(0.98);
+        }
+        @media (hover: hover) {
+            &:hover {
+                @if $btn-second-hover-bg {
+                    background: $btn-second-hover-bg;
+                }
+                @if $btn-second-hover-text {
+                    color: $btn-second-hover-text;
+                }
+            }
+        }
+    }
+    &--third {
+        border-color: transparent;
+        background: transparent;
+        color: $btn-ink;
+
+        @media (hover: hover) {
+            &:hover {
+                background: rgba($btn-ink, 0.06);
+                color: $btn-ink;
+            }
+        }
+    }
+    &--fourth {
+        border-color: $btn-paper;
+        background: $btn-paper;
+        color: $btn-ink;
+
+        &:focus-visible {
+            outline-color: $btn-paper;
+        }
+        &:active {
+            transform: scale(0.98);
+        }
+        @media (hover: hover) {
+            &:hover {
+                background: transparent;
+                color: $btn-paper;
+            }
+        }
+    }
+    &--fifth {
+        border-color: transparent;
+        background: transparent;
+        color: $btn-paper;
+
+        &:focus-visible {
+            outline-color: $btn-paper;
+        }
+        @media (hover: hover) {
+            &:hover {
+                background: rgba($btn-paper, 0.12);
+                color: $btn-paper;
+            }
+        }
+    }
+
+    // the intent colour, on the icon only
+    .c--icon-a {
+        transition: color $time-a $ease-standard-a;
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+    @each $name, $letter in (danger: $buttons-danger, warning: $buttons-warning, info: $buttons-info, success: $buttons-success) {
+        &--icon.c--btn-a--#{$name} {
+            @media (hover: hover) {
+                &:hover .c--icon-a {
+                    color: pick($letter);
+                }
+            }
+            &:focus-visible .c--icon-a {
+                color: pick($letter);
+            }
+        }
+    }
 }
-.c--btn-d {
-    border-color: $btn-paper;
-    background: $btn-paper;
-    color: $btn-ink;
-}
-.c--btn-e {
-    padding: 0 $measure * 1.5;
-    border-color: transparent;
-    background: transparent;
-    color: $btn-paper;
-}
+// The letters c--btn-b to c--btn-e: the same buttons with their own look (aliases of the modifiers above).
 .c--btn-b {
     background: transparent;
     color: $btn-ink;
+
+    &:active {
+        transform: scale(0.98);
+    }
+    @media (hover: hover) {
+        &:hover {
+            background: $btn-ink;
+            color: $btn-paper;
+        }
+    }
+    @include btn-sizes;
 }
 .c--btn-c {
     padding: 0 $measure * 1.5;
     border-color: transparent;
     background: transparent;
     color: $btn-ink;
-}
-.c--btn-a:active,
-.c--btn-b:active,
-.c--btn-d:active {
-    transform: scale(0.98);
-}
 
-@media (hover: hover) {
-    .c--btn-a:not(.c--btn-a--fourth):hover {
-        border-radius: $btn-hover-r;
-        @if $btn-primary-hover-bg {
-            background: $btn-primary-hover-bg;
+    @media (hover: hover) {
+        &:hover {
+            background: rgba($btn-ink, 0.06);
         }
     }
-    .c--btn-d:hover {
-        background: transparent;
-        color: $btn-paper;
-    }
-    .c--btn-b:hover {
-        background: $btn-ink;
-        color: $btn-paper;
-    }
-    .c--btn-c:hover {
-        background: rgba($btn-ink, 0.06);
-    }
-    .c--btn-e:hover {
-        background: rgba($btn-paper, 0.12);
-    }
+    @include btn-sizes(true);
 }
-
-// --small 32px · --medium 40px (the default, written out so it can be forced) · --large 48px
-@mixin btn-size($v, $name, $height, $font, $px, $px-c) {
-    .c--btn-#{$v}--#{$name} {
-        --c-btn-r: #{$height * 0.5};
-        --c-btn-h: #{$height};
-        height: $height;
-        padding-inline: $px;
-        font-size: $font;
-        @if $v == c or $v == e {
-            padding-inline: $px-c;
-        }
-    }
-}
-@each $v in (a, b, c, d, e) {
-    @include btn-size($v, small, $measure * 4, 13px, $measure * 1.75, $measure * 1.5);
-    @include btn-size($v, medium, $measure * 5, 14px, $measure * 2.5, $measure * 1.5);
-    @include btn-size($v, large, $measure * 6, 16px, $measure * 3.5, $measure * 2);
-}
-
-// Modifiers of c--btn-a. They come after the base and the letters so they win at equal specificity.
-// --icon: an icon button, as wide as it is tall (a circle at rest, radius-a on hover like the others). It takes any variant and any size:
-//   <button class="c--btn-a c--btn-a--third c--btn-a--icon" aria-label="Edit"><i class="c--icon-a c--icon-a--pencil"></i></button>
-.c--btn-a.c--btn-a--icon {
-    width: var(--c-btn-h);
-    padding-inline: 0;
-}
-.c--btn-a--second {
-    border-color: $btn-second-edge;
-    background: $btn-second-fill;
-    color: $btn-ink;
-}
-.c--btn-a--third {
-    border-color: transparent;
-    background: transparent;
-    color: $btn-ink;
-}
-.c--btn-a--fourth {
+.c--btn-d {
     border-color: $btn-paper;
     background: $btn-paper;
     color: $btn-ink;
+
+    &:focus-visible {
+        outline-color: $btn-paper;
+    }
+    &:active {
+        transform: scale(0.98);
+    }
+    @media (hover: hover) {
+        &:hover {
+            background: transparent;
+            color: $btn-paper;
+        }
+    }
+    @include btn-sizes;
 }
-.c--btn-a--fifth {
+.c--btn-e {
+    padding: 0 $measure * 1.5;
     border-color: transparent;
     background: transparent;
     color: $btn-paper;
-}
-.c--btn-a--second:active,
-.c--btn-a--fourth:active {
-    transform: scale(0.98);
-}
-@media (hover: hover) {
-    .c--btn-a--second:hover {
-        @if $btn-second-hover-bg {
-            background: $btn-second-hover-bg;
-        }
-        @if $btn-second-hover-text {
-            color: $btn-second-hover-text;
-        }
-    }
-    .c--btn-a--third:hover {
-        background: rgba($btn-ink, 0.06);
-        color: $btn-ink;
-    }
-    .c--btn-a--fourth:hover {
-        background: transparent;
-        color: $btn-paper;
-    }
-    .c--btn-a--fifth:hover {
-        background: rgba($btn-paper, 0.12);
-        color: $btn-paper;
-    }
-}
 
-// the intent colour, on the icon only
-.c--btn-a .c--icon-a {
-    transition: color $time-a $ease-standard-a;
-}
-@each $name, $letter in (danger: h, warning: g, info: f, success: d) {
+    &:focus-visible {
+        outline-color: $btn-paper;
+    }
     @media (hover: hover) {
-        .c--btn-a--icon.c--btn-a--#{$name}:hover .c--icon-a {
-            color: pick($letter);
+        &:hover {
+            background: rgba($btn-paper, 0.12);
         }
     }
-    .c--btn-a--icon.c--btn-a--#{$name}:focus-visible .c--icon-a {
-        color: pick($letter);
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .c--btn-a .c--icon-a,
-    .c--btn-a,
-    .c--btn-b,
-    .c--btn-c,
-    .c--btn-d,
-    .c--btn-e {
-        transition: none;
-    }
+    @include btn-sizes(true);
 }

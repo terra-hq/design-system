@@ -1,0 +1,74 @@
+@use "sass:list";
+@use "sass:string";
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
+@use "./helpers" as *;
+
+// c--alert-a, c--alert-b, c--alert-c…: an inline message, from the design: a soft tint of a colour, big corners, no outline. Each variant is a letter and
+// has its own colour: by default a = info (cielo), b = success (emerald), c = warning (sol), d = danger (rojizo). The project sets the list with
+// `alerts.kinds` in terra.config.js (a list of palette letters: the first is a, the second b…). The fill is that colour at `alerts.wash` (10% by default),
+// the way a clickable pill gets its fill: it is not a palette colour. Pair the pill with the same colour (c--pill-a--e for the emerald one…).
+// It is the box: what goes inside is up to you.
+//   Stacked (the default: a pill, the message, a button, one under the other):
+//   <div class="c--alert-b" role="status">
+//     <span class="c--pill-a c--pill-a--e f--font-f">saved</span>        // optional
+//     <p class="c--alert-b__content">Your changes are saved.</p>
+//     <a class="c--btn-a c--btn-a--second c--btn-a--small" href="#">See the page</a>     // optional
+//   </div>
+//   On one line: put a row of utilities inside; the text takes the room and pushes the button to the end, and it wraps when it does not fit:
+//   <div class="c--alert-c">
+//     <div class="u--display-flex u--flex-wrap-wrap u--align-items-center u--gap-2">
+//       <span class="c--pill-a c--pill-a--g f--font-f">plan</span>
+//       <p class="c--alert-c__content u--flex-1 u--min-width-30">Your plan ends in three days.</p>
+//       <a class="c--btn-a c--btn-a--second c--btn-a--small" href="#">See plans</a>
+//     </div>
+//   </div>
+// The default is the text font, small (14px); an f--font-* on it makes it bigger. Padding, gaps and corners are in em. It is in the flow, as wide as its
+// column. The text takes the colour of the surface it is on (color: inherit): on a Noche surface, with f--color-b on it, it is white. The tint is the
+// colour at `alerts.wash`, so there is no second version for dark.
+$alert-letters: "abcdefghijklmnopqrstuvwxyz";
+
+@mixin alert-box($letter, $colour) {
+    @extend .u--display-flex;
+    @extend .u--flex-direction-column;
+    @extend .u--width-100;
+    gap: 0.8em;
+    box-sizing: border-box;
+    padding: 1.2em;
+    border-radius: radius(d, $measure * 2.5);
+    background: rgba(pick($colour), $alert-wash);
+    color: inherit;
+    line-height: 1.3;
+
+    // a pill inside a row of your own follows that row's align-items; a pill or a button placed straight inside keeps its own size (it never stretches)
+    // every pill of the system, a to f and the ones the project adds (c--pill-b, c--pill-c…), not only c--pill-a
+    [class*="c--pill-"] {
+        align-self: auto;
+    }
+    > [class*="c--pill-"],
+    > .c--btn-a {
+        align-self: flex-start;
+    }
+}
+
+@for $i from 1 through list.length($alert-kinds) {
+    $letter: string.slice($alert-letters, $i, $i);
+    $colour: list.nth($alert-kinds, $i);
+
+    // the text font, small, by default (:where keeps it from winning over an f--font-* on the same element)
+    :where(.c--alert-#{$letter}) {
+        @extend .f--font-e;
+    }
+
+    .c--alert-#{$letter} {
+        @include alert-box($letter, $colour);
+
+        &__content {
+            margin: 0;
+            font: inherit;
+            font-weight: 400; // after the shorthand: not extended (an @extend would put it before `font: inherit`)
+            line-height: 1.3;
+        }
+    }
+}

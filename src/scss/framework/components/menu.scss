@@ -1,0 +1,137 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
+@use "./helpers" as *;
+
+// c--menu-a: a list of actions that opens from a button. It is a native popover, so there is no script to write:
+//   <button class="c--btn-a c--btn-a--third c--btn-a--icon" popovertarget="row-1" aria-label="More"><i class="c--icon-a c--icon-a--more"></i></button>
+//   <div class="c--menu-a" id="row-1" popover role="menu">
+//     <button class="c--menu-a__item" role="menuitem"><i class="c--icon-a c--icon-a--small c--icon-a--pencil"></i>Edit</button>
+//     <button class="c--menu-a__item c--menu-a__item--danger" role="menuitem"><i class="c--icon-a c--icon-a--small c--icon-a--trash"></i>Delete</button>
+//   </div>
+// The browser opens it on click, closes it on Esc or a click outside, and draws it above the page, so a table that scrolls
+// sideways does not cut it. It opens below the button, aligned to its left edge (to its right edge when it would not fit), and upwards when there is no room.
+// A plain list: no dividers, no groups, Delete last. The icons rest in mute and take the intent colour on hover.
+.c--menu-a,
+.c--menu-b {
+    @extend .f--font-e;
+    box-sizing: border-box;
+    min-width: $measure * 24;
+    max-width: $measure * 35;
+    margin: 0;
+    padding: $measure * 0.75;
+    border: 1px solid rgba(pick($menu-ink), 0.14);
+    border-radius: radius($menu-radius, $measure * 2);
+    background: pick($menu-paper, a);
+    color: pick($menu-ink);
+    box-shadow: 0 2px 4px rgb(15 15 15 / 0.06), 0 12px 32px rgb(15 15 15 / 0.12);
+
+    // Without anchor positioning the browser centres the popover on the screen, which still works.
+    @supports (position-area: bottom) {
+        inset: auto;
+        margin-block: $measure * 0.5;
+        // aligned to the left edge of its button; when it does not fit on the right it goes to the right edge, and upwards when there is no room below
+        position-area: bottom span-right;
+        position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline;
+    }
+    &:popover-open {
+        display: flex;
+        flex-direction: column;
+    }
+    // A menu that is always there: without the `popover` attribute and without a button the same list is just shown, in the page or in a card. It keeps its panel
+    // (raised, with its edge and shadow); `--second` makes it flat: no fill, no edge and no shadow, a plain list of actions (the items keep their hover and focus).
+    //   <div class="c--menu-a" role="menu"> … </div>                          raised, always visible
+    //   <div class="c--menu-a c--menu-a--second" role="menu"> … </div>        flat, always visible
+    &:not([popover]) {
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+    }
+    &__item {
+        @extend .u--display-flex;
+        @extend .u--align-items-center;
+        @extend .u--width-100;
+        @extend .u--text-left;
+        @extend .u--text-decoration-none;
+        @extend .u--cursor-pointer;
+        gap: $measure * 1.5;
+        box-sizing: border-box;
+        min-height: $measure * 4;
+        padding: 0 $measure * 1.5;
+        border-radius: radius($menu-item-radius, $measure);
+        background: transparent;
+        color: pick($menu-ink);
+        font: inherit;
+
+        .c--icon-a {
+            color: rgba(pick($menu-ink), 0.7);
+            transition: color $time-a $ease-standard-a;
+
+            @media (prefers-reduced-motion: reduce) {
+                transition: none;
+            }
+        }
+        &:focus-visible {
+            outline: 2px solid pick($menu-focus);
+            outline-offset: -2px;
+        }
+        @each $name, $letter in (danger: $buttons-danger, warning: $buttons-warning, info: $buttons-info, success: $buttons-success) {
+            &--#{$name} {
+                @media (hover: hover) {
+                    &:hover .c--icon-a {
+                        color: pick($letter);
+                    }
+                }
+                &:focus-visible .c--icon-a {
+                    color: pick($letter);
+                }
+            }
+        }
+    }
+}
+.c--menu-a {
+    @media (hover: hover) {
+        &__item:hover {
+            background: rgba(pick($menu-ink), 0.06);
+        }
+    }
+    &--second {
+        min-width: 0;
+        max-width: none;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+}
+// c--menu-b: the menu on a Noche surface. A Noche panel with a white-18% edge, white text, the icons in white at 70%, and the
+// hover in white at 8% (color-j).
+.c--menu-b {
+    border-color: rgba(pick($menu-paper), 0.18);
+    background: pick($menu-ink);
+    color: pick($menu-paper);
+
+    &__item {
+        color: pick($menu-paper);
+
+        .c--icon-a {
+            color: rgba(pick($menu-paper), 0.7);
+        }
+        &:focus-visible {
+            outline-color: pick($menu-paper);
+        }
+        @media (hover: hover) {
+            &:hover {
+                background: pick($menu-hover);
+            }
+        }
+    }
+    &--second {
+        min-width: 0;
+        max-width: none;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+}

@@ -1,5 +1,21 @@
+@use "sass:map";
 @use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
 @use "./helpers" as *;
+
+// The `links` option of terra.config.js: a key of the palette (or a radius) is looked up; anything else is a CSS value, used as it is.
+@function link-color($value) {
+    @if map.has-key($color-options, $value) {
+        @return map.get($color-options, $value);
+    }
+    @return $value;
+}
+@function link-radius($value) {
+    @if map.has-key($radius-options, $value) {
+        @return map.get($radius-options, $value);
+    }
+    @return $value;
+}
 
 // Hyperlinks, taken from the Terra website (g--link-01, --second and --third). Each variant is its own letter, in pairs:
 // the first two are for a light surface, the last two for a Noche surface, and the second of each pair has no underline.
@@ -13,7 +29,7 @@
 //   --strong    weight 500, for a link that stands on its own line; the underline gets a little thicker
 //   --bold      weight 700; the underline thicker still
 // The underline is proportional to the text: 1px at 16px, and it grows with the size (CSS cannot read a weight, hence --strong and --bold).
-//   --external  adds the ↗ that marks a link leaving the product
+//   __icon      the ↗ that marks a link leaving the product: <a class="c--link-a" href="…">team channel<span class="c--link-a__icon" aria-hidden="true">↗</span></a>
 //   --icon      lines up a c--icon-a (16px) placed inside the link, before the text or after it. A link with an icon never animates
 //               the underline: it has none and fades on hover, so on a or c it behaves like b or d (prefer b and d, they say it plainly)
 // Never an accent color: a link is ink (or white). The size is the one of the text around it.
@@ -21,18 +37,29 @@
 .c--link-b,
 .c--link-c,
 .c--link-d {
+    @extend .u--text-decoration-none;
+    @extend .u--cursor-pointer;
     width: fit-content;
     height: fit-content;
-    color: pick(a);
-    text-decoration: none;
-    cursor: pointer;
+    color: link-color($link-ink);
 
     &:focus-visible {
         outline: 2px solid currentColor;
         outline-offset: 2px;
-        border-radius: 4px;
+        @if $link-focus-radius {
+            border-radius: link-radius($link-focus-radius);
+        } @else {
+            border-radius: 4px;
+        }
+    }
+    // A link that cannot be followed (aria-disabled="true") is shown like a disabled button: 50%, no hover, no pointer.
+    &[aria-disabled="true"] {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
     }
 }
+// The underlined pair, for a light surface (a) and a Noche surface (c).
 .c--link-a,
 .c--link-c {
     // the box hugs the letters (also when the link is a flex item, where the line height would otherwise push the underline away)
@@ -40,92 +67,76 @@
     background-image: linear-gradient(currentColor, currentColor);
     background-repeat: no-repeat;
     background-position: left bottom;
-    --c-link-line: max(1px, 0.0625em);
+    --c-link-line: max(1px, #{$link-line}em);
     background-size: 100% var(--c-link-line);
     // a link that wraps keeps its underline under every line
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
     transition: background-size $time-b $ease-standard-a;
+
+    &--icon {
+        background-image: none;
+        transition: opacity $time-b $ease-standard-a;
+    }
+    @media (hover: hover) {
+        &:hover {
+            background-size: 0% var(--c-link-line);
+        }
+        &--icon:hover {
+            opacity: $link-hover-fade;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+
+        &--icon {
+            transition: none;
+        }
+    }
 }
+// The plain pair: no underline, it fades on hover.
 .c--link-b,
 .c--link-d {
     transition: opacity $time-b $ease-standard-a;
+
+    @media (hover: hover) {
+        &:hover {
+            opacity: $link-hover-fade;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
 }
+// The Noche pair.
 .c--link-c,
 .c--link-d {
-    color: pick(b, a);
+    color: link-color($link-ink-on-dark);
 }
-.c--link-a--strong,
-.c--link-b--strong,
-.c--link-c--strong,
-.c--link-d--strong {
-    --c-link-line: max(1px, 0.075em);
-    font-weight: 500;
-}
-.c--link-a--bold,
-.c--link-b--bold,
-.c--link-c--bold,
-.c--link-d--bold {
-    --c-link-line: max(1px, 0.1em);
-    font-weight: 700;
-}
-.c--link-a--icon,
-.c--link-b--icon,
-.c--link-c--icon,
-.c--link-d--icon {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-
-    .c--icon-a {
-        vertical-align: baseline;
+// The modifiers, for any letter. After the blocks above: they override --c-link-line and the weight.
+.c--link-a,
+.c--link-b,
+.c--link-c,
+.c--link-d {
+    &--strong {
+        @extend .u--font-medium;
+        --c-link-line: max(1px, #{$link-line * 1.2}em);
     }
-}
-.c--link-a--external::after,
-.c--link-b--external::after,
-.c--link-c--external::after,
-.c--link-d--external::after {
-    content: "\2197";
-    display: inline-block;
-    margin-left: 0.25em;
-}
-
-.c--link-a--icon,
-.c--link-c--icon {
-    background-image: none;
-    transition: opacity $time-b $ease-standard-a;
-}
-
-// A link that cannot be followed (aria-disabled="true") is shown like a disabled button: 50%, no hover, no pointer.
-.c--link-a[aria-disabled="true"],
-.c--link-b[aria-disabled="true"],
-.c--link-c[aria-disabled="true"],
-.c--link-d[aria-disabled="true"] {
-    opacity: 0.5;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-@media (hover: hover) {
-    .c--link-a:hover,
-    .c--link-c:hover {
-        background-size: 0% var(--c-link-line);
+    &--bold {
+        @extend .u--font-bold;
+        --c-link-line: max(1px, #{$link-line * 1.6}em);
     }
-    .c--link-b:hover,
-    .c--link-d:hover,
-    .c--link-a--icon:hover,
-    .c--link-c--icon:hover {
-        opacity: 0.6;
-    }
-}
+    &--icon {
+        @extend .u--display-inline-flex;
+        @extend .u--align-items-center;
+        gap: 0.25rem;
 
-@media (prefers-reduced-motion: reduce) {
-    .c--link-a--icon,
-    .c--link-c--icon,
-    .c--link-a,
-    .c--link-b,
-    .c--link-c,
-    .c--link-d {
-        transition: none;
+        .c--icon-a {
+            vertical-align: baseline;
+        }
+    }
+    &__icon {
+        @extend .u--display-inline-block;
+        margin-left: 0.25em;
     }
 }

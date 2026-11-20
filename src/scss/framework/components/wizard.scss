@@ -1,0 +1,195 @@
+@use "@scss/framework/_var/_vars.scss" as *;
+@use "@scss/framework/utilities/utilities";
+@use "@scss/framework/foundation/foundation";
+@use "./helpers" as *;
+
+// c--wizard-a and c--wizard-b: the steps of a flow (1, 2, 3) as circles joined by a line. It only shows where you are: moving between steps is the
+// page's script (Next and Back are buttons of the page, not of the wizard).
+// THE COLOURS ARE THE ONES OF THE SURFACE (currentColor), as in the tabs: on a Noche surface, with f--color-b on it, the circles, the line and the text
+// are white. There is no version for dark. A project can fix one colour with `wizard.ink`.
+// A different variation is a different letter:
+//   a  the steps with their text under each circle (room for a title and a description).
+//   b  compact, for when there is no room for the text: only the circles joined by a line, and under them one line with the current step.
+//
+//   <ol class="c--wizard-a">
+//     <li class="c--wizard-a__item">
+//       <span class="c--wizard-a__icon" aria-hidden="true">1</span>
+//       <span class="c--wizard-a__title">Account</span>
+//       <span class="c--wizard-a__content">Your name and email</span>
+//     </li>
+//     <li class="c--wizard-a__item" aria-current="step">…</li>
+//     <li class="c--wizard-a__item">…</li>
+//   </ol>
+//
+//   <div class="c--wizard-b">
+//     <ol class="c--wizard-b__list-group">
+//       <li class="c--wizard-b__item"><span class="c--wizard-b__icon" aria-hidden="true">1</span><span class="c--wizard-b__title">Account</span></li>
+//       <li class="c--wizard-b__item" aria-current="step">…</li>
+//     </ol>
+//     <p class="c--wizard-b__content">Step 2 of 3: Project</p>
+//   </div>
+// Only the current step is marked, with aria-current="step"; the ones before it are done (a tinted circle and a solid line, with `:has()`), the ones after
+// it are to do (an outlined circle and a faint line). In b the title of each step is there for a screen reader only; the line under the circles is the text.
+// the diameter of the circle is a number of steps of $measure (4 is 32px); `wizard.circle` sets it
+$wizard-circle-size: $measure * $wizard-circle;
+$wizard-ink-color: if($wizard-ink, pick($wizard-ink), currentColor);
+@function ink($percent) {
+    @return color-mix(in srgb, #{$wizard-ink-color} #{$percent}, transparent);
+}
+
+// the circle, the same in both: to do is outlined, done is tinted, current is outlined with a ring
+@mixin wizard-icon {
+    @extend .f--font-e;
+    @extend .u--display-flex;
+    @extend .u--flex-none;
+    @extend .u--align-items-center;
+    @extend .u--justify-content-center;
+    @extend .u--font-medium;
+    box-sizing: border-box;
+    width: $wizard-circle-size;
+    height: $wizard-circle-size;
+    border: 2px solid ink(45%);
+    border-radius: 50%;
+    background: transparent;
+    color: ink(70%);
+    transition:
+        background-color $time-b $ease-standard-a,
+        border-color $time-b $ease-standard-a,
+        color $time-b $ease-standard-a;
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+@mixin wizard-icon-done {
+    border-color: $wizard-ink-color;
+    background: ink(14%);
+    color: $wizard-ink-color;
+}
+@mixin wizard-icon-current {
+    border-color: $wizard-ink-color;
+    color: $wizard-ink-color;
+    font-weight: 700;
+    box-shadow: 0 0 0 $measure * 0.5 ink(14%);
+}
+
+// a: every step takes the same width, the circle on top, the text under it
+.c--wizard-a {
+    @extend .u--display-flex;
+    @extend .u--align-items-flex-start;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: $wizard-ink-color;
+
+    &__icon {
+        @include wizard-icon;
+    }
+    &__item {
+        @extend .u--position-relative;
+        @extend .u--display-flex;
+        @extend .u--flex-direction-column;
+        @extend .u--align-items-center;
+        @extend .u--min-width-0;
+        @extend .u--text-center;
+        flex: 1 1 0;
+        gap: $measure * 0.5;
+        padding: 0 $measure;
+
+        // the line that arrives from the step before, between the two circles
+        & + &::before {
+            content: "";
+            position: absolute;
+            top: calc(#{$wizard-circle-size} / 2 - #{$wizard-line} / 2);
+            right: calc(50% + #{$wizard-circle-size} / 2 + #{$measure});
+            left: calc(-50% + #{$wizard-circle-size} / 2 + #{$measure});
+            height: $wizard-line;
+            background: ink(20%);
+        }
+        // reached: the current step and the ones before it
+        &[aria-current="step"]::before,
+        &:has(~ [aria-current="step"])::before {
+            background: $wizard-ink-color;
+        }
+        &:has(~ [aria-current="step"]) .c--wizard-a__icon {
+            @include wizard-icon-done;
+        }
+        &[aria-current="step"] .c--wizard-a__icon {
+            @include wizard-icon-current;
+        }
+        &[aria-current="step"] .c--wizard-a__title,
+        &:has(~ [aria-current="step"]) .c--wizard-a__title {
+            color: $wizard-ink-color;
+        }
+    }
+    &__title {
+        @extend .f--font-e;
+        @extend .u--font-medium;
+        color: ink(70%);
+    }
+    &__content {
+        @extend .f--font-f;
+        color: ink(70%);
+    }
+}
+
+// b: compact. The circles joined by a line (the last one ends the row) and one line of text under them.
+.c--wizard-b {
+    @extend .u--display-flex;
+    @extend .u--flex-direction-column;
+    gap: $measure * 1.5;
+    color: $wizard-ink-color;
+
+    &__icon {
+        @include wizard-icon;
+    }
+    &__list-group {
+        @extend .u--display-flex;
+        @extend .u--align-items-center;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    &__item {
+        @extend .u--display-flex;
+        @extend .u--align-items-center;
+        @extend .u--min-width-0;
+        flex: 1 1 auto;
+
+        &:last-child {
+            flex: none;
+        }
+        // the line that leaves the circle towards the next one: solid when that step is reached
+        &:not(:last-child)::after {
+            content: "";
+            flex: 1;
+            height: $wizard-line;
+            margin: 0 $measure;
+            background: ink(20%);
+        }
+        &:has(~ [aria-current="step"])::after {
+            background: $wizard-ink-color;
+        }
+        &:has(~ [aria-current="step"]) .c--wizard-b__icon {
+            @include wizard-icon-done;
+        }
+        &[aria-current="step"] .c--wizard-b__icon {
+            @include wizard-icon-current;
+        }
+    }
+    // the title of a step is for a screen reader only: the visible text is the line under the circles
+    &__title {
+        @extend .u--position-absolute;
+        @extend .u--overflow-hidden;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+    &__content {
+        @extend .u--font-medium;
+        margin: 0;
+        @extend .f--font-f;
+    }
+}
