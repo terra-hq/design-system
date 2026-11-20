@@ -38,6 +38,11 @@ strong {
     font-weight: 600;
 }
 
+// A link with no class takes the ink of its text (never the browser's blue and purple); the c--link-* set their own.
+a {
+    color: inherit;
+}
+
 ul,
 ol {
     list-style: none;
